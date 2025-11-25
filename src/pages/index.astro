@@ -1,0 +1,76 @@
+---
+import '../styles/global.css';
+import { bunnyImage } from '../lib/bunny-cdn';
+
+const logoUrl = bunnyImage('/wp-content/uploads/2025/08/Times10-Logo-2025-2.png', {
+	pullZone: 'wordpress',
+	quality: 85
+});
+
+// Brand logos for the grid
+const brandImages = [
+	{ path: '/wp-content/uploads/2025/08/adidas.png', alt: 'Adidas' },
+	{ path: '/wp-content/uploads/2025/02/brands_0018_universal.png', alt: 'Universal' },
+	{ path: '/wp-content/uploads/2025/02/brands_0008_Jordan.png', alt: 'Jordan' },
+	{ path: '/wp-content/uploads/2025/02/brands_0011_MGM-resorts.png', alt: 'MGM Resorts' },
+	{ path: '/wp-content/uploads/2025/02/brands_0017_simplisafe.png', alt: 'SimpliSafe' },
+	{ path: '/wp-content/uploads/2025/02/brands_0013_nike.png', alt: 'Nike' },
+	{ path: '/wp-content/uploads/2025/02/brands_0004_C4.png', alt: 'C4' },
+	{ path: '/wp-content/uploads/2025/02/brands_0010_melo.png', alt: 'Melo' },
+	{ path: '/wp-content/uploads/2025/02/brands_0016_Shoe-Palace.png', alt: 'Shoe Palace' },
+	{ path: '/wp-content/uploads/2025/02/brands_0003_Best-Buy.png', alt: 'Best Buy' },
+	{ path: '/wp-content/uploads/2025/02/brands_0001_arnold-tahuer.png', alt: 'Arnold Tahuer' },
+	{ path: '/wp-content/uploads/2025/02/brands_0002_Attomax.png', alt: 'Attomax' },
+	{ path: '/wp-content/uploads/2025/02/brands_0015_Roscoes.png', alt: 'Roscoes' },
+	{ path: '/wp-content/uploads/2025/02/brands_0005_Derrick-Rose.png', alt: 'Derrick Rose' },
+	{ path: '/wp-content/uploads/2025/08/flerish-logo.png', alt: 'Flerish' },
+	{ path: '/wp-content/uploads/2025/02/brands_0007_interscope.png', alt: 'Interscope' },
+	{ path: '/wp-content/uploads/2025/02/brands_0012_monster.png', alt: 'Monster' },
+	{ path: '/wp-content/uploads/2025/02/brands_0019_WB.png', alt: 'WB' },
+	{ path: '/wp-content/uploads/2025/02/brands_0006_Foot-locker.png', alt: 'Foot Locker' },
+	{ path: '/wp-content/uploads/2025/02/brands_0014_PuraVida.png', alt: 'Pura Vida' },
+];
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/png" href="/favicon.png" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>times10</title>
+	</head>
+	<body class="font-sans overflow-x-hidden">
+		<section class="w-full max-w-screen mx-auto h-dvh flex items-center justify-center snap-start snap-always">
+			<img
+				src={logoUrl}
+				alt="times10 logo"
+				class="max-w-[400px] max-h-full object-contain"
+				loading="eager"
+			/>
+		</section>
+		<section class="w-full max-w-screen mx-auto h-dvh flex flex-col items-center justify-center snap-start snap-always">
+			<h2 class="mb-12 text-4xl font-bold">brands we've worked with</h2>
+			<div class="grid grid-cols-5 gap-8 w-full max-w-[40%] h-auto">
+				{brandImages.map((brand) => {
+					const imageUrl = bunnyImage(brand.path, {
+						pullZone: 'wordpress',
+						width: 300,
+						quality: 75
+					});
+					return (
+						<div class="aspect-square flex items-center justify-center">
+							<img
+								src={imageUrl}
+								alt={brand.alt}
+								class="w-full h-full object-contain"
+								loading="lazy"
+							/>
+						</div>
+					);
+				})}
+			</div>
+		</section>
+		<section class="w-full max-w-screen mx-auto h-dvh flex flex-col items-center justify-center snap-start snap-always"></section>
+	</body>
+</html>
