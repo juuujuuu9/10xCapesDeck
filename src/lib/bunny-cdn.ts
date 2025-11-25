@@ -20,13 +20,16 @@ const getCdnUrl = (pullZone?: string): string => {
 		if (url) {
 			return url.replace(/\/$/, ''); // Remove trailing slash
 		}
-		console.warn(`${envKey} not set, falling back to default`);
+		console.warn(`[Bunny CDN] ${envKey} not set, falling back to default`);
 	}
 
 	// Default pull zone
 	const url = import.meta.env.PUBLIC_BUNNY_CDN_URL;
 	if (!url) {
-		console.warn('PUBLIC_BUNNY_CDN_URL not set, returning empty string');
+		if (typeof window !== 'undefined') {
+			// Client-side: log error to console
+			console.error('[Bunny CDN] PUBLIC_BUNNY_CDN_URL not set. Images will use raw paths. Set environment variables in Vercel.');
+		}
 		return '';
 	}
 	return url.replace(/\/$/, ''); // Remove trailing slash
@@ -54,7 +57,13 @@ export interface BunnyImageOptions {
 export function bunnyImage(path: string, options: BunnyImageOptions = {}): string {
 	const { width, height, quality, aspectRatio, pullZone } = options;
 	const cdnUrl = getCdnUrl(pullZone);
-	if (!cdnUrl) return path;
+	if (!cdnUrl) {
+		// CDN URL not configured - return raw path (will fail to load unless served from origin)
+		if (typeof window !== 'undefined') {
+			console.warn(`[Bunny CDN] CDN URL not configured for pullZone "${pullZone || 'default'}". Image will use raw path: ${path}`);
+		}
+		return path;
+	}
 
 	// Validate inputs
 	if (width !== undefined && (typeof width !== 'number' || width <= 0)) {
