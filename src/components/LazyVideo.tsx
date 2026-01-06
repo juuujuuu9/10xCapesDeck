@@ -8,10 +8,11 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { lazyLoadManager } from '../lib/intersection-observer';
-import { bunnyVideoFile } from '../lib/bunny-cdn';
+import { bunnyImage, bunnyVideoFile, bunnyVideoPoster, bunnyVideoUrl } from '../lib/bunny-cdn';
 
 export interface LazyVideoProps extends Omit<React.VideoHTMLAttributes<HTMLVideoElement>, 'src'> {
-	src: string;
+	src?: string;
+	videoId?: string;
 	poster?: string;
 	priority?: boolean;
 	pullZone?: string;
@@ -20,15 +21,25 @@ export interface LazyVideoProps extends Omit<React.VideoHTMLAttributes<HTMLVideo
 
 export function LazyVideo({
 	src,
-	poster,
+	videoId,
+	poster: customPoster,
 	priority = false,
 	pullZone = 'storage',
 	className = '',
 	...props
 }: LazyVideoProps): JSX.Element {
 	const [shouldLoad, setShouldLoad] = useState(priority);
+	const [isIntersecting, setIsIntersecting] = useState(priority);
 	const [reducedMotion, setReducedMotion] = useState(false);
 	const containerRef = useRef<HTMLDivElement>(null);
+
+	// Determine final URLs
+	const videoUrl = videoId ? bunnyVideoUrl(videoId) : (src ? bunnyVideoFile(src, pullZone) : '');
+	
+	// RULE-015: Use Bunny Optimizer for dynamic resizing/format conversion
+	const posterUrl = videoId 
+		? bunnyVideoPoster(videoId) 
+		: (customPoster ? (customPoster.startsWith('http') ? customPoster : bunnyImage(customPoster, { quality: 85 })) : undefined);
 
 	useEffect(() => {
 		// RULE-008: Respect prefers-reduced-motion
@@ -37,20 +48,19 @@ export function LazyVideo({
 
 		const handleChange = (e: MediaQueryListEvent): void => {
 			setReducedMotion(e.matches);
-			if (e.matches && !shouldLoad) {
+			if (e.matches) {
 				setShouldLoad(true);
 			}
 		};
 
 		mediaQuery.addEventListener('change', handleChange);
-
-		return () => {
-			mediaQuery.removeEventListener('change', handleChange);
-		};
-	}, [shouldLoad]);
+		return () => mediaQuery.removeEventListener('change', handleChange);
+	}, []);
 
 	useEffect(() => {
-		if (priority || reducedMotion || shouldLoad) {
+		if (priority || reducedMotion) {
+			setShouldLoad(true);
+			setIsIntersecting(true);
 			return;
 		}
 
@@ -58,38 +68,54 @@ export function LazyVideo({
 		if (!element) return;
 
 		// RULE-018: Use singleton lazyLoadManager
+		// Load when 50vh away, unload when far away
 		lazyLoadManager.observe(element, (entry) => {
 			if (entry.isIntersecting) {
 				setShouldLoad(true);
-				lazyLoadManager.unobserve(element);
+				setIsIntersecting(true);
+			} else {
+				setIsIntersecting(false);
+				// RULE-018: Unload videos from sections >2 viewports away
+				// With rootMargin: '50vh', isIntersecting=false means it's >50vh away.
+				// For radical memory saving, we unload as soon as it's off-screen (+ margin)
+				setShouldLoad(false);
 			}
 		});
 
 		return () => {
-			if (element) {
-				lazyLoadManager.unobserve(element);
-			}
+			lazyLoadManager.unobserve(element);
 		};
-	}, [priority, reducedMotion, shouldLoad]);
-
-	const videoUrl = bunnyVideoFile(src, pullZone);
+	}, [priority, reducedMotion]);
 
 	return (
-		<div ref={containerRef} className={`relative ${className}`}>
-			{!shouldLoad && poster && (
+		<div 
+			ref={containerRef} 
+			className={`relative overflow-hidden bg-black/5 ${className}`}
+			style={{ aspectRatio: props.width && props.height ? `${props.width}/${props.height}` : undefined }}
+		>
+			{/* RULE-020: Show poster → video stream transition */}
+			{posterUrl && (
 				<img
-					src={poster}
-					alt="Video poster"
-					className="absolute inset-0 w-full h-full object-cover"
-					loading="lazy"
+					src={posterUrl}
+					alt=""
+					aria-hidden="true"
+					className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+						isIntersecting ? 'opacity-0 pointer-events-none' : 'opacity-100'
+					}`}
+					loading={priority ? 'eager' : 'lazy'}
 				/>
 			)}
+
 			{shouldLoad && (
 				<video
 					src={videoUrl}
-					poster={poster}
-					preload={priority ? 'auto' : 'none'}
-					className="w-full h-full object-cover"
+					poster={posterUrl}
+					preload={priority ? 'auto' : 'none'} // RULE-014
+					className={`w-full h-full object-cover transition-opacity duration-700 ${
+						isIntersecting ? 'opacity-100' : 'opacity-0'
+					}`}
+					muted // Most browsers require muted for autoplay
+					playsInline
 					{...props}
 				/>
 			)}

@@ -1,9 +1,23 @@
 ---
 import '../styles/global.css';
-import { bunnyImage } from '../lib/bunny-cdn';
+import { bunnyImage, bunnyVideoFile } from '../lib/bunny-cdn';
+import { LazyVideo } from '../components/LazyVideo.tsx';
 
 const logoUrl = bunnyImage('/wp-content/uploads/2025/08/Times10-Logo-2025-2.png', {
 	pullZone: 'wordpress',
+	quality: 85
+});
+
+// RULE-015: Responsive logo sizes for FCP optimization
+const logoMobile = bunnyImage('/wp-content/uploads/2025/08/Times10-Logo-2025-2.png', {
+	pullZone: 'wordpress',
+	width: 320,
+	quality: 85
+});
+
+const logoDesktop = bunnyImage('/wp-content/uploads/2025/08/Times10-Logo-2025-2.png', {
+	pullZone: 'wordpress',
+	width: 400,
 	quality: 85
 });
 
@@ -30,6 +44,14 @@ const brandImages = [
 	{ path: '/wp-content/uploads/2025/02/brands_0006_Foot-locker.png', alt: 'Foot Locker' },
 	{ path: '/wp-content/uploads/2025/02/brands_0014_PuraVida.png', alt: 'Pura Vida' },
 ];
+
+// Direct video file approach
+const reelVideoUrl = bunnyVideoFile('/Times10-Reel-AaronCut-V7-09012025.mp4', 'storage');
+const reelVideoPoster = bunnyImage('/posters/Times10-Reel-AaronCut-V7-09012025.jpg', {
+	pullZone: 'storage',
+	width: 1920,
+	quality: 85
+});
 ---
 
 <html lang="en">
@@ -39,14 +61,41 @@ const brandImages = [
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<title>times10</title>
+
+		<!-- RULE-014: Preload critical assets for FCP -->
+		<link 
+			rel="preload" 
+			as="image" 
+			href={logoMobile} 
+			media="(max-width: 639px)" 
+		/>
+		<link 
+			rel="preload" 
+			as="image" 
+			href={logoDesktop} 
+			media="(min-width: 640px)" 
+		/>
+
+		<!-- Preload critical fonts to avoid FOIT -->
+		<link
+			rel="preload"
+			href="/fonts/AktivGrotesk-Bold.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin
+		/>
 	</head>
-	<body class="font-sans overflow-x-hidden">
-		<section class="w-full max-w-screen mx-auto h-dvh flex items-center justify-center snap-start snap-always">
+	<body class="font-sans overflow-x-hidden bg-[#fdfffd]">
+		<section class="bg-[#f4f4f0] w-full max-w-screen mx-auto h-dvh flex items-center justify-center snap-start snap-always">
 			<img
-				src={logoUrl}
+				src={logoDesktop}
+				srcset={`${logoMobile} 320w, ${logoDesktop} 400w`}
+				sizes="(max-width: 639px) 320px, 400px"
 				alt="times10 logo"
-				class="max-w-[400px] max-h-full object-contain"
+				class="sm:max-w-[400px] max-w-80 max-h-full object-contain"
 				loading="eager"
+				width="400"
+				height="100"
 			/>
 		</section>
 		<section class="w-full max-w-screen mx-auto h-dvh flex flex-col items-center justify-center snap-start snap-always">
@@ -71,6 +120,18 @@ const brandImages = [
 				})}
 			</div>
 		</section>
-		<section class="w-full max-w-screen mx-auto h-dvh flex flex-col items-center justify-center snap-start snap-always"></section>
+		<section class="w-full max-w-screen mx-auto h-dvh flex flex-col items-center justify-center snap-start snap-always">
+			<LazyVideo
+				client:visible
+				src="/Times10-Reel-AaronCut-V7-09012025.mp4"
+				poster={reelVideoPoster}
+				pullZone="storage"
+				autoPlay
+				muted
+				loop
+				playsInline
+				className="w-full h-full object-cover"
+			/>
+		</section>
 	</body>
 </html>

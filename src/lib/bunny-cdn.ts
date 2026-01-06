@@ -89,6 +89,67 @@ export function bunnyImage(path: string, options: BunnyImageOptions = {}): strin
 }
 
 /**
+ * Generate Bunny Stream video URL
+ * RULE-016: Use Bunny Stream for adaptive video delivery
+ * 
+ * @param videoId - Bunny Stream Video ID
+ */
+export function bunnyVideoUrl(videoId: string): string {
+	const streamUrl = import.meta.env.PUBLIC_BUNNY_STREAM_URL;
+	if (!streamUrl) {
+		console.warn('[Bunny CDN] PUBLIC_BUNNY_STREAM_URL not set');
+		return '';
+	}
+	const cleanUrl = streamUrl.replace(/\/$/, '');
+	return `${cleanUrl}/${videoId}/playlist.m3u8`;
+}
+
+/**
+ * Generate Bunny Stream embed URL
+ * RULE-016: Use Bunny Stream for adaptive video delivery
+ */
+export function bunnyVideoEmbed(videoId: string, options: { autoplay?: boolean; loop?: boolean } = {}): string {
+	const streamUrl = import.meta.env.PUBLIC_BUNNY_STREAM_URL;
+	if (!streamUrl) {
+		console.warn('[Bunny CDN] PUBLIC_BUNNY_STREAM_URL not set');
+		return '';
+	}
+	
+	// Extract Library ID from vz-xxxxx.b-cdn.net
+	const libraryMatch = streamUrl.match(/vz-([a-zA-Z0-9-]+)\./);
+	const libraryId = libraryMatch ? libraryMatch[1] : '';
+	
+	if (!libraryId) {
+		console.warn('[Bunny CDN] Could not extract Library ID from PUBLIC_BUNNY_STREAM_URL');
+		return '';
+	}
+
+	const params = new URLSearchParams({
+		autoplay: options.autoplay ? '1' : '0',
+		loop: options.loop ? '1' : '0',
+		preload: '0',
+	});
+	
+	return `https://iframe.mediadelivery.net/embed/${libraryId}/${videoId}?${params.toString()}`;
+}
+
+/**
+ * Generate Bunny Stream poster image URL (WebP)
+ * RULE-014: Videos must have WebP posters via Bunny CDN
+ * 
+ * @param videoId - Bunny Stream Video ID
+ */
+export function bunnyVideoPoster(videoId: string): string {
+	const streamUrl = import.meta.env.PUBLIC_BUNNY_STREAM_URL;
+	if (!streamUrl) {
+		console.warn('[Bunny CDN] PUBLIC_BUNNY_STREAM_URL not set');
+		return '';
+	}
+	const cleanUrl = streamUrl.replace(/\/$/, '');
+	return `${cleanUrl}/${videoId}/thumbnail.jpg`;
+}
+
+/**
  * Generate srcset for responsive images
  * RULE-015: Use Transform API for responsive sizes
  */
