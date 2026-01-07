@@ -14,7 +14,7 @@ class LazyLoadManager {
 	private observer: IntersectionObserver | null = null;
 	private entries: Map<Element, ObserverEntry> = new Map();
 	private readonly config: IntersectionObserverInit = {
-		rootMargin: '50vh 0px',
+		rootMargin: '20% 0px',
 		threshold: 0.01,
 	};
 
