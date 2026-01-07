@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { bunnyImage } from '../lib/bunny-cdn';
 import { LazyVideo } from '../components/LazyVideo.tsx';
+import ServicesSection from '../components/sections/Services/ServicesSection.astro';
 
 const logoUrl = bunnyImage('/wp-content/uploads/2025/08/Times10-Logo-2025-2.png', {
 	pullZone: 'wordpress',
@@ -121,10 +122,11 @@ const reelVideoPoster = bunnyImage('/posters/Times10-Reel-AaronCut-V7-09012025.j
 		</section>
 		<section class="w-full max-w-screen mx-auto h-dvh flex flex-col items-center justify-center snap-start snap-always p-0">
 			<LazyVideo
-				client:visible
+				client:load
 				src="/Times10-Reel-AaronCut-V7-09012025.mp4"
 				poster={reelVideoPoster}
 				pullZone="storage"
+				priority={true}
 				autoPlay
 				muted
 				loop
@@ -133,29 +135,6 @@ const reelVideoPoster = bunnyImage('/posters/Times10-Reel-AaronCut-V7-09012025.j
 				className="w-full h-full object-cover"
 			/>
 		</section>
-		<section class="w-full bg-black max-w-screen mx-auto h-dvh flex flex-col gap-4 items-center justify-center snap-start snap-always lg:p-8 p-4">
-			<div class="flex flex-row gap-4 w-full h-full items-center justify-center">
-				<div class="border-2 border-[#2a2a2a] p-8 flex flex-col w-full h-full items-center justify-center rounded-4xl">
-					
-				</div>
-				<div class="border-2 border-[#2a2a2a] p-8 flex flex-col w-full h-full items-center justify-center rounded-4xl">
-
-				</div>
-			</div>
-			<div class="flex flex-row gap-4 w-full h-full items-center justify-center">
-				<div class="border-2 border-[#2a2a2a] p-8 flex flex-col w-full h-full items-center justify-center rounded-4xl">
-					
-				</div>
-				<div class="border-2 border-[#2a2a2a] p-8 flex flex-col w-full h-full items-center justify-center rounded-4xl">
-
-				</div>
-				<div class="border-2 border-[#2a2a2a] p-8 flex flex-col w-full h-full items-center justify-center rounded-4xl">
-
-				</div>
-			</div>
-			<div class="border-2 border-[#2a2a2a] p-8 flex flex-col w-full h-full items-center justify-center rounded-3xl max-h-[60px]">
-				<span class="text-white text-sm lowercase text-[24px] flex flex-row gap-3"><strong>AI IS HERE.</strong> <em> IT'S NOT SOMETHING WE FEAR BUT USE AS A TOOL TO CREATE BETTER WORKFLOWS AND ENGAGING CONTENT.</em></span>
-			</div>
-		</section>
+		<ServicesSection />
 	</body>
 </html>

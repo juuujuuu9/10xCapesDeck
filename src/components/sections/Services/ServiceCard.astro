@@ -1,0 +1,24 @@
+---
+interface Props {
+	title: string;
+	tags: string[];
+}
+
+const { title, tags } = Astro.props;
+---
+
+<div class="border-2 border-[#2a2a2a] p-8 flex flex-col w-full h-full items-start justify-end rounded-4xl bg-black">
+	<div class="flex flex-col items-start gap-3 w-full">
+		<h3 class="text-white text-6xl sm:text-7xl lg:text-8xl font-bold uppercase leading-none">
+			{title}
+		</h3>
+		<div class="flex flex-row gap-2 flex-wrap">
+			{tags.map((tag) => (
+				<span class="bg-[#2a2a2a] text-white px-4 py-2 rounded-full text-sm font-medium lowercase">
+					{tag}
+				</span>
+			))}
+		</div>
+	</div>
+</div>
+
