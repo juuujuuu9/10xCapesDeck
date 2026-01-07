@@ -1,22 +1,37 @@
 ---
+import { bunnyImage } from '../../../lib/bunny-cdn';
+
 interface Props {
 	title: string;
 	tags: string[];
+	backgroundImage?: string;
 }
 
-const { title, tags } = Astro.props;
+const { title, tags, backgroundImage } = Astro.props;
+
+const pullZone = backgroundImage?.startsWith('/wp-content/') ? 'wordpress' : 'storage';
+
+const backgroundStyle = backgroundImage
+	? `background-image: url('${bunnyImage(backgroundImage, { pullZone, width: 1920, quality: 85 })}'); background-size: cover; background-position: center; background-repeat: no-repeat;`
+	: '';
 ---
 
-<div class="border-2 border-[#2a2a2a] p-8 flex flex-col w-full h-full items-start justify-end rounded-4xl bg-black">
-	<div class="flex flex-col items-start gap-3 w-full">
-		<h3 class="text-white text-6xl sm:text-7xl lg:text-8xl font-bold uppercase leading-none">
+<div 
+	class="border-2 border-[#2a2a2a] sm:p-6 p-2 flex flex-col w-full sm:h-full sm:flex-1 items-start justify-end lg:rounded-4xl sm:rounded-2xl rounded-xl bg-black relative overflow-hidden"
+	style={backgroundStyle}
+>
+	{backgroundImage && (
+		<div class="absolute inset-0 bg-black/60 z-0"></div>
+	)}
+	<div class="flex flex-col items-start gap-3 w-full relative z-10">
+		<h3 class="text-white text-6xl sm:text-7xl lg:text-[5rem] sm:text-[4rem] text-[1.5rem] font-bold lowercase leading-tight tracking-wide">
 			{title}
 		</h3>
 		<div class="flex flex-row gap-2 flex-wrap">
 			{tags.map((tag) => (
-				<span class="bg-[#2a2a2a] text-white px-4 py-2 rounded-full text-sm font-medium lowercase">
-					{tag}
-				</span>
+			<span class="bg-[#2a2a2a] text-gray-300 px-4 py-2 rounded-full md:text-[1.25rem] text-[15px] leading-none font-thin lowercase">
+				{tag}
+			</span>
 			))}
 		</div>
 	</div>

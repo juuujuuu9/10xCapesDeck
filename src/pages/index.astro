@@ -120,18 +120,17 @@ const reelVideoPoster = bunnyImage('/posters/Times10-Reel-AaronCut-V7-09012025.j
 				})}
 			</div>
 		</section>
-		<section class="w-full max-w-screen mx-auto h-dvh flex flex-col items-center justify-center snap-start snap-always p-0">
+		<section class="bg-black w-full max-w-screen mx-auto h-dvh flex flex-col items-center justify-center snap-start snap-always p-0">
 			<LazyVideo
 				client:load
 				src="/Times10-Reel-AaronCut-V7-09012025.mp4"
 				poster={reelVideoPoster}
 				pullZone="storage"
-				priority={true}
 				autoPlay
-				muted
+				muted={true}
 				loop
 				playsInline
-				usePlyr={true}
+				showUnmuteButton={true}
 				className="w-full h-full object-cover"
 			/>
 		</section>

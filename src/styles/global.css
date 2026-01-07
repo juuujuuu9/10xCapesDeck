@@ -3,6 +3,14 @@
 /* AktivGrotesk Font Family */
 @font-face {
 	font-family: 'AktivGrotesk';
+	src: url('/fonts/aktiv-grotesk-thin.woff') format('woff');
+	font-weight: 100;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'AktivGrotesk';
 	src: url('/fonts/AktivGrotesk-Regular.woff2') format('woff2'),
 		url('/fonts/AktivGrotesk-Regular.woff') format('woff');
 	font-weight: 400;
