@@ -3,8 +3,8 @@ import ServiceCard from './ServiceCard.astro';
 ---
 
 <section class="w-full bg-black max-w-screen mx-auto h-dvh flex flex-col gap-4 items-stretch justify-between snap-start snap-always lg:p-8 sm:p-4 p-2">
-	<!-- Mobile: All cards stacked vertically, Desktop: Grid layout in rows -->
-	<div class="flex flex-col sm:flex-row gap-2 w-full sm:flex-1 items-stretch">
+	<!-- Mobile: All 5 cards in single container for equal height distribution -->
+	<div class="sm:hidden flex flex-col gap-2 w-full flex-1 items-stretch min-h-0">
 		<ServiceCard 
 			title="creative" 
 			tags={['video', 'creative', 'design', '3d']} 
@@ -15,8 +15,37 @@ import ServiceCard from './ServiceCard.astro';
 			tags={['content management', 'influencers', 'growth', 'network']} 
 			backgroundImage="/wp-content/uploads/2025/09/Influencers-phones-1.png"
 		/>
-		<!-- Mobile: Show these 3 cards in column, Desktop: Hide (shown in second row) -->
-		<div class="sm:hidden flex flex-col gap-2 w-full">
+		<ServiceCard 
+			title="strategy" 
+			tags={['copywriting', 'brand positioning', 'campaigns']} 
+			backgroundImage="/wp-content/uploads/2025/09/iyf-hero.jpg"
+		/>
+		<ServiceCard 
+			title="experiential" 
+			tags={['production', 'interactive media', 'activations', 'moments', 'creative']} 
+			backgroundImage="/wp-content/uploads/2025/08/Derrick-Rose.jpg"
+		/>
+		<ServiceCard 
+			title="paid media" 
+			tags={['outdoor', 'seo/sem', 'digital', 'influencers', 'email']} 
+			backgroundImage="/wp-content/uploads/2025/09/vegas-billboard.jpg"
+		/>
+	</div>
+	<!-- Desktop: Two-row layout -->
+	<div class="hidden sm:flex flex-col gap-4 w-full flex-1 items-stretch min-h-0">
+		<div class="flex flex-row gap-4 w-full flex-1 items-stretch min-h-0">
+			<ServiceCard 
+				title="creative" 
+				tags={['video', 'creative', 'design', '3d']} 
+				backgroundImage="/wp-content/uploads/2025/03/CLEW-CarHero-Horz.00_00_02_04.Still001.jpg"
+			/>
+			<ServiceCard 
+				title="social" 
+				tags={['content management', 'influencers', 'growth', 'network']} 
+				backgroundImage="/wp-content/uploads/2025/09/Influencers-phones-1.png"
+			/>
+		</div>
+		<div class="flex flex-row gap-4 w-full flex-1 items-stretch min-h-0">
 			<ServiceCard 
 				title="strategy" 
 				tags={['copywriting', 'brand positioning', 'campaigns']} 
@@ -33,24 +62,6 @@ import ServiceCard from './ServiceCard.astro';
 				backgroundImage="/wp-content/uploads/2025/09/vegas-billboard.jpg"
 			/>
 		</div>
-	</div>
-	<!-- Desktop: Second row with 3 cards -->
-	<div class="hidden sm:flex flex-row gap-4 w-full sm:flex-1 items-stretch">
-		<ServiceCard 
-			title="strategy" 
-			tags={['copywriting', 'brand positioning', 'campaigns']} 
-			backgroundImage="/wp-content/uploads/2025/09/iyf-hero.jpg"
-		/>
-		<ServiceCard 
-			title="experiential" 
-			tags={['production', 'interactive media', 'activations', 'moments', 'creative']} 
-			backgroundImage="/wp-content/uploads/2025/08/Derrick-Rose.jpg"
-		/>
-		<ServiceCard 
-			title="paid media" 
-			tags={['outdoor', 'seo/sem', 'digital', 'influencers', 'email']} 
-			backgroundImage="/wp-content/uploads/2025/09/vegas-billboard.jpg"
-		/>
 	</div>
 	<div class="border-2 border-[#2a2a2a] p-8 sm:flex hidden flex-col w-full sm:h-full items-center justify-center rounded-3xl sm:max-h-[60px] min-h-[60px]">
 		<span class="text-white text-sm lowercase text-[24px] flex flex-row gap-3"><strong>AI IS HERE.</strong> <em> IT'S NOT SOMETHING WE FEAR BUT USE AS A TOOL TO CREATE BETTER WORKFLOWS AND ENGAGING CONTENT.</em></span>
