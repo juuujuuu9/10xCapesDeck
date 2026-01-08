@@ -1,0 +1,30 @@
+---
+interface Props {
+	backgroundImage: string;
+	textParts: Array<{ text: string; color: string }>;
+	overlayOpacity?: number;
+}
+
+const { backgroundImage, textParts, overlayOpacity = 75 } = Astro.props;
+---
+
+<section 
+	class="relative w-full max-w-screen mx-auto h-dvh flex items-center justify-center snap-start snap-always overflow-hidden bg-cover bg-center bg-no-repeat"
+	style={`--bg-image: url('${backgroundImage}'); background-image: var(--bg-image);`}
+>
+	<!-- Black overlay -->
+	<div class={`absolute inset-0 bg-black/${overlayOpacity}`}></div>
+	<!-- Text content -->
+	<div class="relative z-10 text-center">
+		<h2 class="text-[2rem] md:text-[3.5rem] lowercase font-[600]">
+			{textParts.map((part, index) => (
+				<span 
+					class={index > 0 ? 'ml-1' : ''}
+					style={`color: ${part.color};`}
+				>
+					{part.text}
+				</span>
+			))}
+		</h2>
+	</div>
+</section>

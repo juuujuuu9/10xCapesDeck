@@ -246,6 +246,20 @@ PUBLIC_BUNNY_STREAM_URL=https://vz-xxxxx.b-cdn.net
 - Use `client:visible` directive in Astro for hydration optimization
 - Components location: `src/components/LazyImage.tsx`, `src/components/LazyVideo.tsx`
 
+### RULE-021: WordPress URL Auto-Conversion 🔴
+**Automatically convert WordPress URLs to Bunny CDN**
+- When user provides WordPress URL: `https://capabilities.times10.net/wp-content/uploads/...`
+- Extract path portion: everything after `/wp-content/uploads/`
+- Convert to Bunny CDN using `bunnyImage()` with `pullZone: 'wordpress'`
+- Pattern: `bunnyImage('/wp-content/uploads/2025/04/image.jpg', { pullZone: 'wordpress' })`
+- Apply same conversion for any URL containing `capabilities.times10.net/wp-content/uploads/`
+- If full URL provided, strip domain and use path only
+- Example conversion:
+  - Input: `https://capabilities.times10.net/wp-content/uploads/2025/04/03202025-Adidas-HardenV9Event-1041.jpg`
+  - Output: `bunnyImage('/wp-content/uploads/2025/04/03202025-Adidas-HardenV9Event-1041.jpg', { pullZone: 'wordpress' })`
+- This ensures all WordPress-sourced images use Bunny CDN optimization (RULE-015)
+- Never hardcode WordPress domain URLs in components or code
+
 ---
 
 ## Rule Symbols
@@ -374,6 +388,7 @@ You: "Yes"
 - ✅ RULE-008: Accessibility
 - ✅ RULE-015: Bunny CDN Images (for this project)
 - ✅ RULE-016: Bunny Stream Videos (for this project)
+- ✅ RULE-021: WordPress URL Auto-Conversion (for this project)
 
 ---
 
@@ -404,6 +419,7 @@ You: "Yes"
 - Multiple Intersection Observer instances
 - Manual image/video optimization
 - Loading all assets upfront
+- Hardcoded WordPress domain URLs (use RULE-021 conversion)
 
 **Required utilities for this project:**
 - `src/lib/bunny-cdn.ts` - CDN URL generation functions
@@ -425,5 +441,5 @@ You: "Yes"
 ---
 
 **Last updated:** 2025-01-27  
-**Active rules:** 20  
+**Active rules:** 21  
 **Philosophy:** Radical simplicity + Performance at scale

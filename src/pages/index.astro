@@ -3,6 +3,8 @@ import '../styles/global.css';
 import { bunnyImage } from '../lib/bunny-cdn';
 import { LazyVideo } from '../components/LazyVideo.tsx';
 import ServicesSection from '../components/sections/Services/ServicesSection.astro';
+import TitleSlide from '../components/sections/Services/TitleSlide.astro';
+import ShortFormSocial from '../components/sections/ShortFormSocial/ShortFormSocial.astro';
 
 const logoUrl = bunnyImage('/wp-content/uploads/2025/08/Times10-Logo-2025-2.png', {
 	pullZone: 'wordpress',
@@ -52,6 +54,13 @@ const reelVideoPoster = bunnyImage('/posters/Times10-Reel-AaronCut-V7-09012025.j
 	width: 1920,
 	quality: 85
 });
+
+// RULE-021: WordPress URL auto-conversion to Bunny CDN
+const socialContentBg = bunnyImage('/wp-content/uploads/2025/04/03202025-Adidas-HardenV9Event-1041.jpg', {
+	pullZone: 'wordpress',
+	width: 1920,
+	quality: 85
+});
 ---
 
 <html lang="en">
@@ -86,6 +95,55 @@ const reelVideoPoster = bunnyImage('/posters/Times10-Reel-AaronCut-V7-09012025.j
 		/>
 	</head>
 	<body class="font-sans overflow-x-hidden bg-[#fdfffd]">
+		<script>
+			// Development: Save and restore scroll position
+			// Remove this in production by deleting the script or setting ENABLE_SCROLL_RESTORE=false
+			(function() {
+				const STORAGE_KEY = 'dev-scroll-section';
+				
+				function initScrollRestore() {
+					const sections = document.querySelectorAll('section[class*="snap-start"]');
+					if (sections.length === 0) return;
+					
+					// Restore scroll position on load
+					const savedIndex = sessionStorage.getItem(STORAGE_KEY);
+					if (savedIndex !== null) {
+						const index = parseInt(savedIndex, 10);
+						if (index >= 0 && index < sections.length) {
+							// Small delay to ensure layout is complete
+							setTimeout(() => {
+								sections[index].scrollIntoView({ behavior: 'instant' });
+							}, 100);
+						}
+					}
+					
+					// Track current section using IntersectionObserver
+					const observer = new IntersectionObserver((entries) => {
+						entries.forEach((entry) => {
+							if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+								const index = Array.from(sections).indexOf(entry.target);
+								if (index !== -1) {
+									sessionStorage.setItem(STORAGE_KEY, index.toString());
+								}
+							}
+						});
+					}, {
+						threshold: 0.5,
+						rootMargin: '-20% 0px -20% 0px'
+					});
+					
+					// Observe all sections
+					sections.forEach((section) => observer.observe(section));
+				}
+				
+				// Wait for DOM to be ready
+				if (document.readyState === 'loading') {
+					document.addEventListener('DOMContentLoaded', initScrollRestore);
+				} else {
+					initScrollRestore();
+				}
+			})();
+		</script>
 		<section class="bg-[#f4f4f0] w-full max-w-screen mx-auto h-dvh flex items-center justify-center snap-start snap-always">
 			<img
 				src={logoDesktop}
@@ -135,5 +193,26 @@ const reelVideoPoster = bunnyImage('/posters/Times10-Reel-AaronCut-V7-09012025.j
 			/>
 		</section>
 		<ServicesSection />
+		<TitleSlide 
+			backgroundImage={socialContentBg}
+			textParts={[
+				{ text: 'social ', color: '#fff' },
+				{ text: 'content', color: '#ca2c1e' }
+			]}
+			overlayOpacity={75}
+		/>
+		<ShortFormSocial 
+			title="short form social"
+			videos={[
+				{ src: '/Adidas-ManchesterUnitedMeetAndGreet-Recap-Final-07.29.2025.mp4', pullZone: 'storage' },
+				{ src: '/WWE-Capabilities-Recut-08.14.25.mp4', pullZone: 'storage' },
+				{ src: '/wp-content/uploads/2025/03/PuraVida-WhatsYourSecret-Capes.mp4', pullZone: 'wordpress' },
+				{ src: '/HowtoFlerish-FirstDate-Final.mp4', pullZone: 'storage' },
+				{ src: '/wp-content/uploads/2025/02/Attomax-GolfBall-Hero-V4-1.mp4', pullZone: 'wordpress' },
+				{ src: '/wp-content/uploads/2025/02/LaundrySauce_forhimandher-1.mp4', pullZone: 'wordpress' },
+				{ src: '/RosesFlowerShop-WhiteSoxOpeningDay-CutdownIGV4-033125.mp4', pullZone: 'storage' },
+				{ src: '/wp-content/uploads/2025/02/candace_parker_story_1-1080p.mp4', pullZone: 'wordpress' },
+			]}
+		/>
 	</body>
 </html>
