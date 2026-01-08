@@ -4,7 +4,7 @@ import ServiceCard from './ServiceCard.astro';
 
 <section class="w-full bg-black max-w-screen mx-auto h-dvh flex flex-col gap-4 items-stretch justify-between snap-start snap-always lg:p-8 sm:p-4 p-2">
 	<!-- Mobile: All 5 cards in single container for equal height distribution -->
-	<div class="sm:hidden flex flex-col gap-2 w-full flex-1 items-stretch min-h-0">
+	<div class="md:hidden flex flex-col gap-2 w-full flex-1 items-stretch min-h-0">
 		<ServiceCard 
 			title="creative" 
 			tags={['video', 'creative', 'design', '3d']} 
@@ -32,7 +32,7 @@ import ServiceCard from './ServiceCard.astro';
 		/>
 	</div>
 	<!-- Desktop: Two-row layout -->
-	<div class="hidden sm:flex flex-col gap-4 w-full flex-1 items-stretch min-h-0">
+	<div class="hidden md:flex flex-col gap-4 w-full flex-1 items-stretch min-h-0">
 		<div class="flex flex-row gap-4 w-full flex-1 items-stretch min-h-0">
 			<ServiceCard 
 				title="creative" 
@@ -63,8 +63,8 @@ import ServiceCard from './ServiceCard.astro';
 			/>
 		</div>
 	</div>
-	<div class="border-2 border-[#2a2a2a] p-8 sm:flex hidden flex-col w-full sm:h-full items-center justify-center rounded-3xl sm:max-h-[60px] min-h-[60px]">
-		<span class="text-white text-sm lowercase text-[24px] flex flex-row gap-3"><strong>AI IS HERE.</strong> <em> IT'S NOT SOMETHING WE FEAR BUT USE AS A TOOL TO CREATE BETTER WORKFLOWS AND ENGAGING CONTENT.</em></span>
+	<div class="border-2 border-[#2a2a2a] p-8 lg:flex hidden flex-col w-full md:h-full items-center justify-center rounded-3xl md:max-h-[60px] min-h-[60px]">
+		<span class="text-white lowercase xl:text-[24px] text-[20px] flex flex-row gap-3"><strong>AI IS HERE.</strong> <em> IT'S NOT SOMETHING WE FEAR BUT USE AS A TOOL TO CREATE BETTER WORKFLOWS AND ENGAGING CONTENT.</em></span>
 	</div>
 </section>
 

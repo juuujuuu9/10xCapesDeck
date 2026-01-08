@@ -17,19 +17,19 @@ const backgroundStyle = backgroundImage
 ---
 
 <div 
-	class="border-2 border-[#2a2a2a] sm:p-6 p-2 flex flex-col w-full sm:h-full sm:flex-1 flex-1 min-h-0 items-start justify-end lg:rounded-4xl sm:rounded-2xl rounded-xl bg-black relative overflow-hidden"
+	class="border-2 border-[#2a2a2a] xl:p-6 lg:p-4 p-2 flex flex-col w-full sm:h-full sm:flex-1 flex-1 min-h-0 items-start justify-end lg:rounded-4xl sm:rounded-2xl rounded-xl bg-black relative overflow-hidden"
 	style={backgroundStyle}
 >
 	{backgroundImage && (
 		<div class="absolute inset-0 bg-black/60 z-0"></div>
 	)}
 	<div class="flex flex-col items-start gap-3 w-full relative z-10">
-		<h3 class="text-white text-6xl sm:text-7xl lg:text-[5rem] sm:text-[4rem] text-[1.5rem] font-bold lowercase leading-tight tracking-wide">
+		<h3 class="text-white text-6xl sm:text-7xl lg:text-[3rem] sm:text-[2rem] text-[1.5rem] font-bold lowercase leading-tight tracking-wide">
 			{title}
 		</h3>
 		<div class="flex flex-row gap-2 flex-wrap max-w-[370px] sm:max-w-none ">
 			{tags.map((tag) => (
-			<span class="bg-[#2a2a2a] text-gray-300 px-4 py-2 rounded-full md:text-[1.25rem] text-[15px] leading-none font-thin lowercase">
+			<span class="bg-[#2a2a2a] text-gray-300 px-4 py-2 rounded-full lg:text-[1rem] xl:text-[1.25rem] text-[15px] leading-none font-thin lowercase">
 				{tag}
 			</span>
 			))}
