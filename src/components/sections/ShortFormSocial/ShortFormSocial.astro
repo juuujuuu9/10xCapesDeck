@@ -13,6 +13,21 @@ export interface Props {
 }
 
 const { videos, title = "short form social" } = Astro.props;
+
+// Group videos into rows: 1 per row on mobile, 2 per row on md, 4 per row on lg
+// We group by the maximum (4) and let CSS handle responsive display
+function groupVideosIntoRows(videoList: typeof videos) {
+	const rows: Array<Array<typeof videos[0]>> = [];
+	const VIDEOS_PER_ROW_LG = 4;
+	
+	for (let i = 0; i < videoList.length; i += VIDEOS_PER_ROW_LG) {
+		rows.push(videoList.slice(i, i + VIDEOS_PER_ROW_LG));
+	}
+	
+	return rows;
+}
+
+const videoRows = groupVideosIntoRows(videos);
 ---
 
 <section class="w-full h-dvh p-12 snap-start snap-always flex flex-col overflow-hidden">
@@ -23,23 +38,29 @@ const { videos, title = "short form social" } = Astro.props;
 			</h2>
 		</div>
 	)}
-	<div class="flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide">
-		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full min-h-full items-center justify-center py-4">
-			{videos.map((video) => (
-				<div class="w-full h-full flex items-center justify-center p-0 min-h-[50vh]">
-					<LazyVideo
-						client:load
-						src={video.src}
-						videoId={video.videoId}
-						poster={video.poster}
-						pullZone={video.pullZone}
-						priority={video.priority || false}
-						className="max-w-full max-h-full w-auto h-auto object-contain"
-						autoPlay
-						loop
-						muted
-						playsInline
-					/>
+	<div class="flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide snap-y snap-mandatory">
+		<div class="flex flex-col h-full">
+			{videoRows.map((row) => (
+				<div class="w-full h-full shrink-0 snap-start snap-stop-always flex items-center justify-center px-4">
+					<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full h-full items-center justify-center">
+						{row.map((video) => (
+							<div class="w-full h-full flex items-center justify-center p-0">
+								<LazyVideo
+									client:load
+									src={video.src}
+									videoId={video.videoId}
+									poster={video.poster}
+									pullZone={video.pullZone}
+									priority={video.priority || false}
+									className="max-w-full max-h-full w-auto h-auto object-contain"
+									autoPlay
+									loop
+									muted
+									playsInline
+								/>
+							</div>
+						))}
+					</div>
 				</div>
 			))}
 		</div>
