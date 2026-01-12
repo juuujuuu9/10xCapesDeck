@@ -260,6 +260,16 @@ PUBLIC_BUNNY_STREAM_URL=https://vz-xxxxx.b-cdn.net
 - This ensures all WordPress-sourced images use Bunny CDN optimization (RULE-015)
 - Never hardcode WordPress domain URLs in components or code
 
+### RULE-022: Default Section Padding ⚠️
+**Standard horizontal padding for all sections**
+- Unless given instructions otherwise, sections should use default padding pattern
+- Small screens (sm): `px-2`
+- Medium screens (md): `px-4`
+- Large screens and up (lg+): `px-8`
+- Pattern: `px-2 md:px-4 lg:px-8`
+- Override only when explicitly requested or design requires different spacing
+- Applies to all `<section>` elements and section components
+
 ---
 
 ## Rule Symbols
@@ -441,5 +451,5 @@ You: "Yes"
 ---
 
 **Last updated:** 2025-01-27  
-**Active rules:** 21  
+**Active rules:** 22  
 **Philosophy:** Radical simplicity + Performance at scale

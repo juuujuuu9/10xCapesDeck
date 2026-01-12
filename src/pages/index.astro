@@ -95,6 +95,15 @@ const socialContentBg = bunnyImage('/wp-content/uploads/2025/04/03202025-Adidas-
 		/>
 	</head>
 	<body class="font-sans overflow-x-hidden bg-[#fdfffd]">
+		<button
+			class="fixed top-3 right-0 z-50 p-2 hover:opacity-80 transition-opacity"
+			aria-label="Menu"
+			type="button"
+		>
+			<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+				<path fill="#d63a2e" d="M32 96v64h448V96H32zm0 128v64h448v-64H32zm0 128v64h448v-64H32z"></path>
+			</svg>
+		</button>
 		<script>
 			// Development: Save and restore scroll position
 			// Remove this in production by deleting the script or setting ENABLE_SCROLL_RESTORE=false
@@ -144,7 +153,7 @@ const socialContentBg = bunnyImage('/wp-content/uploads/2025/04/03202025-Adidas-
 				}
 			})();
 		</script>
-		<section class="bg-[#f4f4f0] w-full max-w-screen mx-auto h-dvh flex items-center justify-center snap-start snap-always">
+		<section class="bg-[#f4f4f0] w-full max-w-screen mx-auto h-dvh flex items-center justify-center snap-start snap-always px-4 md:px-0">
 			<img
 				src={logoDesktop}
 				srcset={`${logoMobile} 320w, ${logoDesktop} 400w`}
@@ -156,7 +165,7 @@ const socialContentBg = bunnyImage('/wp-content/uploads/2025/04/03202025-Adidas-
 				height="100"
 			/>
 		</section>
-		<section class="w-full max-w-screen mx-auto h-dvh flex flex-col items-center justify-center snap-start snap-always">
+		<section class="w-full max-w-screen mx-auto h-dvh flex flex-col items-center justify-center snap-start snap-always px-4 md:px-4 lg:px-0">
 			<h2 class="mb-12 sm:text-4xl text-2xl font-bold text-center">brands we've worked with</h2>
 			<div class="grid grid-cols-5 gap-8 w-full xl:max-w-4xl lg:max-w-3xl md:max-w-2xl sm:max-w-1xl h-auto">
 				{brandImages.map((brand) => {
@@ -178,7 +187,7 @@ const socialContentBg = bunnyImage('/wp-content/uploads/2025/04/03202025-Adidas-
 				})}
 			</div>
 		</section>
-		<section class="bg-black w-full max-w-screen mx-auto h-dvh flex flex-col items-center justify-center snap-start snap-always p-0">
+		<section class="bg-black w-full max-w-screen mx-auto h-dvh flex flex-col items-center justify-center snap-start snap-always px-0">
 			<LazyVideo
 				client:load
 				src="/Times10-Reel-AaronCut-V7-09012025.mp4"
