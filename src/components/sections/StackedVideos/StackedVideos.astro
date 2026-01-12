@@ -1,0 +1,48 @@
+---
+import { LazyVideo } from '../../LazyVideo.tsx';
+
+export interface Props {
+	videos: Array<{
+		src?: string;
+		videoId?: string;
+		poster?: string;
+		pullZone?: string;
+		priority?: boolean;
+	}>;
+	title?: string;
+}
+
+const { videos, title } = Astro.props;
+
+// Take first 4 videos for the stack
+const stackedVideos = videos.slice(0, 4);
+---
+
+<section class="w-full h-dvh snap-start snap-always flex flex-col overflow-hidden px-2 md:px-4 lg:px-8 py-2 md:py-4 lg:py-8">
+	{title && (
+		<div class="w-full text-center mb-2 md:mb-4 shrink-0">
+			<h2 class="text-[#ca2c1e] text-[2rem] md:text-[48px] lowercase font-bold leading-none tracking-wide">
+				{title}
+			</h2>
+		</div>
+	)}
+	<div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 overflow-hidden auto-rows-fr">
+		{stackedVideos.map((video, index) => (
+			<div class="aspect-video overflow-hidden w-full h-full">
+				<LazyVideo
+					client:load
+					src={video.src}
+					videoId={video.videoId}
+					poster={video.poster}
+					pullZone={video.pullZone}
+					priority={video.priority || index === 0}
+					className="w-full h-full object-contain"
+					autoPlay
+					loop
+					muted
+					playsInline
+				/>
+			</div>
+		))}
+	</div>
+</section>

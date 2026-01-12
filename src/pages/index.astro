@@ -5,6 +5,7 @@ import { LazyVideo } from '../components/LazyVideo.tsx';
 import ServicesSection from '../components/sections/Services/ServicesSection.astro';
 import TitleSlide from '../components/sections/Services/TitleSlide.astro';
 import ShortFormSocial from '../components/sections/ShortFormSocial/ShortFormSocial.astro';
+import StackedVideos from '../components/sections/StackedVideos/StackedVideos.astro';
 
 const logoUrl = bunnyImage('/wp-content/uploads/2025/08/Times10-Logo-2025-2.png', {
 	pullZone: 'wordpress',
@@ -221,6 +222,22 @@ const socialContentBg = bunnyImage('/wp-content/uploads/2025/04/03202025-Adidas-
 				{ src: '/wp-content/uploads/2025/02/LaundrySauce_forhimandher-1.mp4', pullZone: 'wordpress' },
 				{ src: '/RosesFlowerShop-WhiteSoxOpeningDay-CutdownIGV4-033125.mp4', pullZone: 'storage' },
 				{ src: '/wp-content/uploads/2025/02/candace_parker_story_1-1080p.mp4', pullZone: 'wordpress' },
+			]}
+		/>
+		<StackedVideos 
+			videos={[
+				{ src: '/wp-content/uploads/2025/02/040722_C4_KevinHart_IgniteYourFire_PictureLock_FullLength_16x9_1920x1080.mp4', pullZone: 'wordpress' },
+				{ src: '/wp-content/uploads/2025/03/3D-Hero-Video-1920x1080-1.mp4', pullZone: 'wordpress' },
+				{ src: '/1920x1080_SocialPost-02-V1.mp4', pullZone: 'storage' },
+				{ src: '/AlphaBounce-Capabilities-Recut-08.14.25.mp4', pullZone: 'storage' },
+			]}
+		/>
+		<StackedVideos 
+			videos={[
+				{ src: '/Adidas-HardenRecap-V2-032125.mp4', pullZone: 'storage' },
+				{ src: '/Adidas HArden v2 Unboxing (updated) v2.mp4', pullZone: 'storage' },
+				{ src: '/HypePromo-Capabilities-Recut-08.14.25.mp4', pullZone: 'storage' },
+				{ src: '/wp-content/uploads/2025/02/CLEW-CarHero-Horz.mp4', pullZone: 'wordpress' },
 			]}
 		/>
 	</body>
