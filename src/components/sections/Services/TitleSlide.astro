@@ -13,7 +13,7 @@ const { backgroundImage, textParts, overlayOpacity = 75 } = Astro.props;
 	style={`--bg-image: url('${backgroundImage}'); background-image: var(--bg-image);`}
 >
 	<!-- Black overlay -->
-	<div class={`absolute inset-0 bg-black/${overlayOpacity}`}></div>
+	<div class="absolute inset-0" style={`background: linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75));`}></div>
 	<!-- Text content -->
 	<div class="relative z-10 text-center">
 		<h2 class="text-[2rem] md:text-[3.5rem] lowercase font-[600]">

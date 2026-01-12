@@ -62,6 +62,12 @@ const socialContentBg = bunnyImage('/wp-content/uploads/2025/04/03202025-Adidas-
 	width: 1920,
 	quality: 85
 });
+
+const photoSlideBg = bunnyImage('/wp-content/uploads/2025/03/C4-Lindsay-St-Louis-Niko-Selects1-53.jpg', {
+	pullZone: 'wordpress',
+	width: 1920,
+	quality: 85
+});
 ---
 
 <html lang="en">
@@ -239,6 +245,13 @@ const socialContentBg = bunnyImage('/wp-content/uploads/2025/04/03202025-Adidas-
 				{ src: '/HypePromo-Capabilities-Recut-08.14.25.mp4', pullZone: 'storage' },
 				{ src: '/wp-content/uploads/2025/02/CLEW-CarHero-Horz.mp4', pullZone: 'wordpress' },
 			]}
+		/>
+		<TitleSlide 
+			backgroundImage={photoSlideBg}
+			textParts={[
+				{ text: 'photo', color: '#fff' }
+			]}
+			overlayOpacity={75}
 		/>
 	</body>
 </html>
