@@ -1,0 +1,89 @@
+---
+import { LazyImage } from '../../LazyImage.tsx';
+import { bunnyImage } from '../../../lib/bunny-cdn';
+
+export interface Props {
+	images: Array<{
+		src: string;
+		alt: string;
+		label: string;
+		pullZone?: string;
+		priority?: boolean;
+		width?: number;
+		quality?: number;
+	}>;
+}
+
+const { images } = Astro.props;
+
+// Ensure we have exactly 3 images
+if (images.length !== 3) {
+	throw new Error('ThreeImageGrid requires exactly 3 images');
+}
+
+const [leftImage, topRightImage, bottomRightImage] = images;
+---
+
+<section class="w-full h-dvh max-h-dvh p-2 md:p-4 lg:p-8 snap-start snap-always flex flex-col overflow-hidden box-border">
+	<div class="w-full flex-1 min-h-0 grid grid-cols-1 md:grid-cols-2 grid-rows-[1fr_2fr] md:grid-rows-1 gap-2 md:gap-4 lg:gap-8">
+		{/* Left Panel - Full height on desktop, 1/3 height on mobile */}
+		<div class="relative w-full min-h-0 overflow-hidden justify-self-end xl:justify-self-start">
+			<LazyImage
+				client:visible
+				src={leftImage.src}
+				alt={leftImage.alt}
+				pullZone={leftImage.pullZone}
+				priority={leftImage.priority || false}
+				width={leftImage.width || 1200}
+				quality={leftImage.quality || 85}
+				className="w-full h-full object-cover"
+			/>
+			<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-4 py-1.5 md:py-2 lg:py-3">
+				<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
+					{leftImage.label}
+				</span>
+			</div>
+		</div>
+
+		{/* Right Side - Two stacked panels */}
+		<div class="flex flex-col gap-2 md:gap-4 lg:gap-8 min-h-0">
+			{/* Top Right Panel */}
+			<div class="relative flex-1 min-h-0 overflow-hidden">
+				<LazyImage
+					client:visible
+					src={topRightImage.src}
+					alt={topRightImage.alt}
+					pullZone={topRightImage.pullZone}
+					priority={topRightImage.priority || false}
+					width={topRightImage.width || 1200}
+					quality={topRightImage.quality || 85}
+					className="w-full h-full object-cover"
+				/>
+				<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
+					<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
+						{topRightImage.label}
+					</span>
+				</div>
+			</div>
+
+			{/* Bottom Right Panel */}
+			<div class="relative flex-1 min-h-0 overflow-hidden">
+				<LazyImage
+					client:visible
+					src={bottomRightImage.src}
+					alt={bottomRightImage.alt}
+					pullZone={bottomRightImage.pullZone}
+					priority={bottomRightImage.priority || false}
+					width={bottomRightImage.width || 1200}
+					quality={bottomRightImage.quality || 85}
+					className="w-full h-full object-cover"
+				/>
+				<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
+					<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
+						{bottomRightImage.label}
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

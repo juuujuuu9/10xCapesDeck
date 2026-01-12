@@ -261,14 +261,28 @@ PUBLIC_BUNNY_STREAM_URL=https://vz-xxxxx.b-cdn.net
 - Never hardcode WordPress domain URLs in components or code
 
 ### RULE-022: Default Section Padding ⚠️
-**Standard horizontal padding for all sections**
+**Equal padding on all sides for all sections**
 - Unless given instructions otherwise, sections should use default padding pattern
-- Small screens (sm): `px-2`
-- Medium screens (md): `px-4`
-- Large screens and up (lg+): `px-8`
-- Pattern: `px-2 md:px-4 lg:px-8`
+- Small screens (sm): `p-2` (equal padding on all sides)
+- Medium screens (md): `p-4` (equal padding on all sides)
+- Large screens and up (lg+): `p-8` (equal padding on all sides)
+- Pattern: `p-2 md:p-4 lg:p-8`
+- Grid gaps must match section padding: `gap-2 md:gap-4 lg:gap-8`
+- Applies to all grid containers within sections (except Services and ShortFormSocial sections)
 - Override only when explicitly requested or design requires different spacing
 - Applies to all `<section>` elements and section components
+
+### RULE-023: Section Content Containment 🔴
+**All section content must be contained within padding boundaries**
+- Sections with `h-dvh` must use `max-h-dvh` to prevent overflow
+- Inner containers must respect parent padding: use `flex-1` + `min-h-0` instead of `h-full`
+- Never use fixed viewport heights (`h-[33vh]`, `h-[66vh]`) inside padded sections
+- Grid/flex children should use `min-h-0` to allow proper flex shrinking
+- Pattern: Section has `p-2 md:p-4 lg:p-8` → inner container uses `flex-1 min-h-0`
+- All content (images, videos, text) must fit within the padded area
+- Use `overflow-hidden` on section to clip any overflow
+- Test: Content should never touch viewport edges, always respect padding on all sides
+- Applies to all section components, especially those with `h-dvh` or full-height layouts
 
 ---
 
@@ -451,5 +465,5 @@ You: "Yes"
 ---
 
 **Last updated:** 2025-01-27  
-**Active rules:** 22  
+**Active rules:** 23  
 **Philosophy:** Radical simplicity + Performance at scale

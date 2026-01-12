@@ -6,6 +6,7 @@ import ServicesSection from '../components/sections/Services/ServicesSection.ast
 import TitleSlide from '../components/sections/Services/TitleSlide.astro';
 import ShortFormSocial from '../components/sections/ShortFormSocial/ShortFormSocial.astro';
 import StackedVideos from '../components/sections/StackedVideos/StackedVideos.astro';
+import ThreeImageGrid from '../components/sections/ThreeImageGrid/ThreeImageGrid.astro';
 
 const logoUrl = bunnyImage('/wp-content/uploads/2025/08/Times10-Logo-2025-2.png', {
 	pullZone: 'wordpress',
@@ -174,7 +175,7 @@ const photoSlideBg = bunnyImage('/wp-content/uploads/2025/03/C4-Lindsay-St-Louis
 		</section>
 		<section class="w-full max-w-screen mx-auto h-dvh flex flex-col items-center justify-center snap-start snap-always px-4 md:px-4 lg:px-0">
 			<h2 class="mb-12 sm:text-4xl text-2xl font-bold text-center">brands we've worked with</h2>
-			<div class="grid grid-cols-5 gap-8 w-full xl:max-w-4xl lg:max-w-3xl md:max-w-2xl sm:max-w-1xl h-auto">
+			<div class="grid grid-cols-5 gap-2 md:gap-4 lg:gap-8 w-full xl:max-w-4xl lg:max-w-3xl md:max-w-2xl sm:max-w-1xl h-auto">
 				{brandImages.map((brand) => {
 					const imageUrl = bunnyImage(brand.path, {
 						pullZone: 'wordpress',
@@ -252,6 +253,34 @@ const photoSlideBg = bunnyImage('/wp-content/uploads/2025/03/C4-Lindsay-St-Louis
 				{ text: 'photo', color: '#fff' }
 			]}
 			overlayOpacity={75}
+		/>
+		<ThreeImageGrid 
+			images={[
+				{
+					src: '/wp-content/uploads/2025/03/C4-SS-Montez-and-Bianca-89.jpg',
+					alt: 'Partnerships',
+					label: 'partnerships',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				},
+				{
+					src: '/wp-content/uploads/2025/08/Flerish-ProductPhotos-07.28.25-80.jpg',
+					alt: 'Product',
+					label: 'product',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				},
+				{
+					src: '/wp-content/uploads/2025/09/7.2.21-C4-x-SI-x-JASMINE-10-1-1.jpg',
+					alt: 'Lifestyle',
+					label: 'lifestyle',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				}
+			]}
 		/>
 	</body>
 </html>
