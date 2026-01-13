@@ -7,6 +7,7 @@ import TitleSlide from '../components/sections/Services/TitleSlide.astro';
 import ShortFormSocial from '../components/sections/ShortFormSocial/ShortFormSocial.astro';
 import StackedVideos from '../components/sections/StackedVideos/StackedVideos.astro';
 import ThreeImageGrid from '../components/sections/ThreeImageGrid/ThreeImageGrid.astro';
+import ThreeImageGridFlipped from '../components/sections/ThreeImageGrid/ThreeImageGridFlipped.astro';
 
 const logoUrl = bunnyImage('/wp-content/uploads/2025/08/Times10-Logo-2025-2.png', {
 	pullZone: 'wordpress',
@@ -65,6 +66,20 @@ const socialContentBg = bunnyImage('/wp-content/uploads/2025/04/03202025-Adidas-
 });
 
 const photoSlideBg = bunnyImage('/wp-content/uploads/2025/03/C4-Lindsay-St-Louis-Niko-Selects1-53.jpg', {
+	pullZone: 'wordpress',
+	width: 1920,
+	quality: 85
+});
+
+// RULE-021: WordPress URL auto-conversion to Bunny CDN
+const designSlideBg = bunnyImage('/wp-content/uploads/2025/09/10.1.21-C4-STARBURST-TRUCK-24.jpg', {
+	pullZone: 'wordpress',
+	width: 1920,
+	quality: 85
+});
+
+// RULE-021: WordPress URL auto-conversion to Bunny CDN
+const activationsSlideBg = bunnyImage('/wp-content/uploads/2025/04/RosesFlowerShop-WhiteSoxOpeningDay-Selects-040125-128-scaled.jpg', {
 	pullZone: 'wordpress',
 	width: 1920,
 	quality: 85
@@ -281,6 +296,105 @@ const photoSlideBg = bunnyImage('/wp-content/uploads/2025/03/C4-Lindsay-St-Louis
 					quality: 85
 				}
 			]}
+		/>
+		<ThreeImageGridFlipped 
+			images={[
+				{
+					src: '/wp-content/uploads/2025/08/ClewDrais-53-1.jpg',
+					alt: 'Event',
+					label: 'event',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				},
+				{
+					src: '/wp-content/uploads/2025/02/060523-GoldGrove-62.jpeg',
+					alt: 'Beauty',
+					label: 'beauty',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				},
+				{
+					src: '/wp-content/uploads/2025/03/c4_07.09.22_austin_baura_9675.jpg',
+					alt: 'Action + Sports',
+					label: 'action + sports',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				}
+			]}
+		/>
+		<TitleSlide 
+			backgroundImage={designSlideBg}
+			textParts={[
+				{ text: 'design', color: '#fff' }
+			]}
+			overlayOpacity={75}
+		/>
+		<ThreeImageGrid 
+			images={[
+				{
+					src: '/wp-content/uploads/2025/08/ManU-Social_newsroom-ask_post_v2.png',
+					alt: 'Manchester United Social',
+					label: 'digital ads',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85,
+					type: 'image'
+				},
+				{
+					src: '/wp-content/uploads/2025/04/Clew-Champs-LEDTruck-3.jpg',
+					alt: 'Clew Champs LED Truck',
+					label: 'ooh',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85,
+					type: 'image'
+				},
+				{
+					src: '/wp-content/uploads/2025/03/Instacart-1-16x9-1.mp4',
+					alt: 'Instacart Video',
+					label: 'digital banner',
+					pullZone: 'wordpress',
+					type: 'video'
+				}
+			]}
+		/>
+		<ThreeImageGridFlipped 
+			images={[
+				{
+					src: '/wp-content/uploads/2025/02/website-banner_black-background-1.mp4',
+					alt: 'Website Banner',
+					label: 'booth',
+					pullZone: 'wordpress',
+					type: 'video'
+				},
+				{
+					src: '/wp-content/uploads/2025/03/Both-Render-5.5_0004.jpg',
+					alt: '3D Render',
+					label: '3d render',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85,
+					type: 'image'
+				},
+				{
+					src: '/wp-content/uploads/2025/03/Ryu-Pointing-Animation-2.mp4',
+					alt: 'Ryu Animation',
+					label: 'animation',
+					pullZone: 'wordpress',
+					type: 'video'
+				}
+			]}
+		/>
+		<TitleSlide 
+			backgroundImage={activationsSlideBg}
+			textParts={[
+				{ text: 'activations & ', color: '#fff' },
+				{ text: 'sampling', color: '#ca2c1e' }
+			]}
+			overlayOpacity={75}
 		/>
 	</body>
 </html>
