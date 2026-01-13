@@ -8,6 +8,7 @@ import ShortFormSocial from '../components/sections/ShortFormSocial/ShortFormSoc
 import StackedVideos from '../components/sections/StackedVideos/StackedVideos.astro';
 import ThreeImageGrid from '../components/sections/ThreeImageGrid/ThreeImageGrid.astro';
 import ThreeImageGridFlipped from '../components/sections/ThreeImageGrid/ThreeImageGridFlipped.astro';
+import TwoBlockGrid from '../components/sections/TwoBlockGrid/TwoBlockGrid.astro';
 
 const logoUrl = bunnyImage('/wp-content/uploads/2025/08/Times10-Logo-2025-2.png', {
 	pullZone: 'wordpress',
@@ -395,6 +396,81 @@ const activationsSlideBg = bunnyImage('/wp-content/uploads/2025/04/RosesFlowerSh
 				{ text: 'sampling', color: '#ca2c1e' }
 			]}
 			overlayOpacity={75}
+		/>
+		<TwoBlockGrid 
+			block1={{
+				col1: [
+					{ text: 'c4 wwe nashville summer slam' },
+					{ 
+						image: {
+							src: '/wp-content/uploads/2025/02/C4-NASHVILLE-SUMMER-SLAM-DAY-1.jpg',
+							alt: 'C4 Nashville Summer Slam Day 1',
+							pullZone: 'wordpress',
+							width: 1200,
+							quality: 85
+						}
+					},
+					{ 
+						image: {
+							src: '/wp-content/uploads/2025/02/C4-NASHVILLE-SUMMR-SLAM-DAY-47.jpg',
+							alt: 'C4 Nashville Summer Slam Day 47',
+							pullZone: 'wordpress',
+							width: 1200,
+							quality: 85
+						}
+					}
+				],
+				col2: [
+					{ 
+						video: {
+							src: '/C4 Nashville Recap v3-2.mp4',
+							pullZone: 'storage',
+							priority: false
+						}
+					},
+					{ 
+						image: {
+							src: '/wp-content/uploads/2025/02/C4-NASHVILLE-SUMMER-SLAM-DAY-55-e1740534310474.jpeg',
+							alt: 'C4 Nashville Summer Slam Day 55',
+							pullZone: 'wordpress',
+							width: 1200,
+							quality: 85
+						}
+					}
+				]
+			}}
+			block2={{
+				col1: [
+					{ text: 'c4 sxsw' },
+					{ 
+						image: {
+							src: '/wp-content/uploads/2025/02/031222_C4_SXSW_DAY-2_QUICKTURN-44.jpg',
+							alt: 'C4 SXSW Day 2',
+							pullZone: 'wordpress',
+							width: 1200,
+							quality: 85
+						}
+					},
+					{ 
+						image: {
+							src: '/wp-content/uploads/2025/02/031122_C4_SXSW_DAY-1_QUICKTURN-24.jpg',
+							alt: 'C4 SXSW Day 1',
+							pullZone: 'wordpress',
+							width: 1200,
+							quality: 85
+						}
+					}
+				],
+				col2: [
+					{ 
+						video: {
+							src: '/C4 - SXSW Recap (2nd Week).mp4',
+							pullZone: 'storage',
+							priority: false
+						}
+					}
+				]
+			}}
 		/>
 	</body>
 </html>
