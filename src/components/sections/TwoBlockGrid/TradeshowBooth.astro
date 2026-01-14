@@ -1,0 +1,108 @@
+---
+import { LazyImage } from '../../LazyImage.tsx';
+
+export interface ImageItem {
+	src: string;
+	alt: string;
+	label?: string;
+	pullZone?: string;
+	priority?: boolean;
+	width?: number;
+	quality?: number;
+}
+
+export interface Props {
+	title: string;
+	col1: ImageItem[]; // 2 images
+	col2: ImageItem; // 1 image
+	col3: ImageItem[]; // 2 images
+}
+
+const { title, col1, col2, col3 } = Astro.props;
+---
+
+<section class="w-full h-dvh max-h-dvh p-2 md:p-4 lg:p-8 snap-start snap-always flex flex-col overflow-hidden box-border">
+	{/* Content Grid */}
+	<div class="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-3 gap-2 md:gap-4 lg:gap-8">
+		{/* Column 1: Title + 2 images */}
+		<div class="flex-1 min-h-0 flex flex-col gap-2 md:gap-4 lg:gap-8">
+			{/* Title */}
+			<div class="w-full shrink-0 flex items-start justify-start">
+				<span class="blk-title">
+					{title}
+				</span>
+			</div>
+
+			{/* Two images stacked */}
+			{col1.map((image) => (
+				<div class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+					<LazyImage
+						client:visible
+						src={image.src}
+						alt={image.alt}
+						pullZone={image.pullZone}
+						priority={image.priority || false}
+						width={image.width || 1200}
+						quality={image.quality || 85}
+						className="w-full h-full object-cover object-center"
+					/>
+					{image.label && (
+						<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
+							<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
+								{image.label}
+							</span>
+						</div>
+					)}
+				</div>
+			))}
+		</div>
+
+		{/* Column 2: 1 image */}
+		<div class="flex-1 min-h-0 flex items-center justify-center">
+			<div class="relative overflow-hidden w-full h-full flex items-center justify-center">
+				<LazyImage
+					client:visible
+					src={col2.src}
+					alt={col2.alt}
+					pullZone={col2.pullZone}
+					priority={col2.priority || false}
+					width={col2.width || 1200}
+					quality={col2.quality || 85}
+					className="w-full h-full object-cover object-center"
+				/>
+				{col2.label && (
+					<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
+						<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
+							{col2.label}
+						</span>
+					</div>
+				)}
+			</div>
+		</div>
+
+		{/* Column 3: 2 images stacked */}
+		<div class="flex-1 min-h-0 flex flex-col gap-2 md:gap-4 lg:gap-8">
+			{col3.map((image) => (
+				<div class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+					<LazyImage
+						client:visible
+						src={image.src}
+						alt={image.alt}
+						pullZone={image.pullZone}
+						priority={image.priority || false}
+						width={image.width || 1200}
+						quality={image.quality || 85}
+						className="w-full h-full object-cover object-center"
+					/>
+					{image.label && (
+						<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
+							<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
+								{image.label}
+							</span>
+						</div>
+					)}
+				</div>
+			))}
+		</div>
+	</div>
+</section>
