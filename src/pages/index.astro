@@ -111,6 +111,13 @@ const websiteSlideBg = bunnyImage('/wp-content/uploads/2025/02/MyArcade-Mike-3.j
 	width: 1920,
 	quality: 85
 });
+
+// RULE-021: WordPress URL auto-conversion to Bunny CDN
+const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bombsicle-scaled.jpg', {
+	pullZone: 'wordpress',
+	width: 1920,
+	quality: 85
+});
 ---
 
 <html lang="en">
@@ -623,5 +630,60 @@ const websiteSlideBg = bunnyImage('/wp-content/uploads/2025/02/MyArcade-Mike-3.j
 				priority: false
 			}}
 		/>
+		<section class="bg-[#000] w-full max-w-screen mx-auto h-dvh flex items-center justify-center snap-start snap-always px-4 md:px-0">
+			<div class="text-center">
+				<h2 class="text-[2rem] md:text-[3.5rem] lowercase font-[600]">
+					<span style="color: #fff;">case </span>
+					<span style="color: #ca2c1e;">studies</span>
+				</h2>
+			</div>
+		</section>
+		<section 
+			id="c4-frozen-section"
+			class="w-full h-dvh snap-start snap-always bg-no-repeat flex items-center justify-center relative bg-black"
+			style={`background-image: url('${c4FrozenBombsicleBg}'); background-position: 40% 50%; background-size: cover;`}
+		>
+			<div 
+				id="c4-frozen-overlay"
+				class="absolute inset-0 bg-black transition-opacity duration-1000 ease-in-out"
+			></div>
+		</section>
+		<script>
+			// Fade in/out black overlay when section enters/exits viewport
+			(function() {
+				const overlay = document.getElementById('c4-frozen-overlay');
+				if (!overlay) return;
+
+				// Check for reduced motion preference
+				const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+				
+				// If reduced motion, hide overlay immediately
+				if (prefersReducedMotion) {
+					overlay.style.opacity = '0';
+					return;
+				}
+
+				// Use Intersection Observer to trigger fade in/out
+				const section = document.getElementById('c4-frozen-section');
+				if (!section) return;
+
+				const observer = new IntersectionObserver((entries) => {
+					entries.forEach((entry) => {
+						if (entry.isIntersecting) {
+							// Fade out the black overlay to reveal background image
+							overlay.style.opacity = '0';
+						} else {
+							// Fade in the black overlay when section exits viewport
+							overlay.style.opacity = '1';
+						}
+					});
+				}, {
+					threshold: 0.1,
+					rootMargin: '0px'
+				});
+
+				observer.observe(section);
+			})();
+		</script>
 	</body>
 </html>
