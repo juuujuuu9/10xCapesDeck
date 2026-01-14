@@ -1,0 +1,121 @@
+---
+import { LazyImage } from '../../LazyImage.tsx';
+import { LazyVideo } from '../../LazyVideo.tsx';
+
+export interface ImageItem {
+	src: string;
+	alt: string;
+	label?: string;
+	pullZone?: string;
+	priority?: boolean;
+	width?: number;
+	quality?: number;
+}
+
+export interface VideoItem {
+	src: string;
+	label?: string;
+	pullZone?: string;
+	priority?: boolean;
+}
+
+export interface Props {
+	images: ImageItem[]; // 2 images to stack
+	video: VideoItem;
+}
+
+const { images, video } = Astro.props;
+---
+
+<section class="w-full h-dvh max-h-dvh p-2 md:p-4 lg:p-8 snap-start snap-always flex flex-col overflow-hidden box-border">
+	<div class="w-full flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-2 gap-2 md:gap-4 lg:gap-8">
+		{/* Block 1: 2 stacked images + video (between images when <lg) */}
+		<div class="flex-1 min-h-0 flex flex-col justify-start gap-2 md:gap-4 lg:gap-8">
+			{/* First image */}
+			<div class="relative overflow-hidden flex-1 min-h-0 self-start w-full rounded-[50px] border border-gray-300">
+				<LazyImage
+					client:visible
+					src={images[0].src}
+					alt={images[0].alt}
+					pullZone={images[0].pullZone}
+					priority={images[0].priority || false}
+					width={images[0].width || 1200}
+					quality={images[0].quality || 85}
+					className="w-full h-full object-cover object-top"
+				/>
+				{images[0].label && (
+					<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
+						<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
+							{images[0].label}
+						</span>
+					</div>
+				)}
+			</div>
+
+			{/* Video - visible only when stacked (<lg) */}
+			<div class="relative overflow-hidden flex-1 min-h-0 lg:hidden">
+				<LazyVideo
+					client:visible
+					src={video.src}
+					pullZone={video.pullZone}
+					priority={video.priority || false}
+					autoPlay
+					muted
+					loop
+					playsInline
+					className="w-full h-full object-cover"
+				/>
+				{video.label && (
+					<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
+						<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
+							{video.label}
+						</span>
+					</div>
+				)}
+			</div>
+
+			{/* Second image */}
+			<div class="relative overflow-hidden flex-1 min-h-0 self-start w-full rounded-[50px] border border-gray-300">
+				<LazyImage
+					client:visible
+					src={images[1].src}
+					alt={images[1].alt}
+					pullZone={images[1].pullZone}
+					priority={images[1].priority || false}
+					width={images[1].width || 1200}
+					quality={images[1].quality || 85}
+					className="w-full h-full object-cover object-top"
+				/>
+				{images[1].label && (
+					<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
+						<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
+							{images[1].label}
+						</span>
+					</div>
+				)}
+			</div>
+		</div>
+
+		{/* Block 2: Video - visible only when side-by-side (>=lg) */}
+		<div class="relative overflow-hidden flex-1 min-h-0 hidden lg:block">
+			<LazyVideo
+				client:visible
+				src={video.src}
+				pullZone={video.pullZone}
+				priority={video.priority || false}
+				autoPlay
+				muted
+				loop
+				playsInline
+				className="w-full h-full object-cover"
+			/>
+			{video.label && (
+				<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
+					<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
+						{video.label}
+					</span>
+				</div>
+			)}
+		</div>
+	</div>
+</section>

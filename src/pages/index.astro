@@ -13,6 +13,7 @@ import AdidasWorldCup from '../components/sections/TwoBlockGrid/AdidasWorldCup.a
 import TradeshowBooth from '../components/sections/TwoBlockGrid/TradeshowBooth.astro';
 import InfluencerMarketing from '../components/sections/InfluencerMarketing/InfluencerMarketing.astro';
 import InfluencerMarketing2 from '../components/sections/InfluencerMarketing/InfluencerMarketing2.astro';
+import Website from '../components/sections/Website/Website.astro';
 
 const logoUrl = bunnyImage('/wp-content/uploads/2025/08/Times10-Logo-2025-2.png', {
 	pullZone: 'wordpress',
@@ -101,6 +102,13 @@ const influencerMarketingSlideBg = bunnyImage('/wp-content/uploads/2025/08/PuraV
 const influencerMarketingSlideBgMobile = bunnyImage('/wp-content/uploads/2025/03/Clew-Danrue-ChanelWestCoast-Capes-scaled.jpg', {
 	pullZone: 'wordpress',
 	width: 1200,
+	quality: 85
+});
+
+// RULE-021: WordPress URL auto-conversion to Bunny CDN
+const websiteSlideBg = bunnyImage('/wp-content/uploads/2025/02/MyArcade-Mike-3.jpg', {
+	pullZone: 'wordpress',
+	width: 1920,
 	quality: 85
 });
 ---
@@ -585,5 +593,35 @@ const influencerMarketingSlideBgMobile = bunnyImage('/wp-content/uploads/2025/03
 		/>
 		<InfluencerMarketing />
 		<InfluencerMarketing2 />
+		<TitleSlide 
+			backgroundImage={websiteSlideBg}
+			textParts={[
+				{ text: 'website', color: '#fff' }
+			]}
+			overlayOpacity={75}
+		/>
+		<Website 
+			images={[
+				{
+					src: '/wp-content/uploads/2025/02/MyArcade_Times10_Carousel_9.jpg',
+					alt: 'MyArcade website',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				},
+				{
+					src: '/wp-content/uploads/2025/02/MyArcade_Times10_Carousel_6.jpg',
+					alt: 'MyArcade website',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				}
+			]}
+			video={{
+				src: 'https://times-10-video-offload.b-cdn.net/MyArcade_Times10_Carousel_2.mp4',
+				pullZone: 'wordpress',
+				priority: false
+			}}
+		/>
 	</body>
 </html>
