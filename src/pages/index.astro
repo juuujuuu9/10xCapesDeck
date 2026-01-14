@@ -9,6 +9,7 @@ import StackedVideos from '../components/sections/StackedVideos/StackedVideos.as
 import ThreeImageGrid from '../components/sections/ThreeImageGrid/ThreeImageGrid.astro';
 import ThreeImageGridFlipped from '../components/sections/ThreeImageGrid/ThreeImageGridFlipped.astro';
 import TwoBlockGrid from '../components/sections/TwoBlockGrid/TwoBlockGrid.astro';
+import AdidasWorldCup from '../components/sections/TwoBlockGrid/AdidasWorldCup.astro';
 
 const logoUrl = bunnyImage('/wp-content/uploads/2025/08/Times10-Logo-2025-2.png', {
 	pullZone: 'wordpress',
@@ -471,6 +472,48 @@ const activationsSlideBg = bunnyImage('/wp-content/uploads/2025/04/RosesFlowerSh
 					}
 				]
 			}}
+		/>
+		<AdidasWorldCup 
+			title="adidas club world cup"
+			block1={[
+				{
+					src: '/wp-content/uploads/2025/08/cwc1.jpg',
+					alt: 'Adidas Club World Cup',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				},
+				{
+					src: '/wp-content/uploads/2025/08/cwc2.jpg',
+					alt: 'Adidas Club World Cup',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				},
+				{
+					src: '/wp-content/uploads/2025/08/cwc3.jpg',
+					alt: 'Adidas Club World Cup',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				}
+			]}
+			block2={[
+				{
+					src: '/wp-content/uploads/2025/08/cwc4.jpg',
+					alt: 'Adidas Club World Cup',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				},
+				{
+					src: '/wp-content/uploads/2025/08/cwc5.jpg',
+					alt: 'Adidas Club World Cup',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				}
+			]}
 		/>
 	</body>
 </html>
