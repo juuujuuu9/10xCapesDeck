@@ -1,0 +1,64 @@
+---
+import { LazyVideo } from '../../LazyVideo.tsx';
+
+export interface Props {
+	videoSrc?: string;
+}
+
+const { videoSrc = 'https://times-10-video-offload.b-cdn.net/Influencer-mkt-video.mp4' } = Astro.props;
+
+const bulletPoints = [
+	'identify, source & activate key aim relationships',
+	'seeding kits & gifting',
+	'strategic brand partnerships',
+	'content creation',
+	'audience targeting',
+	'content distribution',
+	'measure impact + reach'
+];
+---
+
+<section class="w-full h-dvh max-h-dvh pl-2 pr-0 md:pl-4 md:pr-0 lg:pl-8 lg:pr-0 snap-start snap-always flex flex-col overflow-hidden box-border">
+	<div class="w-full flex-1 min-h-0 flex flex-col lg:flex-row gap-2 md:gap-4 lg:gap-8">
+		{/* Left side: Text content */}
+		<div class="pl-12 lg:w-[30%] flex flex-col items-start justify-start lg:justify-center">
+			{/* Title */}
+			<h2 class="text-[#ca2c1e] text-[2rem] md:text-[3rem] lg:text-[3rem] lowercase font-bold leading-none tracking-wide mb-4">
+				influencer marketing
+			</h2>
+
+			{/* Black box with white text */}
+			<div class="bg-black text-white py-2 px-6 mb-4 rounded-full">
+				<p class="text-base md:text-lg lg:text-xl font-light lowercase tracking-wide">
+					fanning digital flames with target audiences
+				</p>
+			</div>
+
+			{/* Bullet points */}
+			<ul class="space-y-2 md:space-y-3 lg:space-y-1">
+				{bulletPoints.map((point) => (
+					<li class="text-black text-sm md:text-base lg:text-xl font-light lowercase tracking-wide flex items-start">
+						<span class="mr-2 md:mr-3 text-[#ca2c1e] font-bold">–</span>
+						<span>{point}</span>
+					</li>
+				))}
+			</ul>
+		</div>
+
+		{/* Right side: Video overlay */}
+		<div class="flex-1 w-[70%] min-h-0 relative flex items-center justify-end">
+			<div class="h-[100vh] max-h-full relative overflow-hidden">
+				<LazyVideo
+					client:visible
+					src={videoSrc}
+					priority={true}
+					autoPlay
+					muted
+					loop
+					playsInline
+					className="w-full h-full object-cover"
+				/>
+			</div>
+		</div>
+	</div>
+</section>

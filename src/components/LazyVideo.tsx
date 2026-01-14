@@ -42,7 +42,13 @@ export function LazyVideo({
 	const savedTimeRef = useRef<number>(0);
 
 	// Determine final URLs
-	const videoUrl = videoId ? bunnyVideoUrl(videoId) : (src ? bunnyVideoFile(src, pullZone) : '');
+	const videoUrl = videoId 
+		? bunnyVideoUrl(videoId) 
+		: (src 
+			? (src.startsWith('http://') || src.startsWith('https://') 
+				? src 
+				: bunnyVideoFile(src, pullZone))
+			: '');
 	
 	// RULE-015: Use Bunny Optimizer for dynamic resizing/format conversion
 	const posterUrl = videoId 
