@@ -87,6 +87,20 @@ const activationsSlideBg = bunnyImage('/wp-content/uploads/2025/04/RosesFlowerSh
 	width: 1920,
 	quality: 85
 });
+
+// RULE-021: WordPress URL auto-conversion to Bunny CDN
+const influencerMarketingSlideBg = bunnyImage('/wp-content/uploads/2025/08/PuraVida-061824-62-scaled.jpg', {
+	pullZone: 'wordpress',
+	width: 1200,
+	quality: 85
+});
+
+// RULE-021: WordPress URL auto-conversion to Bunny CDN
+const influencerMarketingSlideBgMobile = bunnyImage('/wp-content/uploads/2025/03/Clew-Danrue-ChanelWestCoast-Capes-scaled.jpg', {
+	pullZone: 'wordpress',
+	width: 1200,
+	quality: 85
+});
 ---
 
 <html lang="en">
@@ -557,6 +571,15 @@ const activationsSlideBg = bunnyImage('/wp-content/uploads/2025/04/RosesFlowerSh
 					quality: 85
 				}
 			]}
+		/>
+		<TitleSlide 
+			backgroundImage={influencerMarketingSlideBg}
+			backgroundImageMobile={influencerMarketingSlideBgMobile}
+			textParts={[
+				{ text: 'influencer ', color: '#fff' },
+				{ text: 'marketing', color: '#ca2c1e' }
+			]}
+			overlayOpacity={75}
 		/>
 	</body>
 </html>

@@ -1,17 +1,29 @@
 ---
 interface Props {
 	backgroundImage: string;
+	backgroundImageMobile?: string;
 	textParts: Array<{ text: string; color: string }>;
 	overlayOpacity?: number;
 }
 
-const { backgroundImage, textParts, overlayOpacity = 75 } = Astro.props;
+const { backgroundImage, backgroundImageMobile, textParts, overlayOpacity = 75 } = Astro.props;
+const mobileBg = backgroundImageMobile || backgroundImage;
 ---
 
 <section 
-	class="relative w-full max-w-screen mx-auto h-dvh flex items-center justify-center snap-start snap-always overflow-hidden bg-cover bg-center bg-no-repeat px-4 md:px-0"
-	style={`--bg-image: url('${backgroundImage}'); background-image: var(--bg-image);`}
+	class="title-slide-responsive relative w-full max-w-screen mx-auto h-dvh flex items-center justify-center snap-start snap-always overflow-hidden bg-cover bg-center bg-no-repeat px-4 md:px-0"
+	style={`--bg-mobile: url('${mobileBg}'); --bg-desktop: url('${backgroundImage}');`}
 >
+	<style>
+		.title-slide-responsive {
+			background-image: var(--bg-mobile);
+		}
+		@media (min-width: 768px) {
+			.title-slide-responsive {
+				background-image: var(--bg-desktop);
+			}
+		}
+	</style>
 	<!-- Black overlay -->
 	<div class="absolute inset-0" style={`background: linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75));`}></div>
 	<!-- Text content -->
