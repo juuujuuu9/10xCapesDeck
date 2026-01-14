@@ -34,7 +34,8 @@ export function LazyImage({
 	className = '',
 	...props
 }: LazyImageProps): JSX.Element {
-	const [isLoaded, setIsLoaded] = useState(false);
+	// For priority images without blur placeholder, show immediately
+	const [isLoaded, setIsLoaded] = useState(priority && !blurPlaceholder);
 	const [shouldLoad, setShouldLoad] = useState(priority);
 	const [reducedMotion, setReducedMotion] = useState(false);
 	const imgRef = useRef<HTMLImageElement>(null);
@@ -111,6 +112,11 @@ export function LazyImage({
 					alt={alt}
 					loading={priority ? 'eager' : 'lazy'}
 					onLoad={() => setIsLoaded(true)}
+					onError={() => {
+						// If image fails to load, show it anyway (might be CDN config issue)
+						setIsLoaded(true);
+						console.warn(`[LazyImage] Failed to load image: ${fullImageUrl}`);
+					}}
 					className={`transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'} ${className}`}
 					{...props}
 				/>
