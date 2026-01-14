@@ -1,0 +1,80 @@
+---
+import { LazyImage } from '../../LazyImage.tsx';
+
+export interface Props {
+	image: {
+		src: string;
+		alt: string;
+		pullZone?: string;
+		priority?: boolean;
+		width?: number;
+		quality?: number;
+	};
+	challenge: string;
+	whatWeDid: string;
+	keyInitiatives: string[];
+}
+
+const { image, challenge, whatWeDid, keyInitiatives } = Astro.props;
+---
+
+<section class="w-full h-dvh max-h-dvh p-2 md:p-4 lg:p-8 snap-start snap-always flex flex-col overflow-hidden box-border">
+	<div class="w-full flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-2 gap-2 md:gap-4 lg:gap-8">
+		{/* Left Column: Image */}
+		<div class="relative overflow-hidden flex-1 min-h-0">
+			<LazyImage
+				client:visible
+				src={image.src}
+				alt={image.alt}
+				pullZone={image.pullZone}
+				priority={image.priority || false}
+				width={image.width || 1200}
+				quality={image.quality || 85}
+				className="w-full h-full object-cover"
+			/>
+		</div>
+
+		{/* Right Column: Text Content */}
+		<div class="flex-1 min-h-0 flex flex-col justify-center overflow-y-auto">
+			<div class="space-y-6 max-w-[650px] mx-auto">
+				{/* Challenge Section */}
+				<div>
+					<h3 class="text-[#d63a2e] xl:text-[32px] lg:text-[24px] md:text-[20px] font-semibold leading-[32px] mb-4 text-left lowercase">
+						challenge:
+					</h3>
+					<p class="text-[#010101] font-aktiv-grotesk xl:text-[20px] lg:text-[15px] md:text-[13px] font-semibold leading-[28px] text-left">
+						{challenge}
+					</p>
+				</div>
+
+				{/* What We Did Section */}
+				<div>
+					<h3 class="text-[#d63a2e] xl:text-[32px] lg:text-[24px] md:text-[20px] font-semibold leading-[32px] mb-4 text-left lowercase">
+						what we did:
+					</h3>
+				<p class="text-[#010101] xl:text-[20px] lg:text-[15px] md:text-[13px] leading-[28px] text-left inline">
+					{whatWeDid}
+				</p>
+				{/* Key Initiatives List */}
+				<p class="text-[#010101] xl:text-[20px] lg:text-[15px] md:text-[13px] leading-[28px] text-left mt-4">
+					Key initiatives included:
+				</p>
+				<ol class="mt-4 space-y-2 list-decimal list-inside">
+						{keyInitiatives.map((initiative) => (
+							<li class="text-[#010101] xl:text-[20px] lg:text-[15px] md:text-[13px] leading-[28px] text-left">
+								{initiative}
+							</li>
+						))}
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	/* RULE-004: Font handling - aktiv-grotesk font family */
+	.font-aktiv-grotesk {
+		font-family: 'AktivGrotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	}
+</style>

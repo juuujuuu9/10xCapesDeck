@@ -14,6 +14,7 @@ import TradeshowBooth from '../components/sections/TwoBlockGrid/TradeshowBooth.a
 import InfluencerMarketing from '../components/sections/InfluencerMarketing/InfluencerMarketing.astro';
 import InfluencerMarketing2 from '../components/sections/InfluencerMarketing/InfluencerMarketing2.astro';
 import Website from '../components/sections/Website/Website.astro';
+import C4CaseStudy from '../components/sections/C4CaseStudy/C4CaseStudy.astro';
 
 const logoUrl = bunnyImage('/wp-content/uploads/2025/08/Times10-Logo-2025-2.png', {
 	pullZone: 'wordpress',
@@ -685,5 +686,24 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 				observer.observe(section);
 			})();
 		</script>
+		<C4CaseStudy
+			image={{
+				src: '/wp-content/uploads/2025/09/10.16.21-C4-KEVIN-HART-IYF-NEW-25_EDIT-2.jpg',
+				alt: 'Kevin Hart with C4 Energy drink',
+				pullZone: 'wordpress',
+				width: 1200,
+				quality: 85
+			}}
+			challenge="Develop a breakthrough brand campaign to launch C4 Energy into the ready-to-drink space, transitioning from a pre-workout supplement brand to a major player in the energy drink category."
+			whatWeDid="Times10 launched a full-funnel brand campaign to introduce Ignite Your Fire (IYF) and establish C4 as a cultural force in the energy drink space. We developed a bold creative platform that merged fitness, music, fashion, and lifestyle, designed to connect with the next generation of energy drinkers across every touchpoint."
+			keyInitiatives={[
+				'Integrated Brand Platform: Built "Ignite Your Fire" as a unifying creative idea across all channels and assets.',
+				'Talent Partnerships: Cast a diverse group of athletes, musicians, and creators to represent the campaign authentically.',
+				'Content Creation: Produced high-energy hero films, social-first cuts, disruptive digital assets, and on-the-ground activation content.',
+				'Social & Digital Strategy: Deployed content across Meta, YouTube, TikTok, and influencer channels to build awareness and drive trial.',
+				'Retail Integration: Extended the campaign to in-store environments with bold visuals and QR-to-content engagement.',
+				'Earned & Owned Media Push: Delivered a cohesive story through organic and paid content to amplify reach and conversions.'
+			]}
+		/>
 	</body>
 </html>
