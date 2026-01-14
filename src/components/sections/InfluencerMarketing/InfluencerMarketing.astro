@@ -18,10 +18,10 @@ const bulletPoints = [
 ];
 ---
 
-<section class="w-full h-dvh max-h-dvh pl-2 pr-0 md:pl-4 md:pr-0 lg:pl-8 lg:pr-0 snap-start snap-always flex flex-col overflow-hidden box-border">
-	<div class="w-full flex-1 min-h-0 flex flex-col lg:flex-row gap-2 md:gap-4 lg:gap-8">
+<section class="w-full h-dvh max-h-dvh pl-0 pr-0 md:pl-4 md:pr-0 lg:pl-8 lg:pr-0 snap-start snap-always flex flex-col overflow-hidden box-border">
+	<div class="w-full flex-1 min-h-0 flex flex-col-reverse lg:flex-row gap-2 md:gap-4 lg:gap-8">
 		{/* Left side: Text content */}
-		<div class="pl-12 lg:w-[30%] flex flex-col items-start justify-start lg:justify-center">
+		<div class="flex-1 lg:flex-none pl-0 xl:pl-8 lg:w-[30%] flex flex-col items-center lg:items-start justify-center">
 			{/* Title */}
 			<h2 class="text-[#ca2c1e] text-[2rem] md:text-[3rem] lg:text-[3rem] lowercase font-bold leading-none tracking-wide mb-4">
 				influencer marketing
@@ -46,8 +46,8 @@ const bulletPoints = [
 		</div>
 
 		{/* Right side: Video overlay */}
-		<div class="flex-1 w-[70%] min-h-0 relative flex items-center justify-end">
-			<div class="h-[100vh] max-h-full relative overflow-hidden">
+		<div class="flex-1 w-full lg:w-[70%] min-h-0 relative flex items-center justify-end">
+			<div class="w-full lg:w-auto h-full relative overflow-hidden">
 				<LazyVideo
 					client:visible
 					src={videoSrc}
