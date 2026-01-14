@@ -66,4 +66,29 @@
 	.scrollbar-hide::-webkit-scrollbar {
 		display: none;
 	}
+
+	.blk-title {
+		font-family: 'AktivGrotesk', sans-serif;
+		font-size: 2.25rem;
+		color: #010101;
+		line-height: 1;
+		text-transform: lowercase;
+		font-weight: 600;
+	}
+
+	@media (max-width: 991px) {
+		.blk-title {
+			font-size: 1.75rem;
+			padding-top: .75rem;
+			padding-bottom: .75rem;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.blk-title {
+			font-size: 1.25rem;
+			padding-top: 1.1rem;
+			padding-bottom: .75rem;
+		}
+	}
 }
