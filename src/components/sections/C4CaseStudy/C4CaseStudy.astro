@@ -16,6 +16,17 @@ export interface Props {
 }
 
 const { image, challenge, whatWeDid, keyInitiatives } = Astro.props;
+
+// Helper function to format text with bold prefix before colon
+function formatWithBoldPrefix(text: string): string {
+	const colonIndex = text.indexOf(':');
+	if (colonIndex === -1) {
+		return text;
+	}
+	const prefix = text.substring(0, colonIndex);
+	const suffix = text.substring(colonIndex);
+	return `<strong>${prefix}</strong>${suffix}`;
+}
 ---
 
 <section class="w-full h-dvh max-h-dvh p-2 md:p-4 lg:p-8 snap-start snap-always flex flex-col overflow-hidden box-border">
@@ -32,10 +43,19 @@ const { image, challenge, whatWeDid, keyInitiatives } = Astro.props;
 				quality={image.quality || 85}
 				className="w-full h-full object-cover"
 			/>
+			{/* MobileChallenge Section */}
+			<div class="absolute bottom-0 left-0 p-4 lg:p-8 lg:hidden block max-w-[500px]">
+				<h3 class="text-[#d63a2e] text-[28px] font-semibold leading-[32px] mb-2 text-left lowercase">
+					challenge:
+				</h3>
+				<p class="text-white font-aktiv-grotesk md:text-[18px] font-semibold leading-[28px] text-left">
+					{challenge}
+				</p>
+			</div>
 		</div>
 
 		{/* Right Column: Text Content */}
-		<div class="flex-1 min-h-0 flex flex-col justify-center overflow-y-auto">
+		<div class="hidden lg:flex flex-1 min-h-0 flex-col justify-center overflow-y-auto">
 			<div class="space-y-6 max-w-[650px] mx-auto">
 				{/* Challenge Section */}
 				<div>
@@ -56,18 +76,40 @@ const { image, challenge, whatWeDid, keyInitiatives } = Astro.props;
 					{whatWeDid}
 				</p>
 				{/* Key Initiatives List */}
-				<p class="text-[#010101] xl:text-[20px] lg:text-[15px] md:text-[13px] leading-[28px] text-left mt-4">
+				<p class="text-[#010101] xl:text-[20px] lg:text-[15px] md:text-[13px] leading-[28px] text-left mt-4 font-semibold">
 					Key initiatives included:
 				</p>
 				<ol class="mt-4 space-y-2 list-decimal list-inside">
 						{keyInitiatives.map((initiative) => (
-							<li class="text-[#010101] xl:text-[20px] lg:text-[15px] md:text-[13px] leading-[28px] text-left">
-								{initiative}
+							<li class="text-[#010101] xl:text-[20px] lg:text-[15px] md:text-[13px] leading-[28px] text-left" set:html={formatWithBoldPrefix(initiative)}>
 							</li>
 						))}
 					</ol>
 				</div>
 			</div>
+		</div>
+	</div>
+</section>
+
+<!-- Mobile What We Did Section -->
+<section class="w-full h-dvh max-h-dvh p-4 md:p-4 lg:p-8 lg:hidden snap-start snap-always flex flex-col overflow-hidden box-border">
+	<div class="flex-1 min-h-0 flex flex-col justify-center overflow-y-auto">
+		<div class="space-y-6">
+			<h3 class="text-[#d63a2e] text-[28px] font-semibold leading-[32px] mb-4 text-left lowercase">
+				what we did:
+			</h3>
+			<p class="text-[#010101] text-[18px] leading-[28px] text-left">
+				{whatWeDid}
+			</p>
+			<p class="text-[#010101] text-[18px] leading-[28px] text-left mt-4 font-semibold">
+				Key initiatives included:
+			</p>
+			<ol class="mt-4 space-y-2 list-decimal list-inside">
+				{keyInitiatives.map((initiative) => (
+					<li class="text-[#010101] text-[18px] leading-[28px] text-left" set:html={formatWithBoldPrefix(initiative)}>
+					</li>
+				))}
+			</ol>
 		</div>
 	</div>
 </section>
