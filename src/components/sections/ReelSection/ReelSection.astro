@@ -41,7 +41,7 @@ const videoSrc = video.src.startsWith('http')
 		loop
 		playsInline
 		showUnmuteButton={true}
-		priority={video.priority || false}
+		priority={video.priority !== undefined ? video.priority : true}
 		className="w-full h-full object-cover"
 	/>
 </section>

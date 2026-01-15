@@ -37,7 +37,7 @@ const [topLeftImage, bottomLeftImage, rightImage] = images;
 						client:load
 						src={topLeftImage.src}
 						pullZone={topLeftImage.pullZone}
-						priority={topLeftImage.priority || false}
+						priority={topLeftImage.priority !== undefined ? topLeftImage.priority : true}
 						autoPlay
 						muted
 						loop
@@ -70,7 +70,7 @@ const [topLeftImage, bottomLeftImage, rightImage] = images;
 						client:load
 						src={bottomLeftImage.src}
 						pullZone={bottomLeftImage.pullZone}
-						priority={bottomLeftImage.priority || false}
+						priority={bottomLeftImage.priority !== undefined ? bottomLeftImage.priority : true}
 						autoPlay
 						muted
 						loop
@@ -104,7 +104,7 @@ const [topLeftImage, bottomLeftImage, rightImage] = images;
 					client:load
 					src={rightImage.src}
 					pullZone={rightImage.pullZone}
-					priority={rightImage.priority || false}
+					priority={rightImage.priority !== undefined ? rightImage.priority : true}
 					autoPlay
 					muted
 					loop

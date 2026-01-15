@@ -35,17 +35,13 @@ export function LazyVideo({
 }: LazyVideoProps): React.JSX.Element {
 	// If priority is true, start with shouldLoad=true and isIntersecting=true
 	// This ensures videos load immediately on mobile when using client:load
-	// For videos using client:load, we want them to load immediately, so start optimistically
-	// MOBILE FIX: Start with shouldLoad=true by default - intersection detection will refine this
-	// This ensures videos load immediately when component mounts (client:load behavior)
-	const [shouldLoad, setShouldLoad] = useState(true); // Default to true - load immediately
-	const [isIntersecting, setIsIntersecting] = useState(true); // Default to true - show immediately
+	const [shouldLoad, setShouldLoad] = useState(priority);
+	const [isIntersecting, setIsIntersecting] = useState(priority); // Start as intersecting if priority
 	const [reducedMotion, setReducedMotion] = useState(false);
 	const [isMuted, setIsMuted] = useState(true);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const videoRef = useRef<HTMLVideoElement>(null);
 	const savedTimeRef = useRef<number>(0);
-	const hasCheckedInitialLoad = useRef<boolean>(false);
 
 	// Determine final URLs
 	const videoUrl = videoId 
@@ -100,46 +96,17 @@ export function LazyVideo({
 			// Also check if it's within 2 viewport heights (for scroll-snap sections)
 			const isInViewport = rect.top < window.innerHeight * 2 && rect.bottom > -window.innerHeight * 0.5;
 			
-			// CRITICAL FIX FOR MOBILE: If element has dimensions, it's rendered - load it immediately
-			// This fixes gray boxes on mobile where videos use client:load
-			// Videos with client:load should load immediately when component mounts
-			if (hasDimensions) {
+			// On mobile, if element has dimensions and is near viewport, load it
+			// This handles cases where scroll-snap sections are just off-screen
+			if (hasDimensions && (isInViewport || priority)) {
 				setIsIntersecting(true);
-				setShouldLoad(true);
-				return; // Early return - we've loaded it
-			}
-			
-			// Fallback: if in viewport or priority, load it
-			if (isInViewport || priority) {
-				setIsIntersecting(true);
+				// If already in viewport, load immediately (especially important for mobile)
 				setShouldLoad(true);
 			}
 		};
-
-		// AGGRESSIVE MOBILE FIX: Load video immediately if container exists
-		// Don't wait for dimensions - load as soon as component mounts
-		// This ensures client:load videos load immediately
-		const loadImmediately = (): void => {
-			const rect = element.getBoundingClientRect();
-			// If we have any dimensions at all, or if it's been more than 100ms since mount
-			if (rect.width > 0 || rect.height > 0) {
-				setIsIntersecting(true);
-				setShouldLoad(true);
-			}
-		};
-
-		// Try loading immediately
-		loadImmediately();
 
 		// For mobile: Use requestAnimationFrame to ensure layout is complete
 		// Then check multiple times with delays
-		// IMPORTANT: Check immediately first (don't wait for RAF) for faster loading
-		if (!hasCheckedInitialLoad.current) {
-			checkInitialIntersection();
-			loadImmediately(); // Also try immediate load
-			hasCheckedInitialLoad.current = true;
-		}
-		
 		let timeoutId1: ReturnType<typeof setTimeout> | null = null;
 		let timeoutId2: ReturnType<typeof setTimeout> | null = null;
 		let timeoutId3: ReturnType<typeof setTimeout> | null = null;
@@ -147,25 +114,12 @@ export function LazyVideo({
 
 		const rafId = requestAnimationFrame(() => {
 			checkInitialIntersection();
-			loadImmediately(); // Try again after RAF
 			
 			// Check immediately and after delays (for mobile layout completion)
-			timeoutId1 = setTimeout(() => {
-				checkInitialIntersection();
-				loadImmediately();
-			}, 50); // Faster first check
-			timeoutId2 = setTimeout(() => {
-				checkInitialIntersection();
-				loadImmediately();
-			}, 150);
-			timeoutId3 = setTimeout(() => {
-				checkInitialIntersection();
-				loadImmediately();
-			}, 300);
-			timeoutId4 = setTimeout(() => {
-				checkInitialIntersection();
-				loadImmediately();
-			}, 600); // Faster final check
+			timeoutId1 = setTimeout(checkInitialIntersection, 100);
+			timeoutId2 = setTimeout(checkInitialIntersection, 300);
+			timeoutId3 = setTimeout(checkInitialIntersection, 500);
+			timeoutId4 = setTimeout(checkInitialIntersection, 1000); // Extra check for slow mobile
 		});
 
 		// Always observe for intersection to handle pause/resume, even for priority videos
@@ -206,18 +160,17 @@ export function LazyVideo({
 	// set isIntersecting to true to ensure video is visible (fixes mobile loading issues)
 	// This handles cases where intersection detection hasn't fired yet
 	useEffect(() => {
-		if (shouldLoad && !isIntersecting) {
-			// Use a very short delay to allow intersection check to run first
+		if (shouldLoad && !isIntersecting && !priority) {
+			// Use a small delay to allow intersection check to run first
 			const safeguardTimeout = setTimeout(() => {
 				// If still loaded but not intersecting, mark as intersecting to show video
 				// This ensures videos load on mobile even if intersection detection is delayed
-				// Especially important for client:load videos that should load immediately
 				setIsIntersecting(true);
-			}, 50); // Shorter delay for faster loading
+			}, 200);
 			
 			return () => clearTimeout(safeguardTimeout);
 		}
-	}, [shouldLoad, isIntersecting]);
+	}, [shouldLoad, isIntersecting, priority]);
 
 	// Ensure video is muted immediately when element is created, and set volume to 55% when unmuted
 	useEffect(() => {
@@ -339,7 +292,7 @@ export function LazyVideo({
 	return (
 		<div 
 			ref={containerRef} 
-			className={`relative overflow-hidden bg-black ${className}`}
+			className={`relative overflow-hidden bg-black/5 ${className}`}
 			style={{ 
 				aspectRatio: props.width && props.height ? `${props.width}/${props.height}` : undefined,
 				height: props.width && props.height ? undefined : '100%',

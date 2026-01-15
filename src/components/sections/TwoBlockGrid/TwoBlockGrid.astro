@@ -84,7 +84,7 @@ const { block1, block2 } = Astro.props;
 									client:load
 									src={item.video.src}
 									pullZone={item.video.pullZone}
-									priority={item.video.priority || false}
+									priority={item.video.priority !== undefined ? item.video.priority : true}
 									autoPlay
 									muted
 									loop
@@ -172,7 +172,7 @@ const { block1, block2 } = Astro.props;
 									client:load
 									src={item.video.src}
 									pullZone={item.video.pullZone}
-									priority={item.video.priority || false}
+									priority={item.video.priority !== undefined ? item.video.priority : true}
 									autoPlay
 									muted
 									loop
