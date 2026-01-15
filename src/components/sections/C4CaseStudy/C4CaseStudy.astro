@@ -105,7 +105,7 @@ function formatWithBoldPrefix(text: string): string {
 			{/* Tab Navigation */}
 			<div class="flex gap-3 px-4 pt-6 pb-4 shrink-0">
 				<button
-					class="tab-button flex-1"
+					class="tab-button flex-1 active"
 					data-tab="overview"
 					type="button"
 					aria-label="Show overview content"
@@ -125,7 +125,7 @@ function formatWithBoldPrefix(text: string): string {
 			{/* Tab Content */}
 			<div class="tab-content-container flex-1 min-h-0 overflow-y-auto px-4 pb-6">
 				{/* Overview Tab Content */}
-				<div id="overview-content" class="tab-content">
+				<div id="overview-content" class="tab-content active">
 					<div class="space-y-6">
 						{/* Challenge Section */}
 						<div>
@@ -167,45 +167,56 @@ function formatWithBoldPrefix(text: string): string {
 
 <script>
 	// Tab switching functionality for mobile
-	(function() {
+	document.addEventListener('DOMContentLoaded', () => {
 		// Only run on mobile
 		if (window.innerWidth >= 1024) return;
 
-		const tabButtons = document.querySelectorAll('.tab-button');
-		const tabContents = document.querySelectorAll('.tab-content');
-		const contentContainer = document.querySelector('.tab-content-container');
-		const contentCard = document.querySelector('.content-card');
-		const mobileLayout = document.querySelector('.mobile-layout');
+		// Find the section element (scope to current component instance)
+		const sections = document.querySelectorAll('section');
+		sections.forEach((section) => {
+			const mobileLayout = section.querySelector('.mobile-layout');
+			if (!mobileLayout) return; // Skip if not this component
 
-		tabButtons.forEach((button) => {
-			button.addEventListener('click', () => {
-				const targetTab = button.getAttribute('data-tab');
+			const tabButtons = section.querySelectorAll('.tab-button');
+			const tabContents = section.querySelectorAll('.tab-content');
+			const contentContainer = section.querySelector('.tab-content-container');
+			const contentCard = section.querySelector('.content-card');
 
-				// Expand card and show content container on first interaction
-				if (mobileLayout) {
-					mobileLayout.classList.add('expanded');
-				}
-				if (contentCard) {
-					contentCard.classList.add('expanded');
-				}
-				if (contentContainer) {
-					contentContainer.classList.add('has-content');
-				}
+			if (!tabButtons.length || !tabContents.length) {
+				return; // Skip if elements not found
+			}
 
-				// Update button states
-				tabButtons.forEach((btn) => btn.classList.remove('active'));
-				button.classList.add('active');
+			tabButtons.forEach((button) => {
+				button.addEventListener('click', () => {
+					const targetTab = button.getAttribute('data-tab');
+					if (!targetTab) return;
 
-				// Update content visibility
-				tabContents.forEach((content) => {
-					content.classList.remove('active');
-					if (content.id === `${targetTab}-content`) {
-						content.classList.add('active');
+					// Expand card and show content container on first interaction
+					if (mobileLayout) {
+						mobileLayout.classList.add('expanded');
 					}
+					if (contentCard) {
+						contentCard.classList.add('expanded');
+					}
+					if (contentContainer) {
+						contentContainer.classList.add('has-content');
+					}
+
+					// Update button states
+					tabButtons.forEach((btn) => btn.classList.remove('active'));
+					button.classList.add('active');
+
+					// Update content visibility
+					tabContents.forEach((content) => {
+						content.classList.remove('active');
+						if (content.id === `${targetTab}-content`) {
+							content.classList.add('active');
+						}
+					});
 				});
 			});
 		});
-	})();
+	});
 </script>
 
 <style>
@@ -288,7 +299,8 @@ function formatWithBoldPrefix(text: string): string {
 			display: none;
 		}
 
-		.tab-content-container.has-content {
+		.tab-content-container.has-content,
+		.content-card.expanded .tab-content-container {
 			display: flex;
 		}
 
