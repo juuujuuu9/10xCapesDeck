@@ -72,33 +72,35 @@ export function LazyVideo({
 	}, []);
 
 	useEffect(() => {
-		// Always load priority videos immediately
-		if (priority || reducedMotion) {
-			setShouldLoad(true);
-		}
-
 		const element = containerRef.current;
 		if (!element) {
 			return;
 		}
 
+		// Always load priority videos immediately and mark as intersecting
+		if (priority || reducedMotion) {
+			setShouldLoad(true);
+			setIsIntersecting(true);
+		}
+
 		// Check if element is already in viewport (fixes mobile gray box issue)
-		// Use a small delay to ensure layout is complete
+		// Use multiple checks with delays to ensure layout is complete on mobile
 		const checkInitialIntersection = (): void => {
 			const rect = element.getBoundingClientRect();
-			const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
+			// More lenient check: element is in viewport or very close to it
+			const isInViewport = rect.top < window.innerHeight * 1.5 && rect.bottom > -window.innerHeight * 0.5;
 			if (isInViewport) {
 				setIsIntersecting(true);
-				// If already in viewport, load immediately
-				if (!shouldLoad) {
-					setShouldLoad(true);
-				}
+				// If already in viewport, load immediately (especially important for mobile)
+				setShouldLoad(true);
 			}
 		};
 
-		// Check immediately and after a short delay (for mobile layout completion)
+		// Check immediately and after delays (for mobile layout completion)
 		checkInitialIntersection();
-		const timeoutId = setTimeout(checkInitialIntersection, 100);
+		const timeoutId1 = setTimeout(checkInitialIntersection, 100);
+		const timeoutId2 = setTimeout(checkInitialIntersection, 300);
+		const timeoutId3 = setTimeout(checkInitialIntersection, 500);
 
 		// Always observe for intersection to handle pause/resume, even for priority videos
 		lazyLoadManager.observe(element, (entry) => {
@@ -125,10 +127,12 @@ export function LazyVideo({
 		});
 
 		return () => {
-			clearTimeout(timeoutId);
+			clearTimeout(timeoutId1);
+			clearTimeout(timeoutId2);
+			clearTimeout(timeoutId3);
 			lazyLoadManager.unobserve(element);
 		};
-	}, [priority, reducedMotion, shouldLoad]);
+	}, [priority, reducedMotion]);
 
 	// Ensure video is muted immediately when element is created, and set volume to 55% when unmuted
 	useEffect(() => {

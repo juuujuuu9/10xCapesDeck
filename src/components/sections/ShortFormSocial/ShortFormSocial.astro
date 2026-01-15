@@ -52,7 +52,7 @@ const videoRows = groupVideosIntoRows(videos);
 								videoId={video.videoId}
 								poster={video.poster}
 								pullZone={video.pullZone}
-								priority={video.priority || false}
+								priority={video.priority !== undefined ? video.priority : true}
 								className="max-w-full max-h-full w-auto h-auto object-contain"
 								autoPlay
 								loop
@@ -89,7 +89,7 @@ const videoRows = groupVideosIntoRows(videos);
 												videoId={video.videoId}
 												poster={video.poster}
 												pullZone={video.pullZone}
-												priority={video.priority || false}
+												priority={video.priority !== undefined ? video.priority : true}
 												className="max-w-full max-h-full w-auto h-auto object-contain"
 												autoPlay
 												loop
@@ -112,7 +112,7 @@ const videoRows = groupVideosIntoRows(videos);
 													videoId={video.videoId}
 													poster={video.poster}
 													pullZone={video.pullZone}
-													priority={video.priority || false}
+													priority={video.priority !== undefined ? video.priority : true}
 													className="max-w-full max-h-full w-auto h-auto object-contain"
 													autoPlay
 													loop
@@ -135,7 +135,7 @@ const videoRows = groupVideosIntoRows(videos);
 													videoId={video.videoId}
 													poster={video.poster}
 													pullZone={video.pullZone}
-													priority={video.priority || false}
+													priority={video.priority !== undefined ? video.priority : true}
 													className="max-w-full max-h-full w-auto h-auto object-contain"
 													autoPlay
 													loop
