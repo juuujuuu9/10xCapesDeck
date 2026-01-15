@@ -33,8 +33,10 @@ export function LazyVideo({
 	unmuteButtonText = 'unmute',
 	...props
 }: LazyVideoProps): React.JSX.Element {
+	// If priority is true, start with shouldLoad=true and isIntersecting=true
+	// This ensures videos load immediately on mobile when using client:load
 	const [shouldLoad, setShouldLoad] = useState(priority);
-	const [isIntersecting, setIsIntersecting] = useState(false); // Start as NOT intersecting
+	const [isIntersecting, setIsIntersecting] = useState(priority); // Start as intersecting if priority
 	const [reducedMotion, setReducedMotion] = useState(false);
 	const [isMuted, setIsMuted] = useState(true);
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -88,19 +90,37 @@ export function LazyVideo({
 		const checkInitialIntersection = (): void => {
 			const rect = element.getBoundingClientRect();
 			// More lenient check: element is in viewport or very close to it
-			const isInViewport = rect.top < window.innerHeight * 1.5 && rect.bottom > -window.innerHeight * 0.5;
-			if (isInViewport) {
+			// On mobile, check if element is visible (has dimensions and is in viewport)
+			const hasDimensions = rect.width > 0 && rect.height > 0;
+			// More aggressive check for mobile: if element has dimensions, it's likely visible
+			// Also check if it's within 2 viewport heights (for scroll-snap sections)
+			const isInViewport = rect.top < window.innerHeight * 2 && rect.bottom > -window.innerHeight * 0.5;
+			
+			// On mobile, if element has dimensions and is near viewport, load it
+			// This handles cases where scroll-snap sections are just off-screen
+			if (hasDimensions && (isInViewport || priority)) {
 				setIsIntersecting(true);
 				// If already in viewport, load immediately (especially important for mobile)
 				setShouldLoad(true);
 			}
 		};
 
-		// Check immediately and after delays (for mobile layout completion)
-		checkInitialIntersection();
-		const timeoutId1 = setTimeout(checkInitialIntersection, 100);
-		const timeoutId2 = setTimeout(checkInitialIntersection, 300);
-		const timeoutId3 = setTimeout(checkInitialIntersection, 500);
+		// For mobile: Use requestAnimationFrame to ensure layout is complete
+		// Then check multiple times with delays
+		let timeoutId1: ReturnType<typeof setTimeout> | null = null;
+		let timeoutId2: ReturnType<typeof setTimeout> | null = null;
+		let timeoutId3: ReturnType<typeof setTimeout> | null = null;
+		let timeoutId4: ReturnType<typeof setTimeout> | null = null;
+
+		const rafId = requestAnimationFrame(() => {
+			checkInitialIntersection();
+			
+			// Check immediately and after delays (for mobile layout completion)
+			timeoutId1 = setTimeout(checkInitialIntersection, 100);
+			timeoutId2 = setTimeout(checkInitialIntersection, 300);
+			timeoutId3 = setTimeout(checkInitialIntersection, 500);
+			timeoutId4 = setTimeout(checkInitialIntersection, 1000); // Extra check for slow mobile
+		});
 
 		// Always observe for intersection to handle pause/resume, even for priority videos
 		lazyLoadManager.observe(element, (entry) => {
@@ -127,12 +147,30 @@ export function LazyVideo({
 		});
 
 		return () => {
-			clearTimeout(timeoutId1);
-			clearTimeout(timeoutId2);
-			clearTimeout(timeoutId3);
+			cancelAnimationFrame(rafId);
+			if (timeoutId1) clearTimeout(timeoutId1);
+			if (timeoutId2) clearTimeout(timeoutId2);
+			if (timeoutId3) clearTimeout(timeoutId3);
+			if (timeoutId4) clearTimeout(timeoutId4);
 			lazyLoadManager.unobserve(element);
 		};
 	}, [priority, reducedMotion]);
+
+	// Additional safeguard: If shouldLoad becomes true but isIntersecting is false,
+	// set isIntersecting to true to ensure video is visible (fixes mobile loading issues)
+	// This handles cases where intersection detection hasn't fired yet
+	useEffect(() => {
+		if (shouldLoad && !isIntersecting && !priority) {
+			// Use a small delay to allow intersection check to run first
+			const safeguardTimeout = setTimeout(() => {
+				// If still loaded but not intersecting, mark as intersecting to show video
+				// This ensures videos load on mobile even if intersection detection is delayed
+				setIsIntersecting(true);
+			}, 200);
+			
+			return () => clearTimeout(safeguardTimeout);
+		}
+	}, [shouldLoad, isIntersecting, priority]);
 
 	// Ensure video is muted immediately when element is created, and set volume to 55% when unmuted
 	useEffect(() => {
@@ -269,7 +307,8 @@ export function LazyVideo({
 					aria-hidden="true"
 					crossOrigin="anonymous" // Required for mobile browsers CORS (iOS Safari)
 					className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-						// Hide poster when video is visible (fixes mobile gray box)
+						// Hide poster when video is loaded and visible
+						// On mobile, if shouldLoad is true, video should be visible, so hide poster
 						shouldLoad && (isIntersecting || priority || reducedMotion) ? 'opacity-0 pointer-events-none' : 'opacity-100'
 					}`}
 					loading={priority ? 'eager' : 'lazy'}
@@ -284,7 +323,9 @@ export function LazyVideo({
 					preload={priority ? 'auto' : 'metadata'} // RULE-014: Use metadata for non-priority
 					crossOrigin="anonymous" // Required for mobile browsers CORS (iOS Safari)
 					className={`w-full h-full object-cover transition-opacity duration-700 ${
-						// Show video when intersecting OR when priority/reducedMotion (fixes mobile gray box)
+						// Show video when intersecting OR when priority/reducedMotion
+						// If shouldLoad is true, video element is rendered, and we show it if intersecting
+						// The safeguard useEffect will ensure isIntersecting is set when shouldLoad is true
 						isIntersecting || priority || reducedMotion ? 'opacity-100' : 'opacity-0'
 					}`}
 					muted // Always muted for autoplay compatibility
@@ -292,6 +333,18 @@ export function LazyVideo({
 					playsInline // Required for iOS autoplay
 					autoPlay={props.autoPlay !== false}
 					loop={props.loop}
+					onError={(e) => {
+						// Log video loading errors for debugging (especially on mobile)
+						const video = e.currentTarget;
+						console.error('[LazyVideo] Video loading error:', {
+							src: videoUrl,
+							error: video.error?.message || 'Unknown error',
+							code: video.error?.code,
+							pullZone,
+							priority
+						});
+						// Don't prevent default - let browser handle error display
+					}}
 					{...props}
 				/>
 			)}
