@@ -69,7 +69,7 @@ function formatWithBoldPrefix(text: string): string {
 					</p>
 					{/* Key Initiatives List */}
 					<p class="text-[#010101] xl:text-[20px] lg:text-[15px] md:text-[13px] leading-[28px] text-left mt-4 font-semibold">
-						Key initiatives included:
+						key initiatives included:
 					</p>
 					<ol class="mt-4 space-y-2 list-decimal list-inside">
 						{keyInitiatives.map((initiative) => (
@@ -300,5 +300,17 @@ function formatWithBoldPrefix(text: string): string {
 		.tab-content.active {
 			display: block;
 		}
+	}
+
+	/* Key Initiatives List Numbers - Red Color */
+	section ol.list-decimal li::marker {
+		color: #d63a2e;
+		font-weight: 600;
+	}
+
+	/* All text in section should be lowercase */
+	section p,
+	section li {
+		text-transform: lowercase;
 	}
 </style>
