@@ -263,6 +263,7 @@ export function LazyVideo({
 					src={posterUrl}
 					alt=""
 					aria-hidden="true"
+					crossOrigin="anonymous" // Required for mobile browsers CORS (iOS Safari)
 					className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
 						// Hide poster when video is visible (fixes mobile gray box)
 						shouldLoad && (isIntersecting || priority || reducedMotion) ? 'opacity-0 pointer-events-none' : 'opacity-100'
@@ -277,6 +278,7 @@ export function LazyVideo({
 					src={videoUrl}
 					poster={posterUrl}
 					preload={priority ? 'auto' : 'metadata'} // RULE-014: Use metadata for non-priority
+					crossOrigin="anonymous" // Required for mobile browsers CORS (iOS Safari)
 					className={`w-full h-full object-cover transition-opacity duration-700 ${
 						// Show video when intersecting OR when priority/reducedMotion (fixes mobile gray box)
 						isIntersecting || priority || reducedMotion ? 'opacity-100' : 'opacity-0'

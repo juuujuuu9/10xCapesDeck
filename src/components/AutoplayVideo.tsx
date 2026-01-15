@@ -80,6 +80,7 @@ export function AutoplayVideo({
 					src={poster}
 					alt=""
 					aria-hidden="true"
+					crossOrigin="anonymous" // Required for mobile browsers CORS (iOS Safari)
 					className="absolute inset-0 w-full h-full object-cover"
 					loading="lazy"
 				/>
@@ -89,6 +90,7 @@ export function AutoplayVideo({
 					ref={videoRef}
 					src={videoUrl}
 					poster={poster}
+					crossOrigin="anonymous" // Required for mobile browsers CORS (iOS Safari)
 					autoPlay
 					muted
 					loop

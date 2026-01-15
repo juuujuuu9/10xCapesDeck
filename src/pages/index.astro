@@ -126,17 +126,20 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 		<title>times10</title>
 
 		<!-- RULE-014: Preload critical assets for FCP -->
+		<!-- Logo is in first visible section, preload helps FCP -->
 		<link 
 			rel="preload" 
 			as="image" 
 			href={logoMobile} 
-			media="(max-width: 639px)" 
+			media="(max-width: 639px)"
+			fetchpriority="high"
 		/>
 		<link 
 			rel="preload" 
 			as="image" 
 			href={logoDesktop} 
-			media="(min-width: 640px)" 
+			media="(min-width: 640px)"
+			fetchpriority="high"
 		/>
 
 		<!-- Preload critical fonts to avoid FOIT -->
@@ -215,6 +218,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 				alt="times10 logo"
 				class="sm:max-w-[400px] max-w-80 max-h-full object-contain"
 				loading="eager"
+				crossorigin="anonymous"
 				width="400"
 				height="100"
 			/>
@@ -235,6 +239,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 								alt={brand.alt}
 								class="w-full h-full object-contain"
 								loading="lazy"
+								crossorigin="anonymous"
 							/>
 						</div>
 					);
@@ -244,7 +249,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 		<ReelSection
 			video={{
 				src: '/Times10-Reel-AaronCut-V7-09012025.mp4',
-				poster: '/posters/Times10-Reel-AaronCut-V7-09012025.jpg',
+				poster: '/Times10-Reel-AaronCut-V7-09012025.jpg', // Removed /posters/ prefix - file should be in storage root
 				pullZone: 'storage',
 				priority: true
 			}}

@@ -45,11 +45,50 @@ PUBLIC_BUNNY_CDN_URL=https://capeswp.b-cdn.net
 
 ### Troubleshooting
 
-If images show raw paths like `/wp-content/uploads/2025/08/image.png` in production:
+**If images show raw paths like `/wp-content/uploads/2025/08/image.png` in production:**
 - ✅ Check that environment variables are set in Vercel
 - ✅ Verify they're set for the correct environment (Production/Preview)
 - ✅ Redeploy after adding variables
 - ✅ Check browser console for `[Bunny CDN]` warnings/errors
+
+**If you see "Failed to load resource: You do not have permission to access the requested resource":**
+This is typically a CORS (Cross-Origin Resource Sharing) issue. Fix it by:
+
+1. **Enable CORS in Bunny CDN Dashboard:**
+   - Log into [Bunny CDN Dashboard](https://bunny.net)
+   - Go to **Pull Zones** → Select your pull zone
+   - Navigate to **Security** tab
+   - Under **CORS**, enable **Enable CORS**
+   - Add your domain(s) to **Allowed Origins** (or use `*` for all origins during development)
+   - Click **Save**
+
+2. **For WordPress Pull Zone (`capeswp.b-cdn.net`):**
+   - Enable CORS and add your site domain(s)
+   - Example allowed origins: `https://yourdomain.com`, `https://www.yourdomain.com`
+
+3. **For Storage Pull Zone (`times-10-video-offload.b-cdn.net`):**
+   - Enable CORS and add your site domain(s)
+   - Same domain configuration as above
+
+4. **Verify the URLs:**
+   - Check browser console Network tab to see which exact URL is failing
+   - Verify the URL format matches: `https://{pullzone}.b-cdn.net/{path}`
+   - Ensure the path exists in your pull zone
+
+5. **Check Access Restrictions:**
+   - In Bunny CDN Dashboard → Pull Zone → **Security**
+   - Ensure **Access Control** is not blocking requests
+   - If using IP restrictions, make sure your server/client IPs are allowed
+
+**Common CORS Configuration:**
+```
+Enable CORS: ✅ Enabled
+Allowed Origins: *
+Allowed Methods: GET, HEAD, OPTIONS
+Allowed Headers: *
+Expose Headers: *
+Max Age: 86400
+```
 
 The code will log warnings to the browser console if CDN URLs aren't configured.
 

@@ -101,6 +101,7 @@ export function LazyImage({
 					src={thumbnailUrl}
 					alt=""
 					aria-hidden="true"
+					crossOrigin="anonymous" // Required for mobile browsers CORS (iOS Safari)
 					className="absolute inset-0 w-full h-full object-cover blur-sm scale-110"
 					style={{ filter: 'blur(10px)' }}
 				/>
@@ -111,6 +112,7 @@ export function LazyImage({
 					src={fullImageUrl}
 					alt={alt}
 					loading={priority ? 'eager' : 'lazy'}
+					crossOrigin="anonymous" // Required for mobile browsers CORS (iOS Safari)
 					onLoad={() => setIsLoaded(true)}
 					onError={() => {
 						// If image fails to load, show it anyway (might be CDN config issue)
