@@ -92,9 +92,12 @@ function formatWithBoldPrefix(text: string): string {
 </section>
 
 <!-- Mobile What We Did Section -->
-<section class="w-full h-dvh max-h-dvh p-4 md:p-4 lg:p-8 lg:hidden snap-start snap-always flex flex-col overflow-hidden box-border">
-	<div class="flex-1 min-h-0 flex flex-col justify-center overflow-y-auto">
-		<div class="space-y-6">
+<section 
+	id="c4-mobile-text-section"
+	class="w-full h-dvh max-h-dvh p-4 md:p-4 lg:p-8 lg:hidden snap-start snap-always flex flex-col overflow-hidden box-border"
+>
+	<div id="c4-mobile-scroll-container" class="flex-1 min-h-0 flex flex-col overflow-y-auto">
+		<div id="c4-mobile-text-content" class="space-y-6">
 			<h3 class="text-[#d63a2e] text-[28px] font-semibold leading-[32px] mb-4 text-left lowercase">
 				what we did:
 			</h3>
@@ -113,6 +116,51 @@ function formatWithBoldPrefix(text: string): string {
 		</div>
 	</div>
 </section>
+
+<script>
+	// Mobile scroll behavior: When section enters viewport, position text at top
+	// User scrolls through text, then continues to next section
+	(function() {
+		// Only run on mobile (lg:hidden section)
+		if (window.innerWidth >= 1024) return;
+
+		const section = document.getElementById('c4-mobile-text-section');
+		const scrollContainer = document.getElementById('c4-mobile-scroll-container');
+		if (!section || !scrollContainer) return;
+
+		let hasPositioned = false;
+		let isPositioning = false;
+
+		// Intersection Observer to detect when section enters viewport
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting && !hasPositioned && !isPositioning) {
+						// Section just entered viewport - position text at top
+						isPositioning = true;
+						hasPositioned = true;
+						
+						// Use requestAnimationFrame to ensure layout is complete
+						requestAnimationFrame(() => {
+							// Scroll the inner container so text content starts at top
+							scrollContainer.scrollTop = 0;
+							isPositioning = false;
+						});
+					} else if (!entry.isIntersecting) {
+						// Section left viewport - reset flag for next time
+						hasPositioned = false;
+					}
+				});
+			},
+			{
+				threshold: 0.1,
+				rootMargin: '0px'
+			}
+		);
+
+		observer.observe(section);
+	})();
+</script>
 
 <style>
 	/* RULE-004: Font handling - aktiv-grotesk font family */
