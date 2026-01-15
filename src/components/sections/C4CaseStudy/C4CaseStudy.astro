@@ -29,8 +29,9 @@ function formatWithBoldPrefix(text: string): string {
 }
 ---
 
-<section class="w-full h-dvh max-h-dvh p-2 md:p-4 lg:p-8 snap-start snap-always flex flex-col overflow-hidden box-border">
-	<div class="w-full flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-2 gap-2 md:gap-4 lg:gap-8">
+<section class="w-full h-dvh max-h-dvh snap-start snap-always flex flex-col overflow-hidden box-border bg-[#f4f4f0] lg:bg-transparent p-0 md:p-4 lg:p-8">
+	{/* Desktop Layout - Unchanged */}
+	<div class="hidden lg:grid w-full flex-1 min-h-0 grid-cols-2 gap-2 md:gap-4 lg:gap-8">
 		{/* Left Column: Image */}
 		<div class="relative overflow-hidden flex-1 min-h-0">
 			<LazyImage
@@ -43,19 +44,10 @@ function formatWithBoldPrefix(text: string): string {
 				quality={image.quality || 85}
 				className="w-full h-full object-cover"
 			/>
-			{/* MobileChallenge Section */}
-			<div class="absolute bottom-0 left-0 p-4 lg:p-8 lg:hidden block max-w-[500px]">
-				<h3 class="text-[#d63a2e] text-[28px] font-semibold leading-[32px] mb-2 text-left lowercase">
-					challenge:
-				</h3>
-				<p class="text-white font-aktiv-grotesk md:text-[18px] font-semibold leading-[28px] text-left">
-					{challenge}
-				</p>
-			</div>
 		</div>
 
 		{/* Right Column: Text Content */}
-		<div class="hidden lg:flex flex-1 min-h-0 flex-col justify-center overflow-y-auto">
+		<div class="flex flex-1 min-h-0 flex-col justify-center overflow-y-auto">
 			<div class="space-y-6 max-w-[650px] mx-auto">
 				{/* Challenge Section */}
 				<div>
@@ -72,14 +64,14 @@ function formatWithBoldPrefix(text: string): string {
 					<h3 class="text-[#d63a2e] xl:text-[32px] lg:text-[24px] md:text-[20px] font-semibold leading-[32px] mb-4 text-left lowercase">
 						what we did:
 					</h3>
-				<p class="text-[#010101] xl:text-[20px] lg:text-[15px] md:text-[13px] leading-[28px] text-left inline">
-					{whatWeDid}
-				</p>
-				{/* Key Initiatives List */}
-				<p class="text-[#010101] xl:text-[20px] lg:text-[15px] md:text-[13px] leading-[28px] text-left mt-4 font-semibold">
-					Key initiatives included:
-				</p>
-				<ol class="mt-4 space-y-2 list-decimal list-inside">
+					<p class="text-[#010101] xl:text-[20px] lg:text-[15px] md:text-[13px] leading-[28px] text-left inline">
+						{whatWeDid}
+					</p>
+					{/* Key Initiatives List */}
+					<p class="text-[#010101] xl:text-[20px] lg:text-[15px] md:text-[13px] leading-[28px] text-left mt-4 font-semibold">
+						Key initiatives included:
+					</p>
+					<ol class="mt-4 space-y-2 list-decimal list-inside">
 						{keyInitiatives.map((initiative) => (
 							<li class="text-[#010101] xl:text-[20px] lg:text-[15px] md:text-[13px] leading-[28px] text-left" set:html={formatWithBoldPrefix(initiative)}>
 							</li>
@@ -89,76 +81,116 @@ function formatWithBoldPrefix(text: string): string {
 			</div>
 		</div>
 	</div>
-</section>
 
-<!-- Mobile What We Did Section -->
-<section 
-	id="c4-mobile-text-section"
-	class="w-full h-dvh max-h-dvh p-4 md:p-4 lg:p-8 lg:hidden snap-start snap-always flex flex-col overflow-hidden box-border"
->
-	<div id="c4-mobile-scroll-container" class="flex-1 min-h-0 flex flex-col overflow-y-auto">
-		<div id="c4-mobile-text-content" class="space-y-6">
-			<h3 class="text-[#d63a2e] text-[28px] font-semibold leading-[32px] mb-4 text-left lowercase">
-				what we did:
-			</h3>
-			<p class="text-[#010101] text-[18px] leading-[28px] text-left">
-				{whatWeDid}
-			</p>
-			<p class="text-[#010101] text-[18px] leading-[28px] text-left mt-4 font-semibold">
-				Key initiatives included:
-			</p>
-			<ol class="mt-4 space-y-2 list-decimal list-inside">
-				{keyInitiatives.map((initiative) => (
-					<li class="text-[#010101] text-[18px] leading-[28px] text-left" set:html={formatWithBoldPrefix(initiative)}>
-					</li>
-				))}
-			</ol>
+	{/* Mobile Layout - New Design */}
+	<div class="lg:hidden flex flex-col h-full w-full relative">
+		{/* Hero Image Section with Concave Curve */}
+		<div class="relative shrink-0 hero-section">
+			<div class="hero-image-container">
+				<LazyImage
+					client:visible
+					src={image.src}
+					alt={image.alt}
+					pullZone={image.pullZone}
+					priority={image.priority || false}
+					width={image.width || 1200}
+					quality={image.quality || 85}
+					className="w-full h-full object-cover"
+				/>
+			</div>
+		</div>
+
+		{/* White Content Card */}
+		<div class="content-card flex-1 min-h-0 flex flex-col overflow-y-auto">
+			{/* Tab Navigation */}
+			<div class="flex gap-3 px-4 pt-6 pb-4 shrink-0">
+				<button
+					class="tab-button active"
+					data-tab="overview"
+					type="button"
+					aria-label="Show overview content"
+				>
+					Overview
+				</button>
+				<button
+					class="tab-button"
+					data-tab="initiatives"
+					type="button"
+					aria-label="Show key initiatives"
+				>
+					Key Initiatives
+				</button>
+			</div>
+
+			{/* Tab Content */}
+			<div class="flex-1 min-h-0 overflow-y-auto px-4 pb-6">
+				{/* Overview Tab Content */}
+				<div id="overview-content" class="tab-content active">
+					<div class="space-y-6">
+						{/* Challenge Section */}
+						<div>
+							<h3 class="text-[#d63a2e] text-[20px] font-semibold leading-[28px] mb-3 text-left lowercase">
+								challenge:
+							</h3>
+							<p class="text-[#010101] text-[16px] leading-[24px] text-left">
+								{challenge}
+							</p>
+						</div>
+
+						{/* What We Did Section */}
+						<div>
+							<h3 class="text-[#d63a2e] text-[20px] font-semibold leading-[28px] mb-3 text-left lowercase">
+								what we did:
+							</h3>
+							<p class="text-[#010101] text-[16px] leading-[24px] text-left">
+								{whatWeDid}
+							</p>
+						</div>
+					</div>
+				</div>
+
+				{/* Key Initiatives Tab Content */}
+				<div id="initiatives-content" class="tab-content">
+					<div class="space-y-4">
+						<ol class="space-y-3 list-decimal list-inside">
+							{keyInitiatives.map((initiative) => (
+								<li class="text-[#010101] text-[16px] leading-[24px] text-left" set:html={formatWithBoldPrefix(initiative)}>
+								</li>
+							))}
+						</ol>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </section>
 
 <script>
-	// Mobile scroll behavior: When section enters viewport, position text at top
-	// User scrolls through text, then continues to next section
+	// Tab switching functionality for mobile
 	(function() {
-		// Only run on mobile (lg:hidden section)
+		// Only run on mobile
 		if (window.innerWidth >= 1024) return;
 
-		const section = document.getElementById('c4-mobile-text-section');
-		const scrollContainer = document.getElementById('c4-mobile-scroll-container');
-		if (!section || !scrollContainer) return;
+		const tabButtons = document.querySelectorAll('.tab-button');
+		const tabContents = document.querySelectorAll('.tab-content');
 
-		let hasPositioned = false;
-		let isPositioning = false;
+		tabButtons.forEach((button) => {
+			button.addEventListener('click', () => {
+				const targetTab = button.getAttribute('data-tab');
 
-		// Intersection Observer to detect when section enters viewport
-		const observer = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting && !hasPositioned && !isPositioning) {
-						// Section just entered viewport - position text at top
-						isPositioning = true;
-						hasPositioned = true;
-						
-						// Use requestAnimationFrame to ensure layout is complete
-						requestAnimationFrame(() => {
-							// Scroll the inner container so text content starts at top
-							scrollContainer.scrollTop = 0;
-							isPositioning = false;
-						});
-					} else if (!entry.isIntersecting) {
-						// Section left viewport - reset flag for next time
-						hasPositioned = false;
+				// Update button states
+				tabButtons.forEach((btn) => btn.classList.remove('active'));
+				button.classList.add('active');
+
+				// Update content visibility
+				tabContents.forEach((content) => {
+					content.classList.remove('active');
+					if (content.id === `${targetTab}-content`) {
+						content.classList.add('active');
 					}
 				});
-			},
-			{
-				threshold: 0.1,
-				rootMargin: '0px'
-			}
-		);
-
-		observer.observe(section);
+			});
+		});
 	})();
 </script>
 
@@ -166,5 +198,69 @@ function formatWithBoldPrefix(text: string): string {
 	/* RULE-004: Font handling - aktiv-grotesk font family */
 	.font-aktiv-grotesk {
 		font-family: 'AktivGrotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	}
+
+	/* Mobile Hero Image with Concave Curve */
+	@media (max-width: 1023px) {
+		.hero-section {
+			height: 45%;
+			min-height: 0;
+		}
+
+		.hero-image-container {
+			width: 100%;
+			height: 100%;
+			position: relative;
+			overflow: hidden;
+		}
+
+		/* White Content Card with Prominent Rounded Top Corners */
+		.content-card {
+			background: white;
+			border-radius: 48px 48px 0 0;
+			margin-top: -48px;
+			position: relative;
+			z-index: 1;
+			padding-top: 0;
+			box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+		}
+
+		/* Tab Buttons */
+		.tab-button {
+			padding: 10px 20px;
+			border-radius: 9999px;
+			font-size: 16px;
+			font-weight: 500;
+			background: #f4f4f0;
+			color: #010101;
+			border: none;
+			cursor: pointer;
+			transition: all 0.2s;
+			font-family: 'AktivGrotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+		}
+
+		.tab-button:hover {
+			opacity: 0.9;
+		}
+
+		.tab-button:focus-visible {
+			outline: 2px solid #d63a2e;
+			outline-offset: 2px;
+		}
+
+		.tab-button.active {
+			background: white;
+			color: #010101;
+			border: 1px solid #d63a2e;
+		}
+
+		/* Tab Content */
+		.tab-content {
+			display: none;
+		}
+
+		.tab-content.active {
+			display: block;
+		}
 	}
 </style>
