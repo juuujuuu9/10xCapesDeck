@@ -26,7 +26,7 @@ const {
 		{/* Right side: Two iPhone images/videos */}
 		<div class="lg:flex-1 w-full lg:w-[60%] min-h-0 min-w-0 max-w-full relative flex flex-row items-center justify-center gap-2 md:gap-4 lg:gap-8 overflow-hidden">
 			{/* First iPhone - Video */}
-			<div class="flex-1 min-w-0 w-full max-w-[300px] lg:max-w-none lg:w-auto h-auto max-h-full lg:max-w-[50%] xl:max-w-[40%] relative overflow-hidden">
+			<div class="flex-1 min-w-0 w-full max-w-[300px] lg:max-w-none lg:w-auto h-auto max-h-full lg:max-w-[50%] xl:max-w-[40%] relative overflow-hidden flex items-center justify-center">
 				<LazyVideo
 					client:load
 					src={videoSrc}
@@ -35,7 +35,7 @@ const {
 					muted
 					loop
 					playsInline
-					className="w-full h-auto object-contain"
+					className="w-full h-auto max-h-full object-contain"
 				/>
 			</div>
 

@@ -289,13 +289,18 @@ export function LazyVideo({
 		}
 	}, [isIntersecting, shouldLoad, reducedMotion, props.autoPlay, props.muted]);
 
+	// Extract video-specific className if provided, otherwise use default
+	const videoClassName = className.includes('object-contain') || className.includes('h-auto') 
+		? className 
+		: 'w-full h-full object-cover';
+	
 	return (
 		<div 
 			ref={containerRef} 
-			className={`relative overflow-hidden bg-black/5 ${className}`}
+			className={`relative overflow-hidden ${className.includes('object-contain') || className.includes('h-auto') ? 'bg-transparent' : 'bg-black/5'}`}
 			style={{ 
 				aspectRatio: props.width && props.height ? `${props.width}/${props.height}` : undefined,
-				height: props.width && props.height ? undefined : '100%',
+				height: props.width && props.height ? undefined : (className.includes('h-auto') ? 'auto' : '100%'),
 				width: '100%'
 			}}
 		>
@@ -322,7 +327,7 @@ export function LazyVideo({
 					poster={posterUrl}
 					preload={priority ? 'auto' : 'metadata'} // RULE-014: Use metadata for non-priority
 					crossOrigin="anonymous" // Required for mobile browsers CORS (iOS Safari)
-					className={`w-full h-full object-cover transition-opacity duration-700 ${
+					className={`${videoClassName} transition-opacity duration-700 ${
 						// Show video when intersecting OR when priority/reducedMotion
 						// If shouldLoad is true, video element is rendered, and we show it if intersecting
 						// The safeguard useEffect will ensure isIntersecting is set when shouldLoad is true
