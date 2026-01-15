@@ -13,9 +13,10 @@ export interface Props {
 	challenge: string;
 	whatWeDid: string;
 	keyInitiatives: string[];
+	id?: string;
 }
 
-const { image, challenge, whatWeDid, keyInitiatives } = Astro.props;
+const { image, challenge, whatWeDid, keyInitiatives, id } = Astro.props;
 
 // Helper function to format text with bold prefix before colon
 function formatWithBoldPrefix(text: string): string {
@@ -29,7 +30,7 @@ function formatWithBoldPrefix(text: string): string {
 }
 ---
 
-<section class="w-full h-dvh max-h-dvh snap-start snap-always flex flex-col overflow-hidden box-border bg-[#f4f4f0] lg:bg-transparent p-0 md:p-4 lg:p-8">
+<section id={id} class="w-full h-dvh max-h-dvh snap-start snap-always flex flex-col overflow-hidden box-border bg-[#f4f4f0] lg:bg-transparent p-0 md:p-4 lg:p-8">
 	{/* Desktop Layout - Unchanged */}
 	<div class="hidden lg:grid w-full flex-1 min-h-0 grid-cols-2 gap-2 md:gap-4 lg:gap-8">
 		{/* Left Column: Image */}

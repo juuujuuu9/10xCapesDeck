@@ -3,9 +3,10 @@ import { LazyVideo } from '../../LazyVideo.tsx';
 
 export interface Props {
 	videoSrc?: string;
+	id?: string;
 }
 
-const { videoSrc = 'https://times-10-video-offload.b-cdn.net/Influencer-mkt-video.mp4' } = Astro.props;
+const { videoSrc = 'https://times-10-video-offload.b-cdn.net/Influencer-mkt-video.mp4', id } = Astro.props;
 
 const bulletPoints = [
 	'identify, source & activate key aim relationships',
@@ -18,7 +19,7 @@ const bulletPoints = [
 ];
 ---
 
-<section class="w-full h-dvh max-h-dvh pl-0 pr-0 md:pl-4 md:pr-0 lg:pl-8 lg:pr-0 snap-start snap-always flex flex-col overflow-hidden box-border">
+<section id={id} class="w-full h-dvh max-h-dvh pl-0 pr-0 md:pl-4 md:pr-0 lg:pl-8 lg:pr-0 snap-start snap-always flex flex-col overflow-hidden box-border">
 	<div class="w-full flex-1 min-h-0 flex flex-col-reverse lg:flex-row gap-2 md:gap-4 lg:gap-8">
 		{/* Left side: Text content */}
 		<div class="flex-1 lg:flex-none pl-0 xl:pl-8 lg:w-[30%] flex flex-col items-center lg:items-start justify-center">

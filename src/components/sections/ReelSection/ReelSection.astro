@@ -10,9 +10,10 @@ export interface Props {
 		priority?: boolean;
 	};
 	className?: string;
+	id?: string;
 }
 
-const { video, className = '' } = Astro.props;
+const { video, className = '', id } = Astro.props;
 
 // Generate poster URL if provided
 const posterUrl = video.poster 
@@ -31,7 +32,7 @@ const videoSrc = video.src.startsWith('http')
 	: bunnyVideoFile(video.src, video.pullZone || 'storage');
 ---
 
-<section class={`bg-black w-full max-w-screen mx-auto h-dvh flex flex-col items-center justify-center snap-start snap-always px-0 ${className}`}>
+<section id={id} class={`bg-black w-full max-w-screen mx-auto h-dvh flex flex-col items-center justify-center snap-start snap-always px-0 ${className}`}>
 	<LazyVideo
 		client:load
 		src={videoSrc}

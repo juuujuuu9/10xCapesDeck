@@ -22,12 +22,13 @@ export interface VideoItem {
 export interface Props {
 	images: ImageItem[]; // 2 images to stack
 	video: VideoItem;
+	id?: string;
 }
 
-const { images, video } = Astro.props;
+const { images, video, id } = Astro.props;
 ---
 
-<section class="w-full h-dvh max-h-dvh p-2 md:p-4 lg:p-8 snap-start snap-always flex flex-col overflow-hidden box-border">
+<section id={id} class="w-full h-dvh max-h-dvh p-2 md:p-4 lg:p-8 snap-start snap-always flex flex-col overflow-hidden box-border">
 	<div class="w-full flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-2 gap-2 md:gap-4 lg:gap-8">
 		{/* Block 1: 2 stacked images + video (between images when <lg) */}
 		<div class="flex-1 min-h-0 flex flex-col justify-start gap-2 md:gap-4 lg:gap-8">

@@ -10,12 +10,13 @@ export interface Props {
 		width?: number;
 		quality?: number;
 	};
+	id?: string;
 }
 
-const { phoneImage } = Astro.props;
+const { phoneImage, id } = Astro.props;
 ---
 
-<section class="w-full h-dvh max-h-dvh p-2 md:p-4 pt-20 lg:p-8 lg:p-8 snap-start snap-always flex flex-col overflow-hidden box-border bg-[#f4f4f0]">
+<section id={id} class="w-full h-dvh max-h-dvh p-2 md:p-4 pt-20 lg:p-8 lg:p-8 snap-start snap-always flex flex-col overflow-hidden box-border bg-[#f4f4f0]">
 	<div class="flex-1 min-h-0 flex flex-col xl:flex-row gap-2 md:gap-4 lg:gap-8">
 		{/* Phone Mockup - appears at top on mobile, left on desktop */}
 		<div class="flex-1 min-h-0 relative flex items-center justify-center">

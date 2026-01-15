@@ -10,9 +10,10 @@ export interface Props {
 		priority?: boolean;
 	}>;
 	title?: string;
+	id?: string;
 }
 
-const { videos, title = "short form social" } = Astro.props;
+const { videos, title = "short form social", id } = Astro.props;
 
 // Group videos into rows: 1 per row on mobile, 2 per row on md, 4 per row on lg
 // Create rows of 2 for medium screens, then combine pairs for large screens
@@ -30,7 +31,7 @@ function groupVideosIntoRows(videoList: typeof videos) {
 const videoRows = groupVideosIntoRows(videos);
 ---
 
-<section class="w-full h-dvh p-2 md:p-4 lg:p-8 snap-start snap-always flex flex-col overflow-hidden box-border">
+<section id={id} class="w-full h-dvh p-2 md:p-4 lg:p-8 snap-start snap-always flex flex-col overflow-hidden box-border">
 	{title && (
 		<div class="w-full text-center mb-4 shrink-0 sticky top-2 z-10 bg-white">
 			<h2 class="text-[#ca2c1e] text-[2rem] md:text-[48px] lowercase font-bold leading-none tracking-wide">

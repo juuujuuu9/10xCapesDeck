@@ -38,12 +38,13 @@ export interface Props {
 			quality?: number;
 		};
 	};
+	id?: string;
 }
 
-const { block1, block2 } = Astro.props;
+const { block1, block2, id } = Astro.props;
 ---
 
-<section class="w-full h-dvh max-h-dvh pl-2 md:pl-4 lg:pl-8 pr-2 md:pr-4 lg:pr-8 py-2 md:py-4 lg:py-8 snap-start snap-always flex flex-col overflow-hidden box-border">
+<section id={id} class="w-full h-dvh max-h-dvh pl-2 md:pl-4 lg:pl-8 pr-2 md:pr-4 lg:pr-8 py-2 md:py-4 lg:py-8 snap-start snap-always flex flex-col overflow-hidden box-border">
 	<div class="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-2 gap-2 md:gap-4 lg:gap-8">
 		{/* Block 1 - Left Side */}
 		<div class="flex-1 min-h-0 flex flex-col gap-2 md:gap-4 lg:gap-8">

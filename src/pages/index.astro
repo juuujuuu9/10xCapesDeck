@@ -210,7 +210,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 				}
 			})();
 		</script>
-		<section class="bg-[#f4f4f0] w-full max-w-screen mx-auto h-dvh flex items-center justify-center snap-start snap-always px-4 md:px-0">
+		<section id="home" class="bg-[#f4f4f0] w-full max-w-screen mx-auto h-dvh flex items-center justify-center snap-start snap-always px-4 md:px-0">
 			<img
 				src={logoDesktop}
 				srcset={`${logoMobile} 320w, ${logoDesktop} 400w`}
@@ -223,7 +223,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 				height="100"
 			/>
 		</section>
-		<section class="w-full max-w-screen mx-auto h-dvh flex flex-col items-center justify-center snap-start snap-always px-4 md:px-4 lg:px-0">
+		<section id="brands" class="w-full max-w-screen mx-auto h-dvh flex flex-col items-center justify-center snap-start snap-always px-4 md:px-4 lg:px-0">
 			<h2 class="mb-12 sm:text-4xl text-2xl font-bold text-center">brands we've worked with</h2>
 			<div class="grid grid-cols-5 gap-2 md:gap-4 lg:gap-8 w-full xl:max-w-4xl lg:max-w-3xl md:max-w-2xl sm:max-w-1xl h-auto">
 				{brandImages.map((brand) => {
@@ -247,6 +247,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 			</div>
 		</section>
 		<ReelSection
+			id="reel"
 			video={{
 				src: '/Times10-Reel-AaronCut-V7-09012025.mp4',
 				poster: '/Times10-Reel-AaronCut-V7-09012025.jpg', // Removed /posters/ prefix - file should be in storage root
@@ -254,8 +255,9 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 				priority: true
 			}}
 		/>
-		<ServicesSection />
+		<ServicesSection id="services" />
 		<TitleSlide 
+			id="social-content-title"
 			backgroundImage={socialContentBg}
 			textParts={[
 				{ text: 'social ', color: '#fff' },
@@ -264,6 +266,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 			overlayOpacity={75}
 		/>
 		<ShortFormSocial 
+			id="short-form-social"
 			title="short form social"
 			videos={[
 				{ src: '/Adidas-ManchesterUnitedMeetAndGreet-Recap-Final-07.29.2025.mp4', pullZone: 'storage' },
@@ -277,6 +280,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 			]}
 		/>
 		<StackedVideos 
+			id="stacked-videos-1"
 			videos={[
 				{ src: '/wp-content/uploads/2025/02/040722_C4_KevinHart_IgniteYourFire_PictureLock_FullLength_16x9_1920x1080.mp4', pullZone: 'wordpress' },
 				{ src: '/wp-content/uploads/2025/03/3D-Hero-Video-1920x1080-1.mp4', pullZone: 'wordpress' },
@@ -285,6 +289,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 			]}
 		/>
 		<StackedVideos 
+			id="stacked-videos-2"
 			videos={[
 				{ src: '/Adidas-HardenRecap-V2-032125.mp4', pullZone: 'storage' },
 				{ src: '/Adidas HArden v2 Unboxing (updated) v2.mp4', pullZone: 'storage' },
@@ -293,13 +298,15 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 			]}
 		/>
 		<TitleSlide 
+			id="photo-title"
 			backgroundImage={photoSlideBg}
 			textParts={[
 				{ text: 'photo', color: '#fff' }
 			]}
 			overlayOpacity={75}
 		/>
-		<ThreeImageGrid 
+		<ThreeImageGrid
+			id="photo-grid-1" 
 			images={[
 				{
 					src: '/wp-content/uploads/2025/03/C4-SS-Montez-and-Bianca-89.jpg',
@@ -328,6 +335,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 			]}
 		/>
 		<ThreeImageGridFlipped 
+			id="photo-grid-2"
 			images={[
 				{
 					src: '/wp-content/uploads/2025/08/ClewDrais-53-1.jpg',
@@ -356,6 +364,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 			]}
 		/>
 		<TitleSlide 
+			id="design-title"
 			backgroundImage={designSlideBg}
 			textParts={[
 				{ text: 'design', color: '#fff' }
@@ -363,6 +372,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 			overlayOpacity={75}
 		/>
 		<ThreeImageGrid 
+			id="design-grid-1"
 			images={[
 				{
 					src: '/wp-content/uploads/2025/08/ManU-Social_newsroom-ask_post_v2.png',
@@ -392,6 +402,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 			]}
 		/>
 		<ThreeImageGridFlipped 
+			id="design-grid-2"
 			images={[
 				{
 					src: '/wp-content/uploads/2025/02/website-banner_black-background-1.mp4',
@@ -419,6 +430,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 			]}
 		/>
 		<TitleSlide 
+			id="activations-title"
 			backgroundImage={activationsSlideBg}
 			textParts={[
 				{ text: 'activations & ', color: '#fff' },
@@ -426,7 +438,8 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 			]}
 			overlayOpacity={75}
 		/>
-		<TwoBlockGrid 
+		<TwoBlockGrid
+			id="activations-grid" 
 			block1={{
 				col1: [
 					{ text: 'c4 wwe nashville summer slam' },
@@ -502,6 +515,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 			}}
 		/>
 		<AdidasWorldCup 
+			id="adidas-world-cup"
 			title="adidas club world cup"
 			block1={[
 				{
@@ -544,6 +558,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 			]}
 		/>
 		<TradeshowBooth 
+			id="tradeshow-booth"
 			title="tradeshow booth"
 			col1={[
 				{
@@ -586,6 +601,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 			]}
 		/>
 		<TitleSlide 
+			id="influencer-marketing-title"
 			backgroundImage={influencerMarketingSlideBg}
 			backgroundImageMobile={influencerMarketingSlideBgMobile}
 			textParts={[
@@ -594,16 +610,18 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 			]}
 			overlayOpacity={75}
 		/>
-		<InfluencerMarketing />
-		<InfluencerMarketing2 />
+		<InfluencerMarketing id="influencer-marketing" />
+		<InfluencerMarketing2 id="influencer-marketing-2" />
 		<TitleSlide 
+			id="website-title"
 			backgroundImage={websiteSlideBg}
 			textParts={[
 				{ text: 'website', color: '#fff' }
 			]}
 			overlayOpacity={75}
 		/>
-		<Website 
+		<Website
+			id="website" 
 			images={[
 				{
 					src: '/wp-content/uploads/2025/02/MyArcade_Times10_Carousel_9.jpg',
@@ -626,7 +644,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 				priority: true
 			}}
 		/>
-		<section class="bg-[#000] w-full max-w-screen mx-auto h-dvh flex items-center justify-center snap-start snap-always px-4 md:px-0">
+		<section id="case-studies-title" class="bg-[#000] w-full max-w-screen mx-auto h-dvh flex items-center justify-center snap-start snap-always px-4 md:px-0">
 			<div class="text-center">
 				<h2 class="text-[2rem] md:text-[3.5rem] lowercase font-[600]">
 					<span style="color: #fff;">case </span>
@@ -635,7 +653,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 			</div>
 		</section>
 		<section 
-			id="c4-frozen-section"
+			id="c4-frozen"
 			class="w-full h-dvh snap-start snap-always bg-no-repeat flex items-center justify-center relative bg-black"
 			style={`background-image: url('${c4FrozenBombsicleBg}'); background-position: 40% 50%; background-size: cover;`}
 		>
@@ -682,6 +700,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 			})();
 		</script>
 		<C4CaseStudy
+			id="c4-case-study"
 			image={{
 				src: '/wp-content/uploads/2025/09/10.16.21-C4-KEVIN-HART-IYF-NEW-25_EDIT-2.jpg',
 				alt: 'Kevin Hart with C4 Energy drink',
@@ -701,6 +720,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 			]}
 		/>
 		<ReelSection
+			id="c4-reel"
 			video={{
 				src: 'https://times-10-video-offload.b-cdn.net/1%20Min%20Collab%20IYF.mp4',
 				pullZone: 'storage',
@@ -708,6 +728,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 			}}
 		/>
 		<TalentBrandPartnership
+			id="talent-brand-partnership"
 			block1={{
 				title: 'talent + brand partnerships',
 				twoImages: {
@@ -746,6 +767,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 			}}
 		/>
 		<IgniteYourFireResults
+			id="ignite-your-fire-results"
 			phoneImage={{
 				src: '/wp-content/uploads/2025/09/C4-IG-Grid-IYF-copy.png',
 				alt: 'C4 Energy Instagram Profile showing Ignite Your Fire campaign',
@@ -754,5 +776,125 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 				quality: 85
 			}}
 		/>
+		<script>
+			// Hash Scroll Manager - Updates URL hash as user scrolls through sections
+			(function() {
+				function initHashScroll() {
+					// Find all sections with snap-start class
+					const sections = document.querySelectorAll('section[class*="snap-start"]');
+					
+					if (sections.length === 0) return;
+					
+					// Track if we're updating hash programmatically (to prevent scroll loops)
+					let isUpdatingHash = false;
+					
+					// Generate section IDs if they don't exist
+					function generateSectionId(section, index) {
+						// Try to find text content that could be used as ID
+						const heading = section.querySelector('h1, h2, h3, h4, h5, h6');
+						if (heading) {
+							const text = heading.textContent?.trim().toLowerCase() || '';
+							if (text) {
+								// Convert to slug: lowercase, replace spaces with hyphens, remove special chars
+								const slug = text
+									.replace(/[^\w\s-]/g, '')
+									.replace(/\s+/g, '-')
+									.replace(/-+/g, '-')
+									.replace(/^-|-$/g, '');
+								if (slug.length > 0) {
+									return slug;
+								}
+							}
+						}
+						
+						// Fallback to section-{index}
+						return `section-${index + 1}`;
+					}
+					
+					sections.forEach((section, index) => {
+						if (!section.id) {
+							const sectionId = generateSectionId(section, index);
+							section.id = sectionId;
+						}
+					});
+					
+					// Handle initial hash on page load
+					const initialHash = window.location.hash.slice(1); // Remove #
+					if (initialHash) {
+						const targetSection = document.getElementById(initialHash);
+						if (targetSection) {
+							// Small delay to ensure layout is complete
+							setTimeout(() => {
+								isUpdatingHash = true;
+								targetSection.scrollIntoView({ behavior: 'instant' });
+								// Reset flag after scroll completes
+								setTimeout(() => {
+									isUpdatingHash = false;
+								}, 100);
+							}, 100);
+						}
+					}
+					
+					// Use Intersection Observer to detect visible sections
+					const observer = new IntersectionObserver(
+						(entries) => {
+							// Don't update hash if we're programmatically scrolling
+							if (isUpdatingHash) return;
+							
+							// Find the section with highest intersection ratio
+							let maxRatio = 0;
+							let activeSection = null;
+							
+							entries.forEach((entry) => {
+								if (entry.isIntersecting && entry.intersectionRatio > maxRatio) {
+									maxRatio = entry.intersectionRatio;
+									activeSection = entry.target;
+								}
+							});
+							
+							// Update hash if we found an active section
+							if (activeSection && activeSection.id) {
+								const newHash = `#${activeSection.id}`;
+								if (window.location.hash !== newHash) {
+									// Use replaceState to avoid adding history entries
+									window.history.replaceState(null, '', newHash);
+								}
+							}
+						},
+						{
+							// Trigger when section is mostly visible (50%+)
+							threshold: [0.5, 0.75, 1.0],
+							// Add some margin to trigger slightly before section is fully visible
+							rootMargin: '-10% 0px -10% 0px'
+						}
+					);
+					
+					// Observe all sections
+					sections.forEach((section) => observer.observe(section));
+					
+					// Handle browser back/forward buttons
+					window.addEventListener('popstate', () => {
+						const hash = window.location.hash.slice(1);
+						if (hash) {
+							const targetSection = document.getElementById(hash);
+							if (targetSection) {
+								isUpdatingHash = true;
+								targetSection.scrollIntoView({ behavior: 'smooth' });
+								setTimeout(() => {
+									isUpdatingHash = false;
+								}, 500);
+							}
+						}
+					});
+				}
+				
+				// Initialize hash scroll functionality
+				if (document.readyState === 'loading') {
+					document.addEventListener('DOMContentLoaded', initHashScroll);
+				} else {
+					initHashScroll();
+				}
+			})();
+		</script>
 	</body>
 </html>
