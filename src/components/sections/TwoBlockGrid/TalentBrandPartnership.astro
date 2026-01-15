@@ -1,0 +1,124 @@
+---
+import { LazyImage } from '../../LazyImage.tsx';
+
+export interface Props {
+	block1: {
+		title: string;
+		twoImages: {
+			image1: {
+				src: string;
+				alt: string;
+				pullZone?: string;
+				width?: number;
+				quality?: number;
+			};
+			image2: {
+				src: string;
+				alt: string;
+				pullZone?: string;
+				width?: number;
+				quality?: number;
+			};
+		};
+		fullWidthImage: {
+			src: string;
+			alt: string;
+			pullZone?: string;
+			width?: number;
+			quality?: number;
+		};
+	};
+	block2: {
+		title: string;
+		image: {
+			src: string;
+			alt: string;
+			pullZone?: string;
+			width?: number;
+			quality?: number;
+		};
+	};
+}
+
+const { block1, block2 } = Astro.props;
+---
+
+<section class="w-full h-dvh max-h-dvh pl-2 md:pl-4 lg:pl-8 pr-2 md:pr-4 lg:pr-8 py-2 md:py-4 lg:py-8 snap-start snap-always flex flex-col overflow-hidden box-border">
+	<div class="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-2 gap-2 md:gap-4 lg:gap-8">
+		{/* Block 1 - Left Side */}
+		<div class="flex-1 min-h-0 flex flex-col gap-2 md:gap-4 lg:gap-8">
+			{/* Title */}
+			<div class="w-full flex-shrink-0 flex items-start justify-start">
+				<span class="blk-title">
+					{block1.title}
+				</span>
+			</div>
+
+			{/* Two Images Side by Side */}
+			<div class="grid grid-cols-2 gap-2 md:gap-4 lg:gap-8 flex-1 min-h-0">
+				<div class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+					<LazyImage
+						client:visible
+						src={block1.twoImages.image1.src}
+						alt={block1.twoImages.image1.alt}
+						pullZone={block1.twoImages.image1.pullZone}
+						priority={false}
+						width={block1.twoImages.image1.width || 1200}
+						quality={block1.twoImages.image1.quality || 85}
+						className="w-full h-full object-cover object-center"
+					/>
+				</div>
+				<div class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+					<LazyImage
+						client:visible
+						src={block1.twoImages.image2.src}
+						alt={block1.twoImages.image2.alt}
+						pullZone={block1.twoImages.image2.pullZone}
+						priority={false}
+						width={block1.twoImages.image2.width || 1200}
+						quality={block1.twoImages.image2.quality || 85}
+						className="w-full h-full object-cover object-center"
+					/>
+				</div>
+			</div>
+
+			{/* Full Width Image */}
+			<div class="flex sm:hidden lg:flex relative overflow-hidden flex-1 min-h-0 items-center justify-center">
+				<LazyImage
+					client:visible
+					src={block1.fullWidthImage.src}
+					alt={block1.fullWidthImage.alt}
+					pullZone={block1.fullWidthImage.pullZone}
+					priority={false}
+					width={block1.fullWidthImage.width || 1200}
+					quality={block1.fullWidthImage.quality || 85}
+					className="w-full h-full object-cover object-center"
+				/>
+			</div>
+		</div>
+
+		{/* Block 2 - Right Side */}
+		<div class="flex-1 min-h-0 flex flex-col gap-2 md:gap-4 lg:gap-8">
+			{/* Title */}
+			<div class="w-full flex-shrink-0 flex items-start justify-start">
+				<span class="blk-title">
+					{block2.title}
+				</span>
+			</div>
+
+		{/* Single Image */}
+		<div class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+			<LazyImage
+				client:visible
+				src={block2.image.src}
+				alt={block2.image.alt}
+				pullZone={block2.image.pullZone}
+				priority={false}
+				width={block2.image.width || 1200}
+				quality={block2.image.quality || 85}
+				className="w-full h-full object-cover object-top lg:object-center"
+			/>
+		</div>
+		</div>
+	</div>
+</section>

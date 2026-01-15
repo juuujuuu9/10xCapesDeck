@@ -52,30 +52,30 @@ const { title, block1, block2 } = Astro.props;
 					</div>
 				)}
 			</div>
-			{/* Second and third images: 50/50 */}
-			<div class="grid grid-cols-2 gap-2 md:gap-4 lg:gap-8 flex-1 min-h-0">
-				{block1.slice(1).map((image) => (
-					<div class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
-						<LazyImage
-							client:visible
-							src={image.src}
-							alt={image.alt}
-							pullZone={image.pullZone}
-							priority={image.priority || false}
-							width={image.width || 1200}
-							quality={image.quality || 85}
-							className="w-full h-full object-cover object-center"
-						/>
-						{image.label && (
-							<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
-								<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
-									{image.label}
-								</span>
-							</div>
-						)}
-					</div>
-				))}
-			</div>
+		{/* Second and third images: 50/50 */}
+		<div class="grid grid-cols-2 gap-2 md:gap-4 lg:gap-8 flex-1 min-h-0">
+			{block1.slice(1).map((image, index) => (
+				<div class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+					<LazyImage
+						client:visible
+						src={image.src}
+						alt={image.alt}
+						pullZone={image.pullZone}
+						priority={image.priority || false}
+						width={image.width || 1200}
+						quality={image.quality || 85}
+						className={`w-full h-full object-cover ${index === 1 ? 'object-[70%_center]' : 'object-center'}`}
+					/>
+					{image.label && (
+						<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
+							<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
+								{image.label}
+							</span>
+						</div>
+					)}
+				</div>
+			))}
+		</div>
 		</div>
 
 		{/* Block 2: 2 images */}

@@ -1,7 +1,6 @@
 ---
 import '../styles/global.css';
 import { bunnyImage } from '../lib/bunny-cdn';
-import { LazyVideo } from '../components/LazyVideo.tsx';
 import ServicesSection from '../components/sections/Services/ServicesSection.astro';
 import TitleSlide from '../components/sections/Services/TitleSlide.astro';
 import ShortFormSocial from '../components/sections/ShortFormSocial/ShortFormSocial.astro';
@@ -15,6 +14,8 @@ import InfluencerMarketing from '../components/sections/InfluencerMarketing/Infl
 import InfluencerMarketing2 from '../components/sections/InfluencerMarketing/InfluencerMarketing2.astro';
 import Website from '../components/sections/Website/Website.astro';
 import C4CaseStudy from '../components/sections/C4CaseStudy/C4CaseStudy.astro';
+import ReelSection from '../components/sections/ReelSection/ReelSection.astro';
+import TalentBrandPartnership from '../components/sections/TwoBlockGrid/TalentBrandPartnership.astro';
 
 const logoUrl = bunnyImage('/wp-content/uploads/2025/08/Times10-Logo-2025-2.png', {
 	pullZone: 'wordpress',
@@ -58,12 +59,6 @@ const brandImages = [
 	{ path: '/wp-content/uploads/2025/02/brands_0014_PuraVida.png', alt: 'Pura Vida' },
 ];
 
-// Direct video file approach
-const reelVideoPoster = bunnyImage('/posters/Times10-Reel-AaronCut-V7-09012025.jpg', {
-	pullZone: 'storage',
-	width: 1920,
-	quality: 85
-});
 
 // RULE-021: WordPress URL auto-conversion to Bunny CDN
 const socialContentBg = bunnyImage('/wp-content/uploads/2025/04/03202025-Adidas-HardenV9Event-1041.jpg', {
@@ -245,20 +240,14 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 				})}
 			</div>
 		</section>
-		<section class="bg-black w-full max-w-screen mx-auto h-dvh flex flex-col items-center justify-center snap-start snap-always px-0">
-			<LazyVideo
-				client:load
-				src="/Times10-Reel-AaronCut-V7-09012025.mp4"
-				poster={reelVideoPoster}
-				pullZone="storage"
-				autoPlay
-				muted={true}
-				loop
-				playsInline
-				showUnmuteButton={true}
-				className="w-full h-full object-cover"
-			/>
-		</section>
+		<ReelSection
+			video={{
+				src: '/Times10-Reel-AaronCut-V7-09012025.mp4',
+				poster: '/posters/Times10-Reel-AaronCut-V7-09012025.jpg',
+				pullZone: 'storage',
+				priority: true
+			}}
+		/>
 		<ServicesSection />
 		<TitleSlide 
 			backgroundImage={socialContentBg}
@@ -705,12 +694,50 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 				'Earned & Owned Media Push: Delivered a cohesive story through organic and paid content to amplify reach and conversions.'
 			]}
 		/>
-		<section class="bg-black w-full max-w-screen mx-auto h-dvh flex items-center justify-center snap-start snap-always px-4 md:px-0">
-			<div class="text-center">
-				<h2 class="text-white text-[2rem] md:text-[3.5rem] lowercase font-[600]">
-					test section
-				</h2>
-			</div>
-		</section>
+		<ReelSection
+			video={{
+				src: 'https://times-10-video-offload.b-cdn.net/1%20Min%20Collab%20IYF.mp4',
+				pullZone: 'storage',
+				priority: false
+			}}
+		/>
+		<TalentBrandPartnership
+			block1={{
+				title: 'talent + brand partnerships',
+				twoImages: {
+					image1: {
+						src: '/wp-content/uploads/2025/02/Site-Banner-390x390-1.jpg',
+						alt: 'C4 Ignite Your Fire Campaign',
+						pullZone: 'wordpress',
+						width: 1200,
+						quality: 85
+					},
+					image2: {
+						src: '/wp-content/uploads/2025/02/C4-WWE-Bianca-Roman-960x960-1.jpeg',
+						alt: 'C4 WWE Bianca Belair and Roman Reigns',
+						pullZone: 'wordpress',
+						width: 1200,
+						quality: 85
+					}
+				},
+				fullWidthImage: {
+					src: '/wp-content/uploads/2025/02/C4-Smart-Energy-Lindsay-Brewer-1920x1080-1.jpg',
+					alt: 'Lindsay Brewer C4 Smart Energy Partnership',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				}
+			}}
+			block2={{
+				title: 'digital execution',
+				image: {
+					src: '/wp-content/uploads/2025/02/jf-espn-takeover-yellow-drinking.jpeg',
+					alt: 'ESPN Digital Takeover C4 Energy',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				}
+			}}
+		/>
 	</body>
 </html>

@@ -271,6 +271,7 @@ PUBLIC_BUNNY_STREAM_URL=https://vz-xxxxx.b-cdn.net
 - Applies to all grid containers within sections (except Services and ShortFormSocial sections)
 - Override only when explicitly requested or design requires different spacing
 - Applies to all `<section>` elements and section components
+- **Exception**: Black title sections follow RULE-024 conventions with split padding pattern
 
 ### RULE-023: Section Content Containment 🔴
 **All section content must be contained within padding boundaries**
@@ -283,6 +284,20 @@ PUBLIC_BUNNY_STREAM_URL=https://vz-xxxxx.b-cdn.net
 - Use `overflow-hidden` on section to clip any overflow
 - Test: Content should never touch viewport edges, always respect padding on all sides
 - Applies to all section components, especially those with `h-dvh` or full-height layouts
+
+### RULE-024: Black Title Section Conventions 🔴
+**Standardized structure and styling for sections with `blk-title` elements**
+- **Section padding**: `pl-2 md:pl-4 lg:pl-8 pr-2 md:pr-4 lg:pr-8 py-2 md:py-4 lg:py-8`
+- **Section attributes**: `w-full h-dvh max-h-dvh snap-start snap-always flex flex-col overflow-hidden box-border`
+- **Main container**: `flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-2 gap-2 md:gap-4 lg:gap-8`
+- **Block containers**: `flex-1 min-h-0 flex flex-col gap-2 md:gap-4 lg:gap-8`
+- **Title containers**: `w-full flex-shrink-0 flex items-start justify-start` with `<span class="blk-title">`
+- **Image/video containers**: `relative overflow-hidden flex-1 min-h-0 flex items-center justify-center`
+- **Image classes**: `className="w-full h-full object-cover object-center"`
+- **Responsive visibility**: Use `flex sm:hidden lg:flex` for elements that should hide on tablets but show on mobile/desktop
+- **Grid spacing**: All grids must match section gap pattern: `gap-2 md:gap-4 lg:gap-8`
+- **Examples**: AdidasWorldCup.astro, TalentBrandPartnership.astro, TwoBlockGrid.astro
+- Applies to all sections in `src/components/sections/TwoBlockGrid/` and similar grid-based layouts
 
 ---
 
@@ -464,6 +479,6 @@ You: "Yes"
 
 ---
 
-**Last updated:** 2025-01-27  
-**Active rules:** 23  
+**Last updated:** 2026-01-15  
+**Active rules:** 24  
 **Philosophy:** Radical simplicity + Performance at scale

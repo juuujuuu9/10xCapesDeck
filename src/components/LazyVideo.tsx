@@ -34,7 +34,7 @@ export function LazyVideo({
 	...props
 }: LazyVideoProps): React.JSX.Element {
 	const [shouldLoad, setShouldLoad] = useState(priority);
-	const [isIntersecting, setIsIntersecting] = useState(priority);
+	const [isIntersecting, setIsIntersecting] = useState(true); // Start as intersecting, will be updated by observer
 	const [reducedMotion, setReducedMotion] = useState(false);
 	const [isMuted, setIsMuted] = useState(true);
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -72,10 +72,9 @@ export function LazyVideo({
 	}, []);
 
 	useEffect(() => {
+		// Always load priority videos immediately
 		if (priority || reducedMotion) {
 			setShouldLoad(true);
-			setIsIntersecting(true);
-			return;
 		}
 
 		const element = containerRef.current;
@@ -83,6 +82,7 @@ export function LazyVideo({
 			return;
 		}
 
+		// Always observe for intersection to handle pause/resume, even for priority videos
 		lazyLoadManager.observe(element, (entry) => {
 			if (entry.isIntersecting) {
 				// Video scrolled into view
@@ -92,14 +92,17 @@ export function LazyVideo({
 				// Video scrolled out of view - pause and save time
 				setIsIntersecting(false);
 				
-				// Save current time and pause
+				// Save current time and pause before unloading
 				if (videoRef.current) {
 					savedTimeRef.current = videoRef.current.currentTime;
 					videoRef.current.pause();
 				}
 
 				// RULE-018: Unload videos from sections >2 viewports away
-				setShouldLoad(false);
+				// Only unload if not priority (keep priority videos loaded)
+				if (!priority && !reducedMotion) {
+					setShouldLoad(false);
+				}
 			}
 		});
 
@@ -163,24 +166,52 @@ export function LazyVideo({
 			return;
 		}
 
-		// Restore saved time if resuming
-		if (savedTimeRef.current > 0 && Math.abs(video.currentTime - savedTimeRef.current) > 0.1) {
-			video.currentTime = savedTimeRef.current;
-		}
-
-		// Use a promise to handle play() to avoid "play() request was interrupted" errors
-		// Only autoplay if props.autoPlay is not false
-		if (props.autoPlay !== false) {
-			const playPromise = video.play();
-			if (playPromise !== undefined) {
-				playPromise.catch(() => {
-					// Silently handle play failures (e.g., user interaction required)
-				});
+		// Function to restore time and play
+		const restoreAndPlay = (): void => {
+			// Restore saved time if resuming
+			if (savedTimeRef.current > 0) {
+				// Wait for video to be ready before setting currentTime
+				if (video.readyState >= 2) {
+					// Video has loaded enough data
+					video.currentTime = savedTimeRef.current;
+				} else {
+					// Wait for loadeddata event
+					const handleLoadedData = (): void => {
+						video.currentTime = savedTimeRef.current;
+						video.removeEventListener('loadeddata', handleLoadedData);
+					};
+					video.addEventListener('loadeddata', handleLoadedData);
+				}
 			}
+
+			// Use a promise to handle play() to avoid "play() request was interrupted" errors
+			// Only autoplay if props.autoPlay is not false
+			if (props.autoPlay !== false) {
+				const playPromise = video.play();
+				if (playPromise !== undefined) {
+					playPromise.catch(() => {
+						// Silently handle play failures (e.g., user interaction required)
+					});
+				}
+			}
+		};
+
+		// If video is already loaded, restore and play immediately
+		if (video.readyState >= 2) {
+			restoreAndPlay();
+		} else {
+			// Wait for video to load first
+			const handleCanPlay = (): void => {
+				restoreAndPlay();
+				video.removeEventListener('canplay', handleCanPlay);
+			};
+			video.addEventListener('canplay', handleCanPlay);
 		}
 
 		return () => {
 			if (video && isIntersecting) {
+				// Save current time before pausing
+				savedTimeRef.current = video.currentTime;
 				video.pause();
 			}
 		};
@@ -219,6 +250,7 @@ export function LazyVideo({
 						isIntersecting ? 'opacity-100' : 'opacity-0'
 					}`}
 					muted={props.muted !== false} // Most browsers require muted for autoplay
+					controls={!isMuted} // Show controls when unmuted
 					playsInline
 					{...props}
 				/>
