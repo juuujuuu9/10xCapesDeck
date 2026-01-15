@@ -83,7 +83,7 @@ function formatWithBoldPrefix(text: string): string {
 	</div>
 
 	{/* Mobile Layout - New Design */}
-	<div class="lg:hidden flex flex-col h-full w-full relative">
+	<div class="lg:hidden flex flex-col h-full w-full relative mobile-layout">
 		{/* Hero Image Section with Concave Curve */}
 		<div class="relative shrink-0 hero-section">
 			<div class="hero-image-container">
@@ -101,16 +101,16 @@ function formatWithBoldPrefix(text: string): string {
 		</div>
 
 		{/* White Content Card */}
-		<div class="content-card flex-1 min-h-0 flex flex-col overflow-y-auto">
+		<div class="content-card flex flex-col overflow-hidden">
 			{/* Tab Navigation */}
-			<div class="flex gap-3 px-4 pt-6 pb-4 shrink-0">
+			<div class="flex gap-3 px-4 pt-6 pb-6 shrink-0">
 				<button
-					class="tab-button active"
+					class="tab-button"
 					data-tab="overview"
 					type="button"
 					aria-label="Show overview content"
 				>
-					Overview
+					overview
 				</button>
 				<button
 					class="tab-button"
@@ -118,14 +118,14 @@ function formatWithBoldPrefix(text: string): string {
 					type="button"
 					aria-label="Show key initiatives"
 				>
-					Key Initiatives
+					key initiatives
 				</button>
 			</div>
 
 			{/* Tab Content */}
-			<div class="flex-1 min-h-0 overflow-y-auto px-4 pb-6">
+			<div class="tab-content-container flex-1 min-h-0 overflow-y-auto px-4 pb-6">
 				{/* Overview Tab Content */}
-				<div id="overview-content" class="tab-content active">
+				<div id="overview-content" class="tab-content">
 					<div class="space-y-6">
 						{/* Challenge Section */}
 						<div>
@@ -173,10 +173,24 @@ function formatWithBoldPrefix(text: string): string {
 
 		const tabButtons = document.querySelectorAll('.tab-button');
 		const tabContents = document.querySelectorAll('.tab-content');
+		const contentContainer = document.querySelector('.tab-content-container');
+		const contentCard = document.querySelector('.content-card');
+		const mobileLayout = document.querySelector('.mobile-layout');
 
 		tabButtons.forEach((button) => {
 			button.addEventListener('click', () => {
 				const targetTab = button.getAttribute('data-tab');
+
+				// Expand card and show content container on first interaction
+				if (mobileLayout) {
+					mobileLayout.classList.add('expanded');
+				}
+				if (contentCard) {
+					contentCard.classList.add('expanded');
+				}
+				if (contentContainer) {
+					contentContainer.classList.add('has-content');
+				}
 
 				// Update button states
 				tabButtons.forEach((btn) => btn.classList.remove('active'));
@@ -203,7 +217,7 @@ function formatWithBoldPrefix(text: string): string {
 	/* Mobile Hero Image with Concave Curve */
 	@media (max-width: 1023px) {
 		.hero-section {
-			height: 45%;
+			flex: 1;
 			min-height: 0;
 		}
 
@@ -218,11 +232,26 @@ function formatWithBoldPrefix(text: string): string {
 		.content-card {
 			background: white;
 			border-radius: 48px 48px 0 0;
-			margin-top: -48px;
-			position: relative;
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
 			z-index: 1;
 			padding-top: 0;
 			box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+			height: auto;
+			max-height: fit-content;
+			transition: top 0.3s ease-out;
+			/* Initially positioned at bottom, showing only buttons */
+		}
+
+		.content-card.expanded {
+			top: calc(0.75rem + 0.5rem + 24px + 0.5rem + 1rem);
+			/* top-3 (0.75rem) + p-2 top (0.5rem) + button height (24px) + p-2 bottom (0.5rem) + 1rem gap */
+			bottom: 0;
+			min-height: 0;
+			max-height: none;
+			overflow-y: auto;
 		}
 
 		/* Tab Buttons */
@@ -252,6 +281,15 @@ function formatWithBoldPrefix(text: string): string {
 			background: white;
 			color: #010101;
 			border: 1px solid #d63a2e;
+		}
+
+		/* Tab Content Container - Hidden Initially */
+		.tab-content-container {
+			display: none;
+		}
+
+		.tab-content-container.has-content {
+			display: flex;
 		}
 
 		/* Tab Content */
