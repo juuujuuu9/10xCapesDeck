@@ -82,6 +82,24 @@ export function LazyVideo({
 			return;
 		}
 
+		// Check if element is already in viewport (fixes mobile gray box issue)
+		// Use a small delay to ensure layout is complete
+		const checkInitialIntersection = (): void => {
+			const rect = element.getBoundingClientRect();
+			const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
+			if (isInViewport) {
+				setIsIntersecting(true);
+				// If already in viewport, load immediately
+				if (!shouldLoad) {
+					setShouldLoad(true);
+				}
+			}
+		};
+
+		// Check immediately and after a short delay (for mobile layout completion)
+		checkInitialIntersection();
+		const timeoutId = setTimeout(checkInitialIntersection, 100);
+
 		// Always observe for intersection to handle pause/resume, even for priority videos
 		lazyLoadManager.observe(element, (entry) => {
 			if (entry.isIntersecting) {
@@ -107,9 +125,10 @@ export function LazyVideo({
 		});
 
 		return () => {
+			clearTimeout(timeoutId);
 			lazyLoadManager.unobserve(element);
 		};
-	}, [priority, reducedMotion]);
+	}, [priority, reducedMotion, shouldLoad]);
 
 	// Ensure video is muted immediately when element is created, and set volume to 55% when unmuted
 	useEffect(() => {
@@ -245,7 +264,8 @@ export function LazyVideo({
 					alt=""
 					aria-hidden="true"
 					className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-						shouldLoad && isIntersecting ? 'opacity-0 pointer-events-none' : 'opacity-100'
+						// Hide poster when video is visible (fixes mobile gray box)
+						shouldLoad && (isIntersecting || priority || reducedMotion) ? 'opacity-0 pointer-events-none' : 'opacity-100'
 					}`}
 					loading={priority ? 'eager' : 'lazy'}
 				/>
@@ -258,7 +278,8 @@ export function LazyVideo({
 					poster={posterUrl}
 					preload={priority ? 'auto' : 'metadata'} // RULE-014: Use metadata for non-priority
 					className={`w-full h-full object-cover transition-opacity duration-700 ${
-						isIntersecting ? 'opacity-100' : 'opacity-0'
+						// Show video when intersecting OR when priority/reducedMotion (fixes mobile gray box)
+						isIntersecting || priority || reducedMotion ? 'opacity-100' : 'opacity-0'
 					}`}
 					muted // Always muted for autoplay compatibility
 					controls={!isMuted} // Show controls when unmuted
