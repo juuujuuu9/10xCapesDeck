@@ -34,7 +34,7 @@ const [topLeftImage, bottomLeftImage, rightImage] = images;
 			<div class="relative flex-1 min-h-0 overflow-hidden">
 				{topLeftImage.type === 'video' ? (
 					<LazyVideo
-						client:visible
+						client:load
 						src={topLeftImage.src}
 						pullZone={topLeftImage.pullZone}
 						priority={topLeftImage.priority || false}
@@ -67,7 +67,7 @@ const [topLeftImage, bottomLeftImage, rightImage] = images;
 			<div class="relative flex-1 min-h-0 overflow-hidden">
 				{bottomLeftImage.type === 'video' ? (
 					<LazyVideo
-						client:visible
+						client:load
 						src={bottomLeftImage.src}
 						pullZone={bottomLeftImage.pullZone}
 						priority={bottomLeftImage.priority || false}
@@ -101,7 +101,7 @@ const [topLeftImage, bottomLeftImage, rightImage] = images;
 		<div class="relative w-full min-h-0 overflow-hidden justify-self-start xl:justify-self-end">
 			{rightImage.type === 'video' ? (
 				<LazyVideo
-					client:visible
+					client:load
 					src={rightImage.src}
 					pullZone={rightImage.pullZone}
 					priority={rightImage.priority || false}

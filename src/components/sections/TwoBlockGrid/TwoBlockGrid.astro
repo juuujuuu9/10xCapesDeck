@@ -81,7 +81,7 @@ const { block1, block2 } = Astro.props;
 						{item.video ? (
 							<>
 								<LazyVideo
-									client:visible
+									client:load
 									src={item.video.src}
 									pullZone={item.video.pullZone}
 									priority={item.video.priority || false}
@@ -169,7 +169,7 @@ const { block1, block2 } = Astro.props;
 						{item.video ? (
 							<>
 								<LazyVideo
-									client:visible
+									client:load
 									src={item.video.src}
 									pullZone={item.video.pullZone}
 									priority={item.video.priority || false}

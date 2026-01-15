@@ -55,7 +55,7 @@ const { images, video } = Astro.props;
 			{/* Video - visible only when stacked (<lg) */}
 			<div class="relative overflow-hidden flex-1 min-h-0 lg:hidden">
 				<LazyVideo
-					client:visible
+					client:load
 					src={video.src}
 					pullZone={video.pullZone}
 					priority={video.priority || false}
@@ -99,7 +99,7 @@ const { images, video } = Astro.props;
 		{/* Block 2: Video - visible only when side-by-side (>=lg) */}
 		<div class="relative overflow-hidden flex-1 min-h-0 hidden lg:block">
 			<LazyVideo
-				client:visible
+				client:load
 				src={video.src}
 				pullZone={video.pullZone}
 				priority={video.priority || false}

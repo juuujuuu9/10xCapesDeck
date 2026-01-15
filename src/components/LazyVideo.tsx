@@ -34,7 +34,7 @@ export function LazyVideo({
 	...props
 }: LazyVideoProps): React.JSX.Element {
 	const [shouldLoad, setShouldLoad] = useState(priority);
-	const [isIntersecting, setIsIntersecting] = useState(true); // Start as intersecting, will be updated by observer
+	const [isIntersecting, setIsIntersecting] = useState(false); // Start as NOT intersecting
 	const [reducedMotion, setReducedMotion] = useState(false);
 	const [isMuted, setIsMuted] = useState(true);
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -114,10 +114,13 @@ export function LazyVideo({
 	// Ensure video is muted immediately when element is created, and set volume to 55% when unmuted
 	useEffect(() => {
 		const video = videoRef.current;
-		if (video) {
+		if (video && shouldLoad) {
 			if (props.muted !== false) {
 				video.muted = true;
 				video.volume = 0;
+				// Set attributes to ensure mobile compatibility
+				video.setAttribute('muted', '');
+				video.setAttribute('playsinline', '');
 			} else {
 				// Set volume to 55% when not muted
 				video.volume = 0.55;
@@ -162,60 +165,68 @@ export function LazyVideo({
 	// Handle play/pause and resume for native video
 	useEffect(() => {
 		const video = videoRef.current;
-		if (!video || !isIntersecting || !shouldLoad || reducedMotion) {
+		if (!video || !shouldLoad || reducedMotion) {
+			return;
+		}
+
+		// Pause video when not intersecting
+		if (!isIntersecting) {
+			savedTimeRef.current = video.currentTime;
+			video.pause();
 			return;
 		}
 
 		// Function to restore time and play
 		const restoreAndPlay = (): void => {
-			// Restore saved time if resuming
-			if (savedTimeRef.current > 0) {
-				// Wait for video to be ready before setting currentTime
-				if (video.readyState >= 2) {
-					// Video has loaded enough data
-					video.currentTime = savedTimeRef.current;
-				} else {
-					// Wait for loadeddata event
-					const handleLoadedData = (): void => {
-						video.currentTime = savedTimeRef.current;
-						video.removeEventListener('loadeddata', handleLoadedData);
-					};
-					video.addEventListener('loadeddata', handleLoadedData);
-				}
+			// Ensure video is properly muted before attempting play (critical for mobile)
+			if (props.muted !== false) {
+				video.muted = true;
+				video.volume = 0;
 			}
 
-			// Use a promise to handle play() to avoid "play() request was interrupted" errors
+			// Restore saved time if resuming
+			if (savedTimeRef.current > 0 && video.readyState >= 2) {
+				video.currentTime = savedTimeRef.current;
+			}
+
 			// Only autoplay if props.autoPlay is not false
 			if (props.autoPlay !== false) {
+				// Use a promise to handle play() to avoid "play() request was interrupted" errors
 				const playPromise = video.play();
 				if (playPromise !== undefined) {
-					playPromise.catch(() => {
-						// Silently handle play failures (e.g., user interaction required)
+					playPromise.catch((error) => {
+						console.log('Video autoplay failed, will retry:', error.message);
+						// On mobile, sometimes play fails even with muted. Retry with a slight delay
+						setTimeout(() => {
+							if (video.muted && video.readyState >= 2) {
+								video.play().catch((retryError) => {
+									console.log('Video autoplay retry failed:', retryError.message);
+									// Final fallback: ensure video can be played on user interaction
+									// Silently fail - user can tap to play if needed
+								});
+							}
+						}, 200);
 					});
 				}
 			}
 		};
 
-		// If video is already loaded, restore and play immediately
-		if (video.readyState >= 2) {
+		// Wait for video to have enough data loaded
+		if (video.readyState >= 3) { // HAVE_FUTURE_DATA - enough data to play
 			restoreAndPlay();
 		} else {
-			// Wait for video to load first
-			const handleCanPlay = (): void => {
+			// Wait for video to load enough data
+			const handleCanPlayThrough = (): void => {
 				restoreAndPlay();
-				video.removeEventListener('canplay', handleCanPlay);
+				video.removeEventListener('canplaythrough', handleCanPlayThrough);
 			};
-			video.addEventListener('canplay', handleCanPlay);
+			video.addEventListener('canplaythrough', handleCanPlayThrough);
+			
+			return () => {
+				video.removeEventListener('canplaythrough', handleCanPlayThrough);
+			};
 		}
-
-		return () => {
-			if (video && isIntersecting) {
-				// Save current time before pausing
-				savedTimeRef.current = video.currentTime;
-				video.pause();
-			}
-		};
-	}, [isIntersecting, shouldLoad, reducedMotion, props.autoPlay]);
+	}, [isIntersecting, shouldLoad, reducedMotion, props.autoPlay, props.muted]);
 
 	return (
 		<div 
@@ -234,7 +245,7 @@ export function LazyVideo({
 					alt=""
 					aria-hidden="true"
 					className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-						isIntersecting ? 'opacity-0 pointer-events-none' : 'opacity-100'
+						shouldLoad && isIntersecting ? 'opacity-0 pointer-events-none' : 'opacity-100'
 					}`}
 					loading={priority ? 'eager' : 'lazy'}
 				/>
@@ -245,13 +256,15 @@ export function LazyVideo({
 					ref={videoRef}
 					src={videoUrl}
 					poster={posterUrl}
-					preload={priority ? 'auto' : 'none'} // RULE-014: Preload if priority
+					preload={priority ? 'auto' : 'metadata'} // RULE-014: Use metadata for non-priority
 					className={`w-full h-full object-cover transition-opacity duration-700 ${
 						isIntersecting ? 'opacity-100' : 'opacity-0'
 					}`}
-					muted={props.muted !== false} // Most browsers require muted for autoplay
+					muted // Always muted for autoplay compatibility
 					controls={!isMuted} // Show controls when unmuted
-					playsInline
+					playsInline // Required for iOS autoplay
+					autoPlay={props.autoPlay !== false}
+					loop={props.loop}
 					{...props}
 				/>
 			)}

@@ -32,7 +32,7 @@ const [leftImage, topRightImage, bottomRightImage] = images;
 		<div class="relative w-full min-h-0 overflow-hidden justify-self-end xl:justify-self-start">
 			{leftImage.type === 'video' ? (
 				<LazyVideo
-					client:visible
+					client:load
 					src={leftImage.src}
 					pullZone={leftImage.pullZone}
 					priority={leftImage.priority || false}
@@ -67,7 +67,7 @@ const [leftImage, topRightImage, bottomRightImage] = images;
 			<div class={`relative overflow-hidden ${bottomRightImage.type === 'video' ? 'flex-1 min-h-0 shrink' : 'flex-1 min-h-0'}`}>
 				{topRightImage.type === 'video' ? (
 					<LazyVideo
-						client:visible
+						client:load
 						src={topRightImage.src}
 						pullZone={topRightImage.pullZone}
 						priority={topRightImage.priority || false}
@@ -100,7 +100,7 @@ const [leftImage, topRightImage, bottomRightImage] = images;
 			<div class={`relative overflow-hidden ${bottomRightImage.type === 'video' ? 'aspect-video w-full shrink-0' : 'flex-1 min-h-0'}`}>
 				{bottomRightImage.type === 'video' ? (
 					<LazyVideo
-						client:visible
+						client:load
 						src={bottomRightImage.src}
 						pullZone={bottomRightImage.pullZone}
 						priority={bottomRightImage.priority || false}

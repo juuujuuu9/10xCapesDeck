@@ -1,6 +1,6 @@
 ---
 import { LazyVideo } from '../../LazyVideo.tsx';
-import { bunnyImage } from '../../../lib/bunny-cdn';
+import { bunnyImage, bunnyVideoFile } from '../../../lib/bunny-cdn';
 
 export interface Props {
 	video: {
@@ -16,20 +16,26 @@ const { video, className = '' } = Astro.props;
 
 // Generate poster URL if provided
 const posterUrl = video.poster 
-	? bunnyImage(video.poster, {
-		pullZone: video.pullZone || 'storage',
-		width: 1920,
-		quality: 85
-	})
+	? (video.poster.startsWith('http') 
+		? video.poster 
+		: bunnyImage(video.poster, {
+			pullZone: video.pullZone || 'storage',
+			width: 1920,
+			quality: 85
+		}))
 	: undefined;
+
+// Generate video URL
+const videoSrc = video.src.startsWith('http') 
+	? video.src 
+	: bunnyVideoFile(video.src, video.pullZone || 'storage');
 ---
 
 <section class={`bg-black w-full max-w-screen mx-auto h-dvh flex flex-col items-center justify-center snap-start snap-always px-0 ${className}`}>
 	<LazyVideo
 		client:load
-		src={video.src}
+		src={videoSrc}
 		poster={posterUrl}
-		pullZone={video.pullZone || 'storage'}
 		autoPlay
 		muted={true}
 		loop
