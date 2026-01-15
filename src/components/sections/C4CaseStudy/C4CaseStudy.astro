@@ -103,9 +103,9 @@ function formatWithBoldPrefix(text: string): string {
 		{/* White Content Card */}
 		<div class="content-card flex flex-col overflow-hidden">
 			{/* Tab Navigation */}
-			<div class="flex gap-3 px-4 pt-6 pb-6 shrink-0">
+			<div class="flex gap-3 px-4 pt-6 pb-4 shrink-0">
 				<button
-					class="tab-button"
+					class="tab-button flex-1"
 					data-tab="overview"
 					type="button"
 					aria-label="Show overview content"
@@ -113,7 +113,7 @@ function formatWithBoldPrefix(text: string): string {
 					overview
 				</button>
 				<button
-					class="tab-button"
+					class="tab-button flex-1"
 					data-tab="initiatives"
 					type="button"
 					aria-label="Show key initiatives"
@@ -260,9 +260,9 @@ function formatWithBoldPrefix(text: string): string {
 			border-radius: 9999px;
 			font-size: 16px;
 			font-weight: 500;
-			background: #f4f4f0;
+			background: white;
 			color: #010101;
-			border: none;
+			border: 1px solid #010101;
 			cursor: pointer;
 			transition: all 0.2s;
 			font-family: 'AktivGrotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -278,8 +278,8 @@ function formatWithBoldPrefix(text: string): string {
 		}
 
 		.tab-button.active {
-			background: white;
-			color: #010101;
+			background: #d63a2e;
+			color: white;
 			border: 1px solid #d63a2e;
 		}
 
