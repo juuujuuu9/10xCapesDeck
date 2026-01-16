@@ -299,6 +299,19 @@ PUBLIC_BUNNY_STREAM_URL=https://vz-xxxxx.b-cdn.net
 - **Examples**: AdidasWorldCup.astro, TalentBrandPartnership.astro, TwoBlockGrid.astro
 - Applies to all sections in `src/components/sections/TwoBlockGrid/` and similar grid-based layouts
 
+### RULE-025: Brand Colors ⚠️
+**Project brand color definitions**
+- **Brand Red**: `#ca2c1e` - Use this whenever "red" is mentioned
+- Apply via Tailwind arbitrary value: `text-[#ca2c1e]`, `bg-[#ca2c1e]`, `border-[#ca2c1e]`
+- This is the primary accent color used throughout the site
+
+### RULE-026: Section Placement ⚠️
+**Always add new sections to the very end of index.astro**
+- New sections/components must be added at the very end of the page, just before the closing `</body>` tag
+- Exception: Only place sections elsewhere if explicitly requested by the user
+- This ensures consistent ordering and makes it easy to find the latest additions
+- Pattern: Add new sections after all existing sections and scripts, before `</body>`
+
 ---
 
 ## Rule Symbols
@@ -479,6 +492,6 @@ You: "Yes"
 
 ---
 
-**Last updated:** 2026-01-15  
-**Active rules:** 24  
+**Last updated:** 2026-01-16  
+**Active rules:** 26  
 **Philosophy:** Radical simplicity + Performance at scale

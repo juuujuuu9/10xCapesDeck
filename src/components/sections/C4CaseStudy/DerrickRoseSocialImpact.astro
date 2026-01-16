@@ -1,0 +1,96 @@
+---
+import { LazyImage } from '../../LazyImage.tsx';
+
+export interface Props {
+	id?: string;
+}
+
+const { id } = Astro.props;
+
+// Phone mockup images from capeswp CDN
+const phoneImages = [
+	{ src: '/wp-content/uploads/2025/02/derrick-rose-social-impact-1.jpg', alt: 'Derrick Rose social media post 1' },
+	{ src: '/wp-content/uploads/2025/02/derrick-rose-social-impact-2.jpg', alt: 'Derrick Rose social media post 2' },
+	{ src: '/wp-content/uploads/2025/02/derrick-rose-social-impact-3.jpg', alt: 'Derrick Rose social media post 3' },
+	{ src: '/wp-content/uploads/2025/02/derrick-rose-social-impact-4_1.jpg', alt: 'Derrick Rose social media post 4' },
+	{ src: '/wp-content/uploads/2025/02/derrick-rose-social-impact-5.jpg', alt: 'Derrick Rose social media post 5' },
+	{ src: '/wp-content/uploads/2025/02/derrick-rose-social-impact-6.jpg', alt: 'Derrick Rose social media post 6' },
+];
+---
+
+<section id={id} class="w-full h-dvh max-h-dvh snap-start snap-always flex flex-col overflow-hidden box-border bg-white p-2 md:p-4 lg:p-12 lg:px-18 lg:gap-8">
+	{/* Phone Mockups Row - 60% height on desktop */}
+	<div class="flex-shrink-0 w-full overflow-hidden lg:w-[100%] lg:flex lg:items-end">
+		<div class="flex items-end justify-between gap-3 w-full h-full">
+			{phoneImages.map((phone, index) => (
+				<div 
+					class="relative flex-shrink-0 w-[15%] max-w-[160px] min-w-[80px] lg:max-w-none lg:h-full"
+					style={`animation-delay: ${index * 100}ms`}
+				>
+					<LazyImage
+						client:visible
+						src={phone.src}
+						alt={phone.alt}
+						pullZone="wordpress"
+						priority={false}
+						width={520}
+						quality={85}
+						className="w-full h-auto lg:h-full lg:w-auto lg:object-contain rounded-[12px] md:rounded-[20px] lg:rounded-[28px]"
+					/>
+				</div>
+			))}
+		</div>
+	</div>
+
+	{/* Content Section - 40% height on desktop */}
+	<div class="flex-1 min-h-0 flex flex-col lg:flex-row lg:items-center gap-6 md:gap-8 lg:gap-16 pt-6 md:pt-8 lg:pt-0 lg:h-[40%] lg:flex-shrink-0">
+		{/* Left Column: The Ask */}
+		<div class="flex-1 flex flex-col justify-start lg:justify-center">
+			<h2 class="inline text-[#ca2c1e] text-[40px] font-semibold leading-[40px] text-left lowercase mb-4 md:mb-6">
+				the ask
+			</h2>
+			<p class="inline text-[#010101] text-[24px] font-light leading-[24px] text-left lowercase mb-4">
+				to ideate and execute on two main events in early january as derrick rose returns to chicago to celebrate his legendary career.
+			</p>
+			<p class="inline text-[#010101] text-[24px] font-light leading-[24px] text-left lowercase">
+				as much as this is a celebration of derrick, it is also a tribute to the city, the people, and the communities that gave him so much more than he could ever ask for.
+			</p>
+		</div>
+
+		{/* Right Column: Events + Impact */}
+		<div class="flex-1 flex flex-col justify-start lg:justify-center">
+			{/* Event Dates */}
+			<div class="flex flex-col gap-2 mb-6 md:mb-8">
+				<p class="text-[#010101] text-[24px] font-light leading-[24px] text-left lowercase">
+					<span class="text-[#ca2c1e] font-light">january 2nd:</span> rose's flower shop
+				</p>
+				<p class="text-[#010101] text-[24px] font-light leading-[24px] text-left lowercase">
+					<span class="text-[#ca2c1e] font-light">january 3rd:</span> homegrown at simeon
+				</p>
+			</div>
+
+			{/* Press/Social Impact */}
+			<h2 class="inline text-[#ca2c1e] text-[40px] font-semibold leading-[40px] text-left lowercase mb-4 md:mb-6">
+				press/social impact:
+			</h2>
+			<ul class="space-y-2 md:space-y-3">
+				<li class="flex items-center gap-3 text-[#010101] text-[24px] font-light leading-[24px] lowercase">
+					<span class="text-[#ca2c1e] text-[24px]">❤</span>
+					<span><span class="text-[#ca2c1e] font-light">300+</span> tagged and major social accounts posted</span>
+				</li>
+				<li class="flex items-center gap-3 text-[#010101] text-[24px] font-light leading-[24px] lowercase">
+					<span class="text-[#ca2c1e] text-[24px]">👁</span>
+					<span><span class="text-[#ca2c1e] font-light">2m+</span> views on social media</span>
+				</li>
+			</ul>
+		</div>
+	</div>
+</section>
+
+<style>
+	/* Ensure lowercase text styling */
+	section h2,
+	section p {
+		text-transform: lowercase;
+	}
+</style>

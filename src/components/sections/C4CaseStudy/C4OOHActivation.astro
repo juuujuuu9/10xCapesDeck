@@ -1,0 +1,163 @@
+---
+import { LazyImage } from '../../LazyImage.tsx';
+import { LazyVideo } from '../../LazyVideo.tsx';
+
+export interface Props {
+	stats: Array<{
+		label: string;
+		value: string;
+	}>;
+	col1: {
+		title: string;
+		images: Array<{
+			src: string;
+			alt: string;
+			pullZone?: string;
+			priority?: boolean;
+			width?: number;
+			quality?: number;
+		}>;
+	};
+	col2: {
+		images: Array<{
+			src: string;
+			alt: string;
+			pullZone?: string;
+			priority?: boolean;
+			width?: number;
+			quality?: number;
+		}>;
+	};
+	col3: {
+		video: {
+			src: string;
+			pullZone?: string;
+			priority?: boolean;
+		};
+	};
+	sectionTitle?: string;
+	id?: string;
+}
+
+const { stats, col1, col2, col3, sectionTitle = 'ooh activation', id } = Astro.props;
+
+// Ensure we have correct number of images
+if (col1.images.length !== 2) {
+	throw new Error('C4OOHActivation col1 requires exactly 2 images');
+}
+if (col2.images.length !== 2) {
+	throw new Error('C4OOHActivation col2 requires exactly 2 images');
+}
+
+const [col1Image1, col1Image2] = col1.images;
+const [col2Image1, col2Image2] = col2.images;
+---
+
+<section id={id} class="w-full h-dvh max-h-dvh snap-start snap-always flex px-0! flex-col overflow-hidden box-border bg-white">
+	{/* Stats Bar */}
+	<div class="w-full bg-black flex-shrink-0 py-3 md:py-4 lg:py-5">
+		<div class="flex items-center flex-wrap justify-start gap-x-6 md:gap-x-10 lg:gap-x-16 gap-y-2 px-2 md:px-4 lg:px-8">
+			{stats.map((stat) => (
+				<div class="flex items-center gap-1 md:gap-2">
+					<span class="text-white text-[12px] md:text-[14px] lg:text-[20px] font-semibold lowercase whitespace-nowrap">
+						{stat.label}:<span class="ml-1 md:ml-1.5 font-bold">{stat.value}</span>
+					</span>
+				</div>
+			))}
+		</div>
+	</div>
+
+	{/* Content Area */}
+	<div class="flex-1 min-h-0 flex flex-col p-2 md:p-4 lg:p-8">
+		{/* Image Grid */}
+		<div class="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 lg:gap-8">
+			{/* Column 1: Title + 2 Images */}
+			<div class="flex flex-col gap-2 md:gap-4 lg:gap-8 min-h-0">
+				{/* Black Title */}
+				<div class="w-full flex-shrink-0 flex items-start justify-start">
+					<span class="blk-title text-white">
+						{col1.title}
+					</span>
+				</div>
+				{/* Image 1 */}
+				<div class="relative overflow-hidden flex-1 min-h-0">
+					<LazyImage
+						client:visible
+						src={col1Image1.src}
+						alt={col1Image1.alt}
+						pullZone={col1Image1.pullZone}
+						priority={col1Image1.priority || false}
+						width={col1Image1.width || 1200}
+						quality={col1Image1.quality || 85}
+						className="w-full h-full object-cover"
+					/>
+				</div>
+				{/* Image 2 */}
+				<div class="relative overflow-hidden flex-1 min-h-0">
+					<LazyImage
+						client:visible
+						src={col1Image2.src}
+						alt={col1Image2.alt}
+						pullZone={col1Image2.pullZone}
+						priority={col1Image2.priority || false}
+						width={col1Image2.width || 1200}
+						quality={col1Image2.quality || 85}
+						className="w-full h-full object-cover"
+					/>
+				</div>
+			</div>
+
+			{/* Column 2: Square Image + Image */}
+			<div class="flex flex-col gap-2 md:gap-4 lg:gap-8 min-h-0">
+				{/* Square Image */}
+				<div class="relative overflow-hidden aspect-square">
+					<LazyImage
+						client:visible
+						src={col2Image1.src}
+						alt={col2Image1.alt}
+						pullZone={col2Image1.pullZone}
+						priority={col2Image1.priority || false}
+						width={col2Image1.width || 1200}
+						quality={col2Image1.quality || 85}
+						className="w-full h-full object-cover"
+					/>
+				</div>
+				{/* Image */}
+				<div class="relative overflow-hidden flex-1 min-h-0">
+					<LazyImage
+						client:visible
+						src={col2Image2.src}
+						alt={col2Image2.alt}
+						pullZone={col2Image2.pullZone}
+						priority={col2Image2.priority || false}
+						width={col2Image2.width || 1200}
+						quality={col2Image2.quality || 85}
+						className="w-full h-full object-cover"
+					/>
+				</div>
+			</div>
+
+			{/* Column 3: Video */}
+			<div class="relative overflow-hidden flex-1 min-h-0">
+				<LazyVideo
+					client:load
+					src={col3.video.src}
+					pullZone={col3.video.pullZone}
+					priority={col3.video.priority !== undefined ? col3.video.priority : true}
+					autoPlay
+					muted
+					loop
+					playsInline
+					className="w-full h-full object-cover"
+				/>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	/* Ensure all text is lowercase */
+	section h2 {
+		text-transform: lowercase;
+	}
+</style>

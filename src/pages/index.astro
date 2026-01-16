@@ -17,6 +17,8 @@ import C4CaseStudy from '../components/sections/C4CaseStudy/C4CaseStudy.astro';
 import ReelSection from '../components/sections/ReelSection/ReelSection.astro';
 import TalentBrandPartnership from '../components/sections/TwoBlockGrid/TalentBrandPartnership.astro';
 import IgniteYourFireResults from '../components/sections/C4CaseStudy/IgniteYourFireResults.astro';
+import C4OOHActivation from '../components/sections/C4CaseStudy/C4OOHActivation.astro';
+import DerrickRoseSocialImpact from '../components/sections/C4CaseStudy/DerrickRoseSocialImpact.astro';
 
 const logoUrl = bunnyImage('/wp-content/uploads/2025/08/Times10-Logo-2025-2.png', {
 	pullZone: 'wordpress',
@@ -111,6 +113,13 @@ const websiteSlideBg = bunnyImage('/wp-content/uploads/2025/02/MyArcade-Mike-3.j
 
 // RULE-021: WordPress URL auto-conversion to Bunny CDN
 const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bombsicle-scaled.jpg', {
+	pullZone: 'wordpress',
+	width: 1920,
+	quality: 85
+});
+
+// RULE-021: WordPress URL auto-conversion to Bunny CDN
+const endingLargeImage = bunnyImage('/wp-content/uploads/2025/02/IMG_3482.jpg', {
 	pullZone: 'wordpress',
 	width: 1920,
 	quality: 85
@@ -678,7 +687,7 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 				}
 
 				// Use Intersection Observer to trigger fade in/out
-				const section = document.getElementById('c4-frozen-section');
+				const section = document.getElementById('c4-frozen');
 				if (!section) return;
 
 				const observer = new IntersectionObserver((entries) => {
@@ -776,6 +785,108 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 				quality: 85
 			}}
 		/>
+		<C4OOHActivation
+			id="c4-ooh-activation"
+			stats={[
+				{ label: 'cans passed out', value: '500k+' },
+				{ label: 'social impressions', value: '100m+' },
+				{ label: 'billboards', value: '45' },
+				{ label: 'events', value: '50+' },
+				{ label: 'box trucks', value: '25+' },
+				{ label: 'tier 1 talent signed', value: '16' }
+			]}
+			col1={{
+				title: 'ooh activation',
+				images: [
+					{
+						src: '/wp-content/uploads/2025/02/041522_C4_COACHELLA_FINAL-27.jpg',
+						alt: 'C4 Coachella activation',
+						pullZone: 'wordpress',
+						width: 1200,
+						quality: 85
+					},
+					{
+						src: '/wp-content/uploads/2025/02/060522_C4_WEHO-PRIDE-16-1-e1740530922745.jpeg',
+						alt: 'C4 WeHo Pride activation',
+						pullZone: 'wordpress',
+						width: 1200,
+						quality: 85
+					}
+				]
+			}}
+			col2={{
+				images: [
+					{
+						src: '/wp-content/uploads/2025/02/C4_WRESTLEMANIA_FINAL-37.jpg',
+						alt: 'C4 WrestleMania activation',
+						pullZone: 'wordpress',
+						width: 1200,
+						quality: 85
+					},
+					{
+						src: '/wp-content/uploads/2025/02/vegas-billboard-e1740533087657.jpg',
+						alt: 'C4 Vegas billboard',
+						pullZone: 'wordpress',
+						width: 1200,
+						quality: 85
+					}
+				]
+			}}
+			col3={{
+				video: {
+					src: 'https://times-10-video-offload.b-cdn.net/C4%20x%20WWE%20-%20AXXCESS%20Recap%20(1).mp4',
+					pullZone: 'storage',
+					priority: true
+				}
+			}}
+		/>
+		<section 
+			id="ending-image"
+			class="w-full h-dvh snap-start snap-always bg-no-repeat flex items-center justify-center relative bg-black"
+			style={`background-image: url('${endingLargeImage}'); background-position: 50% 50%; background-size: cover;`}
+		>
+			<div 
+				id="ending-image-overlay"
+				class="absolute inset-0 bg-black transition-opacity duration-1000 ease-in-out"
+			></div>
+		</section>
+		<script>
+			// Fade in/out black overlay when ending image section enters/exits viewport
+			(function() {
+				const overlay = document.getElementById('ending-image-overlay');
+				if (!overlay) return;
+
+				// Check for reduced motion preference
+				const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+				
+				// If reduced motion, hide overlay immediately
+				if (prefersReducedMotion) {
+					overlay.style.opacity = '0';
+					return;
+				}
+
+				// Use Intersection Observer to trigger fade in/out
+				const section = document.getElementById('ending-image');
+				if (!section) return;
+
+				const observer = new IntersectionObserver((entries) => {
+					entries.forEach((entry) => {
+						if (entry.isIntersecting) {
+							// Fade out the black overlay to reveal background image
+							overlay.style.opacity = '0';
+						} else {
+							// Fade in the black overlay when section exits viewport
+							overlay.style.opacity = '1';
+						}
+					});
+				}, {
+					threshold: 0.1,
+					rootMargin: '0px'
+				});
+
+				observer.observe(section);
+			})();
+		</script>
 		<script>
 			// Hash Scroll Manager - Updates URL hash as user scrolls through sections
 			(function() {
@@ -896,5 +1007,6 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 				}
 			})();
 		</script>
+		<DerrickRoseSocialImpact id="derrick-rose-social-impact" />
 	</body>
 </html>
