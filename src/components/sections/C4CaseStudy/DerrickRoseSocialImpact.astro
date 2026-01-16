@@ -18,68 +18,66 @@ const phoneImages = [
 ];
 ---
 
-<section id={id} class="w-full h-dvh max-h-dvh snap-start snap-always flex flex-col overflow-hidden box-border bg-white p-2 md:p-4 lg:p-12 lg:px-18 lg:gap-8">
-	{/* Phone Mockups Row - 60% height on desktop */}
-	<div class="flex-shrink-0 w-full overflow-hidden lg:w-[100%] lg:flex lg:items-end">
-		<div class="flex items-end justify-between gap-3 w-full h-full">
-			{phoneImages.map((phone, index) => (
-				<div 
-					class="relative flex-shrink-0 w-[15%] max-w-[160px] min-w-[80px] lg:max-w-none lg:h-full"
-					style={`animation-delay: ${index * 100}ms`}
-				>
-					<LazyImage
-						client:visible
-						src={phone.src}
-						alt={phone.alt}
-						pullZone="wordpress"
-						priority={false}
-						width={520}
-						quality={85}
-						className="w-full h-auto lg:h-full lg:w-auto lg:object-contain rounded-[12px] md:rounded-[20px] lg:rounded-[28px]"
-					/>
-				</div>
-			))}
-		</div>
+<section id={id} class="hidden lg:flex w-full h-dvh max-h-dvh snap-start snap-always flex-col overflow-hidden box-border bg-white p-2 md:p-4 lg:p-12  xl:pt-24 lg:pt-16 lg:px-18 gap-0">
+	{/* Phone Mockups Row - 50% height on md-xl */}
+	<div class="flex-1 min-h-0 w-full overflow-hidden flex items-center justify-center sm:items-end sm:justify-between gap-2 sm:gap-3">
+		{phoneImages.map((phone, index) => (
+			<div 
+				class={`relative shrink-0 w-full h-full max-h-full overflow-hidden sm:w-[30%] md:w-[30%] lg:w-[15%] min-w-[80px] lg:max-w-none ${index === 0 ? 'hidden sm:block' : index >= 3 ? 'hidden lg:block' : ''}`}
+				style={`animation-delay: ${index * 100}ms`}
+			>
+				<LazyImage
+					client:visible
+					src={phone.src}
+					alt={phone.alt}
+					pullZone="wordpress"
+					priority={false}
+					width={520}
+					quality={85}
+					className="w-full h-full max-h-full object-contain rounded-[12px] md:rounded-[20px] lg:rounded-[28px]"
+				/>
+			</div>
+		))}
 	</div>
 
-	{/* Content Section - 40% height on desktop */}
-	<div class="flex-1 min-h-0 flex flex-col lg:flex-row lg:items-center gap-6 md:gap-8 lg:gap-16 pt-6 md:pt-8 lg:pt-0 lg:h-[40%] lg:flex-shrink-0">
+	{/* Content Section - 50% height on md-xl */}
+	<div class="flex-1 min-h-0 flex flex-col lg:flex-row lg:items-center gap-4 md:gap-8 lg:gap-16">
 		{/* Left Column: The Ask */}
-		<div class="flex-1 flex flex-col justify-start lg:justify-center">
-			<h2 class="inline text-[#ca2c1e] text-[40px] font-semibold leading-[40px] text-left lowercase mb-4 md:mb-6">
+		<div class="flex-1 flex flex-col justify-start lg:justify-center max-w-[500px] mx-auto w-full">
+			<h2 class="inline text-[#ca2c1e] text-[20px] md:text-[32px] lg:text-[40px] font-semibold leading-[28px] md:leading-[36px] lg:leading-[40px] text-left lowercase mb-3 md:mb-4 lg:mb-6">
 				the ask
 			</h2>
-			<p class="inline text-[#010101] text-[24px] font-light leading-[24px] text-left lowercase mb-4">
+			<p class="inline text-[#010101] text-[14px] md:text-[20px] lg:text-[24px] font-light leading-[20px] md:leading-[28px] lg:leading-[24px] text-left lowercase mb-3 md:mb-4">
 				to ideate and execute on two main events in early january as derrick rose returns to chicago to celebrate his legendary career.
 			</p>
-			<p class="inline text-[#010101] text-[24px] font-light leading-[24px] text-left lowercase">
+			<p class="inline text-[#010101] text-[14px] md:text-[20px] lg:text-[24px] font-light leading-[20px] md:leading-[28px] lg:leading-[24px] text-left lowercase">
 				as much as this is a celebration of derrick, it is also a tribute to the city, the people, and the communities that gave him so much more than he could ever ask for.
 			</p>
 		</div>
 
 		{/* Right Column: Events + Impact */}
-		<div class="flex-1 flex flex-col justify-start lg:justify-center">
+		<div class="flex-1 flex flex-col justify-start lg:justify-center max-w-[500px] mx-auto w-full">
 			{/* Event Dates */}
-			<div class="flex flex-col gap-2 mb-6 md:mb-8">
-				<p class="text-[#010101] text-[24px] font-light leading-[24px] text-left lowercase">
+			<div class="flex flex-col gap-2 mb-4 md:mb-6 lg:mb-8">
+				<p class="text-[#010101] text-[14px] md:text-[20px] lg:text-[24px] font-light leading-[20px] md:leading-[28px] lg:leading-[24px] text-left lowercase">
 					<span class="text-[#ca2c1e] font-light">january 2nd:</span> rose's flower shop
 				</p>
-				<p class="text-[#010101] text-[24px] font-light leading-[24px] text-left lowercase">
+				<p class="text-[#010101] text-[14px] md:text-[20px] lg:text-[24px] font-light leading-[20px] md:leading-[28px] lg:leading-[24px] text-left lowercase">
 					<span class="text-[#ca2c1e] font-light">january 3rd:</span> homegrown at simeon
 				</p>
 			</div>
 
 			{/* Press/Social Impact */}
-			<h2 class="inline text-[#ca2c1e] text-[40px] font-semibold leading-[40px] text-left lowercase mb-4 md:mb-6">
+			<h2 class="inline text-[#ca2c1e] text-[20px] md:text-[32px] lg:text-[40px] font-semibold leading-[28px] md:leading-[36px] lg:leading-[40px] text-left lowercase mb-3 md:mb-4 lg:mb-6">
 				press/social impact:
 			</h2>
 			<ul class="space-y-2 md:space-y-3">
-				<li class="flex items-center gap-3 text-[#010101] text-[24px] font-light leading-[24px] lowercase">
-					<span class="text-[#ca2c1e] text-[24px]">❤</span>
+				<li class="flex items-center gap-2 md:gap-3 text-[#010101] text-[14px] md:text-[20px] lg:text-[24px] font-light leading-[20px] md:leading-[28px] lg:leading-[24px] lowercase">
+					<span class="text-[#ca2c1e] text-[14px] md:text-[20px] lg:text-[24px]">❤</span>
 					<span><span class="text-[#ca2c1e] font-light">300+</span> tagged and major social accounts posted</span>
 				</li>
-				<li class="flex items-center gap-3 text-[#010101] text-[24px] font-light leading-[24px] lowercase">
-					<span class="text-[#ca2c1e] text-[24px]">👁</span>
+				<li class="flex items-center gap-2 md:gap-3 text-[#010101] text-[14px] md:text-[20px] lg:text-[24px] font-light leading-[20px] md:leading-[28px] lg:leading-[24px] lowercase">
+					<span class="text-[#ca2c1e] text-[14px] md:text-[20px] lg:text-[24px]">👁</span>
 					<span><span class="text-[#ca2c1e] font-light">2m+</span> views on social media</span>
 				</li>
 			</ul>
