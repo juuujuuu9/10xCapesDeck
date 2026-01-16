@@ -34,6 +34,9 @@ export interface Props {
 }
 
 const { block1, block2, id } = Astro.props;
+
+// Find first video in block1 for mobile display
+const block1Video = block1.images.find(item => ('type' in item && item.type === 'video') || !('alt' in item));
 ---
 
 <section id={id} class="w-full h-dvh max-h-dvh pl-2 md:pl-4 lg:pl-8 pr-2 md:pr-4 lg:pr-8 py-2 md:py-4 lg:py-8 snap-start snap-always flex flex-col overflow-hidden box-border">
@@ -51,52 +54,125 @@ const { block1, block2, id } = Astro.props;
 					</div>
 				)}
 
-				{/* Large Image/Video - Show video on small screens, full layout on large */}
+				{/* Large Image/Video - Show video on mobile, first item on larger screens */}
 				{block1.images.length > 0 && (
 					<div class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
-						{('type' in block1.images[0] && block1.images[0].type === 'video') || !('alt' in block1.images[0]) ? (
-							<>
+						{/* Mobile: Show video if available, otherwise show first item */}
+						{block1Video ? (
+							<div class="block md:hidden w-full h-full">
 								<LazyVideo
 									client:load
-									src={block1.images[0].src}
-									pullZone={block1.images[0].pullZone}
-									priority={block1.images[0].priority !== undefined ? block1.images[0].priority : true}
+									src={block1Video.src}
+									pullZone={block1Video.pullZone}
+									priority={block1Video.priority !== undefined ? block1Video.priority : true}
 									autoPlay
 									muted
 									loop
 									playsInline
-									className="w-full h-full object-cover object-top md:object-center"
+									className="w-full h-full object-cover object-top"
 								/>
-								{block1.images[0].label && (
-									<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
-										<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
-											{block1.images[0].label}
+								{block1Video.label && (
+									<div class="absolute bottom-0 left-0 px-3 py-1.5">
+										<span class="text-white text-lg font-light lowercase tracking-wide">
+											{block1Video.label}
 										</span>
 									</div>
 								)}
-							</>
-							) : 'alt' in block1.images[0] ? (
+							</div>
+						) : (
+							<div class="block md:hidden w-full h-full">
+								{('type' in block1.images[0] && block1.images[0].type === 'video') || !('alt' in block1.images[0]) ? (
+									<>
+										<LazyVideo
+											client:load
+											src={block1.images[0].src}
+											pullZone={block1.images[0].pullZone}
+											priority={block1.images[0].priority !== undefined ? block1.images[0].priority : true}
+											autoPlay
+											muted
+											loop
+											playsInline
+											className="w-full h-full object-cover object-top"
+										/>
+										{block1.images[0].label && (
+											<div class="absolute bottom-0 left-0 px-3 py-1.5">
+												<span class="text-white text-lg font-light lowercase tracking-wide">
+													{block1.images[0].label}
+												</span>
+											</div>
+										)}
+									</>
+								) : 'alt' in block1.images[0] ? (
+									<>
+										<LazyImage
+											client:visible
+											src={block1.images[0].src}
+											alt={block1.images[0].alt}
+											pullZone={('pullZone' in block1.images[0] ? block1.images[0].pullZone : undefined)}
+											priority={('priority' in block1.images[0] && block1.images[0].priority !== undefined) ? block1.images[0].priority : true}
+											width={('width' in block1.images[0] ? block1.images[0].width : undefined) || 1200}
+											quality={('quality' in block1.images[0] ? block1.images[0].quality : undefined) || 85}
+										blurPlaceholder={false}
+										className="w-full h-full object-cover object-top"
+									/>
+									{block1.images[0].label && (
+										<div class="absolute bottom-0 left-0 px-3 py-1.5">
+											<span class="text-white text-lg font-light lowercase tracking-wide">
+												{block1.images[0].label}
+											</span>
+										</div>
+									)}
+								</>
+							) : null}
+							</div>
+						)}
+						
+						{/* Desktop: Show first item */}
+						<div class="hidden md:block w-full h-full">
+							{('type' in block1.images[0] && block1.images[0].type === 'video') || !('alt' in block1.images[0]) ? (
 								<>
-									<LazyImage
-										client:visible
+									<LazyVideo
+										client:load
 										src={block1.images[0].src}
-										alt={block1.images[0].alt}
-										pullZone={('pullZone' in block1.images[0] ? block1.images[0].pullZone : undefined)}
-										priority={('priority' in block1.images[0] && block1.images[0].priority !== undefined) ? block1.images[0].priority : true}
-										width={('width' in block1.images[0] ? block1.images[0].width : undefined) || 1200}
-										quality={('quality' in block1.images[0] ? block1.images[0].quality : undefined) || 85}
-									blurPlaceholder={false}
-									className="w-full h-full object-cover object-top md:object-center"
-								/>
-								{block1.images[0].label && (
-									<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
-										<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
-											{block1.images[0].label}
-										</span>
-									</div>
-								)}
-							</>
-						) : null}
+										pullZone={block1.images[0].pullZone}
+										priority={block1.images[0].priority !== undefined ? block1.images[0].priority : true}
+										autoPlay
+										muted
+										loop
+										playsInline
+										className="w-full h-full object-cover object-center"
+									/>
+									{block1.images[0].label && (
+										<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
+											<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
+												{block1.images[0].label}
+											</span>
+										</div>
+									)}
+								</>
+								) : 'alt' in block1.images[0] ? (
+									<>
+										<LazyImage
+											client:visible
+											src={block1.images[0].src}
+											alt={block1.images[0].alt}
+											pullZone={('pullZone' in block1.images[0] ? block1.images[0].pullZone : undefined)}
+											priority={('priority' in block1.images[0] && block1.images[0].priority !== undefined) ? block1.images[0].priority : true}
+											width={('width' in block1.images[0] ? block1.images[0].width : undefined) || 1200}
+											quality={('quality' in block1.images[0] ? block1.images[0].quality : undefined) || 85}
+										blurPlaceholder={false}
+										className="w-full h-full object-cover object-center"
+									/>
+									{block1.images[0].label && (
+										<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
+											<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
+												{block1.images[0].label}
+											</span>
+										</div>
+									)}
+								</>
+							) : null}
+						</div>
 					</div>
 				)}
 			</div>
