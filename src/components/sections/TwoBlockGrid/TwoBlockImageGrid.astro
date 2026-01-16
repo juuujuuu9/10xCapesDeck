@@ -59,12 +59,12 @@ const block1Video = block1.images.find(item => ('type' in item && item.type === 
 					<div class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
 						{/* Mobile: Show video if available, otherwise show first item */}
 						{block1Video ? (
-							<div class="block md:hidden w-full h-full">
+							<div class="block md:hidden w-full aspect-square">
 								<LazyVideo
 									client:load
 									src={block1Video.src}
 									pullZone={block1Video.pullZone}
-									priority={block1Video.priority !== undefined ? block1Video.priority : true}
+									priority={true}
 									autoPlay
 									muted
 									loop
@@ -80,14 +80,14 @@ const block1Video = block1.images.find(item => ('type' in item && item.type === 
 								)}
 							</div>
 						) : (
-							<div class="block md:hidden w-full h-full">
+							<div class="block md:hidden w-full aspect-square">
 								{('type' in block1.images[0] && block1.images[0].type === 'video') || !('alt' in block1.images[0]) ? (
 									<>
 										<LazyVideo
 											client:load
 											src={block1.images[0].src}
 											pullZone={block1.images[0].pullZone}
-											priority={block1.images[0].priority !== undefined ? block1.images[0].priority : true}
+											priority={true}
 											autoPlay
 											muted
 											loop
