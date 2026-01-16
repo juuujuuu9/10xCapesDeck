@@ -1,0 +1,141 @@
+---
+import { LazyImage } from '../../LazyImage.tsx';
+
+// RULE-022: Default section padding pattern
+// RULE-023: Section content containment
+// RULE-024: Black title section conventions (if needed)
+// RULE-021: WordPress URL auto-conversion to Bunny CDN
+---
+
+<section id="derrick-rose-brand-grid" class="w-full h-dvh max-h-dvh p-2 md:p-4 lg:p-8 snap-start snap-always flex flex-col overflow-hidden box-border">
+	<div class="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-2 md:gap-4 lg:gap-8">
+		{/* Left Column: Derrick Rose Poster (Full Height) */}
+		<div class="relative overflow-hidden h-full flex items-center justify-center">
+			<img
+				src="https://capeswp.b-cdn.net/wp-content/uploads/2025/03/Derrick-Rose-Ticket_v2.jpg"
+				alt="Derrick Rose Final Game Poster"
+				class="h-full w-auto object-contain"
+				loading="eager"
+				crossorigin="anonymous"
+			/>
+		</div>
+
+		{/* Right Section: Multi-row Grid */}
+		<div class="flex-1 min-h-0 flex flex-col gap-2 md:gap-4 lg:gap-8">
+			{/* Top Row: Postcard + Flower Shop Cards */}
+			<div class="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 lg:gap-8">
+				{/* Postcard Back */}
+				<div class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+					<LazyImage
+						client:visible
+						src="/wp-content/uploads/2025/02/Glossy_A4_Paper_Mockup_2_1-e1740700094220.jpg"
+						alt="Postcard Back"
+						pullZone="wordpress"
+						priority={false}
+						width={1200}
+						quality={85}
+						blurPlaceholder={false}
+						className="w-full h-full object-cover object-center"
+					/>
+				</div>
+
+				{/* Rose's Flower Shop Cards */}
+				<div class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+					<LazyImage
+						client:visible
+						src="/wp-content/uploads/2025/02/Polaroid-Mokcup_1.jpg"
+						alt="Rose's Flower Shop Cards"
+						pullZone="wordpress"
+						priority={false}
+						width={1200}
+						quality={85}
+						blurPlaceholder={false}
+						className="w-full h-full object-contain object-center"
+					/>
+				</div>
+			</div>
+
+			{/* Bottom Row: Candy Shop + Jerseys + Apron/Logo */}
+			<div class="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 lg:gap-8">
+				{/* Pooh's Candy Shop Display */}
+				<div class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+					<LazyImage
+						client:visible
+						src="/wp-content/uploads/2025/02/Pooh-Candy-Shop-Isometric_yellow_Mockup_1.jpg"
+						alt="Pooh's Candy Shop"
+						pullZone="wordpress"
+						priority={false}
+						width={1200}
+						quality={85}
+						blurPlaceholder={false}
+						className="w-full h-full object-cover object-center"
+					/>
+				</div>
+
+				{/* Basketball Jerseys Stacked */}
+				<div class="flex-1 min-h-0 flex flex-col">
+					{/* White Jersey */}
+					<div class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+						<LazyImage
+							client:visible
+							src="/wp-content/uploads/2025/02/Basketball-Jersey-Mockup-6b.jpg"
+							alt="White Jersey"
+							pullZone="wordpress"
+							priority={false}
+							width={1200}
+							quality={85}
+							blurPlaceholder={false}
+							className="w-full h-full object-contain object-center"
+						/>
+					</div>
+					{/* Blue Jersey */}
+					<div class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+						<LazyImage
+							client:visible
+							src="/wp-content/uploads/2025/02/Basketball-Jersey-Mockup-5a.jpg"
+							alt="Blue Jersey"
+							pullZone="wordpress"
+							priority={false}
+							width={1200}
+							quality={85}
+							blurPlaceholder={false}
+							className="w-full h-full object-contain object-center"
+						/>
+					</div>
+				</div>
+
+				{/* Rose's Flower Shop Apron & Logo (Stacked) */}
+				<div class="flex-1 min-h-0 flex flex-col">
+					{/* Apron */}
+					<div class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+						<LazyImage
+							client:visible
+							src="/wp-content/uploads/2025/02/black-apron-e1740700657166.jpg"
+							alt="Rose's Flower Shop Apron"
+							pullZone="wordpress"
+							priority={false}
+							width={1200}
+							quality={85}
+							blurPlaceholder={false}
+							className="w-full h-full object-contain object-center"
+						/>
+					</div>
+					{/* Logo */}
+					<div class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+						<LazyImage
+							client:visible
+							src="/wp-content/uploads/2025/02/Flower-Shop-Signage-Roses-Logo_1.jpg"
+							alt="Rose's Flower Shop Logo"
+							pullZone="wordpress"
+							priority={false}
+							width={1200}
+							quality={85}
+							blurPlaceholder={false}
+							className="w-full h-full object-contain object-center"
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
