@@ -21,6 +21,7 @@ import C4OOHActivation from '../components/sections/C4CaseStudy/C4OOHActivation.
 import DerrickRoseSocialImpact from '../components/sections/C4CaseStudy/DerrickRoseSocialImpact.astro';
 import DerrickRoseSocialImpactMobile from '../components/sections/C4CaseStudy/DerrickRoseSocialImpactMobile.astro';
 import TwoBlockImageGrid from '../components/sections/TwoBlockGrid/TwoBlockImageGrid.astro';
+import ThreeColumnTwoRowGrid from '../components/sections/ThreeColumnTwoRowGrid/ThreeColumnTwoRowGrid.astro';
 
 const logoUrl = bunnyImage('/wp-content/uploads/2025/08/Times10-Logo-2025-2.png', {
 	pullZone: 'wordpress',
@@ -1050,6 +1051,56 @@ const endingLargeImage = bunnyImage('/wp-content/uploads/2025/02/IMG_3482.jpg', 
 					}
 				]
 			}}
+		/>
+		<ThreeColumnTwoRowGrid
+			id="three-column-two-row-grid"
+			images={[
+				{
+					src: '/wp-content/uploads/2025/03/Derrick-Rose-16x9-1.jpg',
+					alt: 'Derrick Rose',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85,
+					priority: true
+				},
+				{
+					src: '/wp-content/uploads/2025/03/RoseFlowerShop-1-gigapixel-low-resolution-v2-2x.jpg',
+					alt: "Derrick Rose's Flower Shop",
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85,
+					priority: true
+				},
+				{
+					src: '/wp-content/uploads/2025/03/ByUs_Derrick-Rose_Roses-Flower-Shop_BTS-Stills-7-1.jpg',
+					alt: "Derrick Rose's Flower Shop Behind the Scenes",
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85,
+					priority: true
+				},
+				{
+					src: '/wp-content/uploads/2025/03/Fans-braved-the-cold-to-experien-1-gigapixel-low-resolution-v2-2x.jpg',
+					alt: 'Fans braved the cold',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				},
+				{
+					src: '/wp-content/uploads/2025/02/SimeonHigh-Gym.jpg',
+					alt: 'Simeon High School Gym',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				},
+				{
+					src: '/wp-content/uploads/2025/03/ByUs_Derrick-Rose_Homegrown-Game-Night-1-1.jpg',
+					alt: "Derrick Rose's Homegrown Game Night",
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				}
+			]}
 		/>
 	</body>
 </html>

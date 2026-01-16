@@ -1,0 +1,78 @@
+---
+import { LazyImage } from '../../LazyImage.tsx';
+
+export interface ImageItem {
+	src: string;
+	alt: string;
+	label?: string;
+	pullZone?: string;
+	priority?: boolean;
+	width?: number;
+	quality?: number;
+}
+
+export interface Props {
+	images: ImageItem[];
+	id?: string;
+}
+
+const { images, id } = Astro.props;
+
+// Ensure we have exactly 6 images for 3x2 grid
+if (images.length !== 6) {
+	throw new Error('ThreeColumnTwoRowGrid requires exactly 6 images');
+}
+---
+
+<section id={id} class="w-full h-dvh max-h-dvh p-2 md:p-4 lg:p-8 snap-start snap-always flex flex-col overflow-hidden box-border">
+	<!-- Mobile: 3 images, single column -->
+	<div class="flex-1 min-h-0 grid grid-cols-1 grid-rows-3 gap-2 sm:hidden">
+		{images.slice(0, 3).map((image, index) => (
+			<div key={index} class="relative overflow-hidden min-h-0 flex items-center justify-center">
+				<LazyImage
+					client:visible
+					src={image.src}
+					alt={image.alt}
+					pullZone={image.pullZone}
+					priority={image.priority !== undefined ? image.priority : index < 2}
+					width={image.width || 1200}
+					quality={image.quality || 85}
+					blurPlaceholder={false}
+					className={`w-full h-full object-cover ${index === 3 ? 'object-right' : 'object-center'}`}
+				/>
+				{image.label && (
+					<div class="absolute bottom-0 left-0 px-3 py-1.5">
+						<span class="text-white text-lg font-light lowercase tracking-wide">
+							{image.label}
+						</span>
+					</div>
+				)}
+			</div>
+		))}
+	</div>
+	<!-- Desktop: All 6 images -->
+	<div class="hidden sm:grid sm:grid-cols-2 sm:grid-rows-3 lg:grid-cols-3 lg:grid-rows-2 gap-2 md:gap-4 lg:gap-8 flex-1 min-h-0">
+		{images.map((image, index) => (
+			<div key={index} class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+				<LazyImage
+					client:visible
+					src={image.src}
+					alt={image.alt}
+					pullZone={image.pullZone}
+					priority={image.priority !== undefined ? image.priority : index < 3}
+					width={image.width || 1200}
+					quality={image.quality || 85}
+					blurPlaceholder={false}
+					className={`w-full h-full object-cover ${index === 3 ? 'object-right' : 'object-center'}`}
+				/>
+				{image.label && (
+					<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
+						<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
+							{image.label}
+						</span>
+					</div>
+				)}
+			</div>
+		))}
+	</div>
+</section>
