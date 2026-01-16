@@ -65,7 +65,7 @@ const { block1, block2, id } = Astro.props;
 									muted
 									loop
 									playsInline
-									className="w-full h-full object-cover object-center"
+									className="w-full h-full object-cover object-top md:object-center"
 								/>
 								{block1.images[0].label && (
 									<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
@@ -86,7 +86,7 @@ const { block1, block2, id } = Astro.props;
 										width={('width' in block1.images[0] ? block1.images[0].width : undefined) || 1200}
 										quality={('quality' in block1.images[0] ? block1.images[0].quality : undefined) || 85}
 									blurPlaceholder={false}
-									className="w-full h-full object-cover object-center"
+									className="w-full h-full object-cover object-top md:object-center"
 								/>
 								{block1.images[0].label && (
 									<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
