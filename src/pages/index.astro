@@ -20,6 +20,7 @@ import IgniteYourFireResults from '../components/sections/C4CaseStudy/IgniteYour
 import C4OOHActivation from '../components/sections/C4CaseStudy/C4OOHActivation.astro';
 import DerrickRoseSocialImpact from '../components/sections/C4CaseStudy/DerrickRoseSocialImpact.astro';
 import DerrickRoseSocialImpactMobile from '../components/sections/C4CaseStudy/DerrickRoseSocialImpactMobile.astro';
+import TwoBlockImageGrid from '../components/sections/TwoBlockGrid/TwoBlockImageGrid.astro';
 
 const logoUrl = bunnyImage('/wp-content/uploads/2025/08/Times10-Logo-2025-2.png', {
 	pullZone: 'wordpress',
@@ -1010,5 +1011,45 @@ const endingLargeImage = bunnyImage('/wp-content/uploads/2025/02/IMG_3482.jpg', 
 		</script>
 		<DerrickRoseSocialImpactMobile id="derrick-rose-social-impact" />
 		<DerrickRoseSocialImpact id="derrick-rose-social-impact" />
+		<TwoBlockImageGrid
+			id="two-block-image-grid"
+			block1={{
+				title: 'simeon high school',
+				images: [
+					{
+						src: '/wp-content/uploads/2025/08/JOE_4646.jpg',
+						alt: 'Derrick Rose at Simeon High School',
+						pullZone: 'wordpress',
+						priority: true
+					},
+					{
+						src: '/wp-content/uploads/2025/08/ByUs_Derrick-Rose_Homegrown-Game-Night-24.jpg',
+						alt: 'Derrick Rose Homegrown Game Night',
+						pullZone: 'wordpress'
+					},
+					{
+						type: 'video',
+						src: 'https://times-10-video-offload.b-cdn.net/Simeon-CapabilitiesLoop-08.14.25.mp4',
+						priority: false
+					}
+				]
+			}}
+			block2={{
+				title: "derrick rose's flower shop",
+				images: [
+					{
+						src: '/wp-content/uploads/2025/08/000027740007.jpg',
+						alt: "Derrick Rose's Flower Shop",
+						pullZone: 'wordpress',
+						priority: true
+					},
+					{
+						src: '/wp-content/uploads/2025/08/DR47.jpg',
+						alt: "Derrick Rose's Flower Shop",
+						pullZone: 'wordpress'
+					}
+				]
+			}}
+		/>
 	</body>
 </html>

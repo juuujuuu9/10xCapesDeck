@@ -1,0 +1,288 @@
+---
+import { LazyImage } from '../../LazyImage.tsx';
+import { LazyVideo } from '../../LazyVideo.tsx';
+
+export interface ImageItem {
+	src: string;
+	alt: string;
+	label?: string;
+	pullZone?: string;
+	priority?: boolean;
+	width?: number;
+	quality?: number;
+}
+
+export interface VideoItem {
+	src: string;
+	label?: string;
+	pullZone?: string;
+	priority?: boolean;
+}
+
+export type MediaItem = ImageItem | ({ type: 'video' } & VideoItem);
+
+export interface Props {
+	block1: {
+		title?: string;
+		images: MediaItem[];
+	};
+	block2: {
+		title?: string;
+		images: MediaItem[];
+	};
+	id?: string;
+}
+
+const { block1, block2, id } = Astro.props;
+---
+
+<section id={id} class="w-full h-dvh max-h-dvh pl-2 md:pl-4 lg:pl-8 pr-2 md:pr-4 lg:pr-8 py-2 md:py-4 lg:py-8 snap-start snap-always flex flex-col overflow-hidden box-border">
+	<div class="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-2 gap-2 md:gap-4 lg:gap-8">
+		{/* Block 1 */}
+		<div class="flex-1 min-h-0 grid grid-cols-2 gap-2 md:gap-4 lg:gap-8">
+			{/* Left Column: Title + Large Image */}
+			<div class="flex-1 min-h-0 flex flex-col gap-2 md:gap-4 lg:gap-8">
+				{/* Title */}
+				{block1.title && (
+					<div class="w-full flex-shrink-0 flex items-start justify-start">
+						<span class="blk-title">
+							{block1.title}
+						</span>
+					</div>
+				)}
+
+				{/* Large Image */}
+				{block1.images.length > 0 && (
+					<div class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+						{('type' in block1.images[0] && block1.images[0].type === 'video') || !('alt' in block1.images[0]) ? (
+							<>
+								<LazyVideo
+									client:load
+									src={block1.images[0].src}
+									pullZone={block1.images[0].pullZone}
+									priority={block1.images[0].priority !== undefined ? block1.images[0].priority : true}
+									autoPlay
+									muted
+									loop
+									playsInline
+									className="w-full h-full object-cover object-center"
+								/>
+								{block1.images[0].label && (
+									<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
+										<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
+											{block1.images[0].label}
+										</span>
+									</div>
+								)}
+							</>
+							) : 'alt' in block1.images[0] ? (
+								<>
+									<LazyImage
+										client:visible
+										src={block1.images[0].src}
+										alt={block1.images[0].alt}
+										pullZone={('pullZone' in block1.images[0] ? block1.images[0].pullZone : undefined)}
+										priority={('priority' in block1.images[0] && block1.images[0].priority !== undefined) ? block1.images[0].priority : true}
+										width={('width' in block1.images[0] ? block1.images[0].width : undefined) || 1200}
+										quality={('quality' in block1.images[0] ? block1.images[0].quality : undefined) || 85}
+									blurPlaceholder={false}
+									className="w-full h-full object-cover object-center"
+								/>
+								{block1.images[0].label && (
+									<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
+										<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
+											{block1.images[0].label}
+										</span>
+									</div>
+								)}
+							</>
+						) : null}
+					</div>
+				)}
+			</div>
+
+			{/* Right Column: Two Stacked Images */}
+			{block1.images.length > 1 && (
+				<div class="flex flex-col gap-2 md:gap-4 lg:gap-8 flex-1 min-h-0">
+					{block1.images.slice(1, 3).map((item, index) => {
+						const isVideo = 'type' in item && item.type === 'video';
+						return (
+							<div class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+								{isVideo ? (
+									<>
+										<LazyVideo
+											client:load
+											src={item.src}
+											pullZone={item.pullZone}
+											priority={item.priority !== undefined ? item.priority : index === 0}
+											autoPlay
+											muted
+											loop
+											playsInline
+											className="w-full h-full object-cover object-center"
+										/>
+										{('label' in item && item.label) && (
+											<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
+												<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
+													{item.label}
+												</span>
+											</div>
+										)}
+									</>
+								) : (
+									<>
+									<LazyImage
+										client:visible
+										src={item.src}
+										alt={'alt' in item ? item.alt : ''}
+										pullZone={'pullZone' in item ? item.pullZone : undefined}
+										priority={('priority' in item ? item.priority : undefined) || index === 0}
+										width={('width' in item ? item.width : undefined) || 1200}
+										quality={('quality' in item ? item.quality : undefined) || 85}
+											blurPlaceholder={false}
+											className="w-full h-full object-cover object-center"
+										/>
+										{('label' in item && item.label) && (
+											<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
+												<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
+													{item.label}
+												</span>
+											</div>
+										)}
+									</>
+								)}
+							</div>
+						);
+					})}
+				</div>
+			)}
+		</div>
+
+		{/* Block 2 */}
+		<div class="flex-1 min-h-0 grid grid-cols-2 gap-2 md:gap-4 lg:gap-8">
+			{/* Left Column: Title + First Image + Second Image */}
+			<div class="flex-1 min-h-0 flex flex-col gap-2 md:gap-4 lg:gap-8">
+				{/* Title */}
+				{block2.title && (
+					<div class="w-full flex-shrink-0 flex items-start justify-start">
+						<span class="blk-title">
+							{block2.title}
+						</span>
+					</div>
+				)}
+
+				{/* First Image */}
+				{block2.images.length > 0 && (
+					<div class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+						{('type' in block2.images[0] && block2.images[0].type === 'video') || !('alt' in block2.images[0]) ? (
+							<>
+								<LazyVideo
+									client:load
+									src={block2.images[0].src}
+									pullZone={block2.images[0].pullZone}
+									priority={block2.images[0].priority !== undefined ? block2.images[0].priority : true}
+									autoPlay
+									muted
+									loop
+									playsInline
+									className="w-full h-full object-cover object-center"
+								/>
+								{block2.images[0].label && (
+									<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
+										<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
+											{block2.images[0].label}
+										</span>
+									</div>
+								)}
+							</>
+							) : 'alt' in block2.images[0] ? (
+								<>
+									<LazyImage
+										client:visible
+										src={block2.images[0].src}
+										alt={block2.images[0].alt}
+										pullZone={('pullZone' in block2.images[0] ? block2.images[0].pullZone : undefined)}
+										priority={('priority' in block2.images[0] && block2.images[0].priority !== undefined) ? block2.images[0].priority : true}
+										width={('width' in block2.images[0] ? block2.images[0].width : undefined) || 1200}
+										quality={('quality' in block2.images[0] ? block2.images[0].quality : undefined) || 85}
+									blurPlaceholder={false}
+									className="w-full h-full object-cover object-center"
+								/>
+								{block2.images[0].label && (
+									<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
+										<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
+											{block2.images[0].label}
+										</span>
+									</div>
+								)}
+							</>
+						) : null}
+					</div>
+				)}
+
+				{/* Second Image */}
+				{block2.images.length > 1 && (
+					<div class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+						{('type' in block2.images[1] && block2.images[1].type === 'video') || !('alt' in block2.images[1]) ? (
+							<>
+								<LazyVideo
+									client:load
+									src={block2.images[1].src}
+									pullZone={block2.images[1].pullZone}
+									priority={block2.images[1].priority !== undefined ? block2.images[1].priority : false}
+									autoPlay
+									muted
+									loop
+									playsInline
+									className="w-full h-full object-cover object-center"
+								/>
+								{block2.images[1].label && (
+									<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
+										<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
+											{block2.images[1].label}
+										</span>
+									</div>
+								)}
+							</>
+							) : 'alt' in block2.images[1] ? (
+								<>
+									<LazyImage
+										client:visible
+										src={block2.images[1].src}
+										alt={block2.images[1].alt}
+										pullZone={('pullZone' in block2.images[1] ? block2.images[1].pullZone : undefined)}
+										priority={('priority' in block2.images[1] ? block2.images[1].priority : undefined) || false}
+										width={('width' in block2.images[1] ? block2.images[1].width : undefined) || 1200}
+										quality={('quality' in block2.images[1] ? block2.images[1].quality : undefined) || 85}
+									blurPlaceholder={false}
+									className="w-full h-full object-cover object-center"
+								/>
+								{block2.images[1].label && (
+									<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
+										<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
+											{block2.images[1].label}
+										</span>
+									</div>
+								)}
+							</>
+						) : null}
+					</div>
+				)}
+			</div>
+
+			{/* Right Column: Video */}
+			<div class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+				<LazyVideo
+					client:load
+					src="https://times-10-video-offload.b-cdn.net/RoseFlowerShop-CapabilitiesLoop-VERT-08.14.25.mp4"
+					priority={false}
+					autoPlay
+					muted
+					loop
+					playsInline
+					className="w-full h-full object-cover object-center"
+				/>
+			</div>
+		</div>
+	</div>
+</section>
