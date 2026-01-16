@@ -7,7 +7,7 @@ export interface Props {
 
 const { id } = Astro.props;
 
-// All 6 phone mockup images in a 2x3 grid
+// All 6 phone mockup images
 const phoneImages = [
 	{ src: '/wp-content/uploads/2025/02/derrick-rose-social-impact-1.jpg', alt: 'Derrick Rose social media post 1' },
 	{ src: '/wp-content/uploads/2025/02/derrick-rose-social-impact-2.jpg', alt: 'Derrick Rose social media post 2' },
@@ -16,80 +16,290 @@ const phoneImages = [
 	{ src: '/wp-content/uploads/2025/02/derrick-rose-social-impact-5.jpg', alt: 'Derrick Rose social media post 5' },
 	{ src: '/wp-content/uploads/2025/02/derrick-rose-social-impact-6.jpg', alt: 'Derrick Rose social media post 6' },
 ];
+
+// Content from social impact section
+const theAsk = "to ideate and execute on two main events in early january as derrick rose returns to chicago to celebrate his legendary career. as much as this is a celebration of derrick, it is also a tribute to the city, the people, and the communities that gave him so much more than he could ever ask for.";
+
+const eventDates = [
+	{ date: "january 2nd:", event: "rose's flower shop" },
+	{ date: "january 3rd:", event: "homegrown at simeon" }
+];
+
+const socialImpact = [
+	{ icon: "❤", value: "300+", text: "tagged and major social accounts posted" },
+	{ icon: "👁", value: "2m+", text: "views on social media" }
+];
+
+const keyFeatures = [
+	{ title: "event ideation", description: "conceptualized two unique events celebrating derrick rose's return to chicago" },
+	{ title: "community engagement", description: "created meaningful experiences that honored both derrick and the chicago community" },
+	{ title: "social media campaign", description: "executed comprehensive social strategy generating 2m+ views and 300+ tagged posts" },
+	{ title: "press coverage", description: "secured coverage from major social accounts and media outlets" }
+];
 ---
 
-<section id={id ? `${id}-mobile` : undefined} class="lg:hidden w-full h-dvh max-h-dvh snap-start snap-always flex flex-col overflow-hidden box-border bg-white p-6 pt-14 gap-8">
-	{/* Phone Mockups Grid - 2 rows x 3 columns on mobile, 1 row x 3 columns on sm-md */}
-	<div class="flex-1 min-h-0 w-full overflow-hidden grid grid-cols-3 grid-rows-2 sm:grid-rows-1 gap-2">
-		{phoneImages.map((phone, index) => (
-			<div 
-				class={`relative w-full h-full overflow-hidden ${index >= 3 ? 'sm:hidden' : ''}`}
-				style={`animation-delay: ${index * 100}ms`}
-			>
-				<LazyImage
-					client:load
-					src={phone.src}
-					alt={phone.alt}
-					pullZone="wordpress"
-					priority={true}
-					blurPlaceholder={false}
-					width={520}
-					quality={85}
-					className="w-full h-full object-contain rounded-[12px]"
-				/>
+<section id={id ? `${id}-mobile` : undefined} class="lg:hidden w-full h-dvh max-h-dvh snap-start snap-always flex flex-col overflow-hidden box-border bg-[#f4f4f0] p-0">
+	{/* Mobile Layout - Based on C4CaseStudy */}
+	<div class="flex flex-col h-full w-full relative mobile-layout">
+		{/* Hero Image Section with Phone Mockups Grid */}
+		<div class="relative shrink-0 hero-section">
+			<div class="hero-image-container flex items-center justify-center p-4 pb-[84px]">
+				<div class="grid grid-cols-3 grid-rows-2 gap-2">
+					{phoneImages.map((phone, index) => (
+						<div class="relative w-full h-full overflow-hidden">
+							<LazyImage
+								client:visible
+								src={phone.src}
+								alt={phone.alt}
+								pullZone="wordpress"
+								priority={index < 3}
+								blurPlaceholder={index >= 3}
+								width={520}
+								quality={85}
+								className="w-full h-full object-contain rounded-[12px]"
+							/>
+						</div>
+					))}
+				</div>
 			</div>
-		))}
-	</div>
-
-	{/* Content Section */}
-	<div class="flex-1 min-h-0 flex flex-col gap-4">
-		{/* Left Column: The Ask */}
-		<div class=" flex flex-col justify-start max-w-[500px] mx-auto w-full">
-			<h2 class="inline text-[#ca2c1e] text-[20px] font-semibold leading-[28px] text-left lowercase mb-3">
-				the ask
-			</h2>
-			<p class="inline text-[#010101] text-[14px] font-light leading-[20px] text-left lowercase mb-3">
-				to ideate and execute on two main events in early january as derrick rose returns to chicago to celebrate his legendary career.
-			</p>
-			<p class="inline text-[#010101] text-[14px] font-light leading-[20px] text-left lowercase">
-				as much as this is a celebration of derrick, it is also a tribute to the city, the people, and the communities that gave him so much more than he could ever ask for.
-			</p>
 		</div>
 
-		{/* Right Column: Events + Impact */}
-		<div class="flex-1 flex flex-col justify-start max-w-[500px] mx-auto w-full">
-			{/* Event Dates */}
-			<div class="flex flex-col gap-2 mb-4">
-				<p class="text-[#010101] text-[14px] font-light leading-[20px] text-left lowercase">
-					<span class="text-[#ca2c1e] font-light">january 2nd:</span> rose's flower shop
-				</p>
-				<p class="text-[#010101] text-[14px] font-light leading-[20px] text-left lowercase">
-					<span class="text-[#ca2c1e] font-light">january 3rd:</span> homegrown at simeon
-				</p>
+		{/* White Content Card */}
+		<div class="content-card flex flex-col overflow-hidden">
+			{/* Tab Navigation */}
+			<div class="flex gap-3 px-4 pt-6 pb-4 shrink-0">
+				<button
+					class="tab-button flex-1 active"
+					data-tab="overview"
+					type="button"
+					aria-label="Show overview content"
+				>
+					overview
+				</button>
+				<button
+					class="tab-button flex-1"
+					data-tab="features"
+					type="button"
+					aria-label="Show key features"
+				>
+					key features
+				</button>
 			</div>
 
-			{/* Press/Social Impact */}
-			<h2 class="inline text-[#ca2c1e] text-[20px] font-semibold leading-[28px] text-left lowercase mb-3">
-				press/social impact:
-			</h2>
-			<ul class="space-y-2">
-				<li class="flex items-center gap-2 text-[#010101] text-[14px] font-light leading-[20px] lowercase">
-					<span class="text-[#ca2c1e] text-[14px]">❤</span>
-					<span><span class="text-[#ca2c1e] font-light">300+</span> tagged and major social accounts posted</span>
-				</li>
-				<li class="flex items-center gap-2 text-[#010101] text-[14px] font-light leading-[20px] lowercase">
-					<span class="text-[#ca2c1e] text-[14px]">👁</span>
-					<span><span class="text-[#ca2c1e] font-light">2m+</span> views on social media</span>
-				</li>
-			</ul>
+			{/* Tab Content */}
+			<div class="tab-content-container flex-1 min-h-0 overflow-y-auto px-4 pb-6">
+				{/* Overview Tab Content */}
+				<div id="overview-content" class="tab-content active">
+					<div class="space-y-6">
+						{/* The Ask Section */}
+						<div>
+							<h3 class="text-[#ca2c1e] text-[20px] font-semibold leading-[28px] mb-3 text-left lowercase">
+								the ask
+							</h3>
+							<p class="text-[#010101] text-[16px] leading-[24px] text-left lowercase">
+								{theAsk}
+							</p>
+						</div>
+
+						{/* Event Dates Section */}
+						<div>
+							<h3 class="text-[#ca2c1e] text-[20px] font-semibold leading-[28px] mb-3 text-left lowercase">
+								events
+							</h3>
+							<div class="space-y-2">
+								{eventDates.map((item) => (
+									<p class="text-[#010101] text-[16px] leading-[24px] text-left lowercase">
+										<span class="text-[#ca2c1e] font-light">{item.date}</span> {item.event}
+									</p>
+								))}
+							</div>
+						</div>
+
+						{/* Press/Social Impact Section */}
+						<div>
+							<h3 class="text-[#ca2c1e] text-[20px] font-semibold leading-[28px] mb-3 text-left lowercase">
+								press/social impact:
+							</h3>
+							<ul class="space-y-3">
+								{socialImpact.map((item) => (
+									<li class="flex items-center gap-2 text-[#010101] text-[16px] leading-[24px] lowercase">
+										<span class="text-[#ca2c1e] text-[16px]">{item.icon}</span>
+										<span><span class="text-[#ca2c1e] font-light">{item.value}</span> {item.text}</span>
+									</li>
+								))}
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				{/* Key Features Tab Content */}
+				<div id="features-content" class="tab-content">
+					<div class="space-y-4">
+						{keyFeatures.map((feature) => (
+							<div>
+								<h3 class="text-[#ca2c1e] text-[18px] font-semibold leading-[24px] mb-2 text-left lowercase">
+									{feature.title}
+								</h3>
+								<p class="text-[#010101] text-[16px] leading-[24px] text-left lowercase">
+									{feature.description}
+								</p>
+							</div>
+						))}
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </section>
 
+<script>
+	// Tab switching functionality for mobile
+	document.addEventListener('DOMContentLoaded', () => {
+		// Only run on mobile
+		if (window.innerWidth >= 1024) return;
+
+		// Find the section element (scope to current component instance)
+		const sections = document.querySelectorAll('section');
+		sections.forEach((section) => {
+			const mobileLayout = section.querySelector('.mobile-layout');
+			if (!mobileLayout) return; // Skip if not this component
+
+			const tabButtons = section.querySelectorAll('.tab-button');
+			const tabContents = section.querySelectorAll('.tab-content');
+			const contentContainer = section.querySelector('.tab-content-container');
+			const contentCard = section.querySelector('.content-card');
+
+			if (!tabButtons.length || !tabContents.length) {
+				return; // Skip if elements not found
+			}
+
+			tabButtons.forEach((button) => {
+				button.addEventListener('click', () => {
+					const targetTab = button.getAttribute('data-tab');
+					if (!targetTab) return;
+
+					// Expand card and show content container on first interaction
+					if (mobileLayout) {
+						mobileLayout.classList.add('expanded');
+					}
+					if (contentCard) {
+						contentCard.classList.add('expanded');
+					}
+					if (contentContainer) {
+						contentContainer.classList.add('has-content');
+					}
+
+					// Update button states
+					tabButtons.forEach((btn) => btn.classList.remove('active'));
+					button.classList.add('active');
+
+					// Update content visibility
+					tabContents.forEach((content) => {
+						content.classList.remove('active');
+						if (content.id === `${targetTab}-content`) {
+							content.classList.add('active');
+						}
+					});
+				});
+			});
+		});
+	});
+</script>
+
 <style>
-	/* Ensure lowercase text styling */
-	section h2,
-	section p {
+	/* Mobile Hero Image with Concave Curve */
+	@media (max-width: 1023px) {
+		.hero-section {
+			flex: 1;
+			min-height: 0;
+		}
+
+		.hero-image-container {
+			width: 100%;
+			height: 100%;
+			position: relative;
+			overflow: hidden;
+		}
+
+		/* White Content Card with Prominent Rounded Top Corners */
+		.content-card {
+			background: white;
+			border-radius: 48px 48px 0 0;
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			z-index: 1;
+			padding-top: 0;
+			box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+			height: auto;
+			max-height: fit-content;
+			transition: top 0.3s ease-out;
+			/* Initially positioned at bottom, showing only buttons */
+		}
+
+		.content-card.expanded {
+			top: calc(0.75rem + 0.5rem + 24px + 0.5rem + 1rem);
+			/* top-3 (0.75rem) + p-2 top (0.5rem) + button height (24px) + p-2 bottom (0.5rem) + 1rem gap */
+			bottom: 0;
+			min-height: 0;
+			max-height: none;
+			overflow-y: auto;
+		}
+
+		/* Tab Buttons */
+		.tab-button {
+			padding: 10px 20px;
+			border-radius: 9999px;
+			font-size: 16px;
+			font-weight: 500;
+			background: white;
+			color: #010101;
+			border: 1px solid #010101;
+			cursor: pointer;
+			transition: all 0.2s;
+			font-family: 'AktivGrotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+		}
+
+		.tab-button:hover {
+			opacity: 0.9;
+		}
+
+		.tab-button:focus-visible {
+			outline: 2px solid #ca2c1e;
+			outline-offset: 2px;
+		}
+
+		.tab-button.active {
+			background: #ca2c1e;
+			color: white;
+			border: 1px solid #ca2c1e;
+		}
+
+		/* Tab Content Container - Hidden Initially */
+		.tab-content-container {
+			display: none;
+		}
+
+		.tab-content-container.has-content,
+		.content-card.expanded .tab-content-container {
+			display: flex;
+		}
+
+		/* Tab Content */
+		.tab-content {
+			display: none;
+		}
+
+		.tab-content.active {
+			display: block;
+		}
+	}
+
+	/* All text in section should be lowercase */
+	section p,
+	section li,
+	section h3 {
 		text-transform: lowercase;
 	}
 </style>
