@@ -1,0 +1,116 @@
+---
+import { LazyImage } from '../../LazyImage';
+import { LazyVideo } from '../../LazyVideo';
+
+// RULE-022: Default section padding pattern
+// RULE-023: Section content containment
+// RULE-021: WordPress URL auto-conversion to Bunny CDN
+// RULE-025: Brand Red color (#ca2c1e)
+
+export interface VideoItem {
+	src?: string;
+	videoId?: string;
+	handle: string;
+	followers: string;
+	pullZone?: string;
+	priority?: boolean;
+}
+
+export interface Props {
+	image: {
+		src: string;
+		alt: string;
+		pullZone?: string;
+		priority?: boolean;
+		width?: number;
+		quality?: number;
+	};
+	stats: {
+		views: string;
+		likes: string;
+	};
+	videos: VideoItem[];
+	id?: string;
+}
+
+const { image, stats, videos, id } = Astro.props;
+---
+
+<section id={id} class="w-full h-dvh max-h-dvh p-2 md:p-4 lg:p-8 snap-start snap-always flex flex-col overflow-hidden box-border">
+	<div class="flex-1 min-h-0 flex gap-2 md:gap-4 lg:gap-8">
+		{/* Block 1: Image with h-full w-auto, left-aligned */}
+		<div class="hidden lg:flex relative overflow-hidden items-center justify-start h-full">
+			<LazyImage
+				client:visible
+				src={image.src}
+				alt={image.alt}
+				pullZone={image.pullZone}
+				priority={image.priority !== undefined ? image.priority : false}
+				width={image.width || 1200}
+				quality={image.quality || 85}
+				className="h-full w-auto object-contain object-left"
+			/>
+		</div>
+		
+		{/* Block 2: Column with stats and videos */}
+		<div class="flex-1 min-h-0 flex flex-col items-center justify-center overflow-hidden w-full">
+			{/* Stats Section */}
+			<div class="shrink-0 flex flex-col sm:flex-row md:flex-row lg:flex-col xl:flex-row items-center sm:justify-center md:justify-center lg:justify-center gap-4 md:gap-6 lg:gap-8 whitespace-nowrap mb-4 sm:mb-8 md:mb-6 lg:mb-8 w-full">
+				{/* Total Views */}
+				<div class="flex items-center gap-2 md:gap-3">
+					<svg class="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+						<circle cx="12" cy="12" r="10" fill="currentColor"/>
+						<line x1="6" y1="12" x2="18" y2="12" stroke="white" stroke-width="2" stroke-linecap="round"/>
+						<circle cx="12" cy="12" r="2" fill="white"/>
+					</svg>
+					<div class="flex items-center gap-2">
+						<span class="inline text-[24px] sm:text-[28.8px] lg:text-[40px] font-semibold leading-[24px] sm:leading-[28.8px] lg:leading-[40px] text-left lowercase text-black">total views</span>
+						<span class="inline text-[24px] sm:text-[28.8px] lg:text-[40px] font-semibold leading-[24px] sm:leading-[28.8px] lg:leading-[40px] text-left lowercase text-[#ca2c1e]">{stats.views}</span>
+					</div>
+				</div>
+				
+				{/* Total Likes */}
+				<div class="flex items-center gap-2 md:gap-3">
+					<svg class="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="currentColor"/>
+					</svg>
+					<div class="flex items-center gap-2">
+						<span class="inline text-[24px] sm:text-[28.8px] lg:text-[40px] font-semibold leading-[24px] sm:leading-[28.8px] lg:leading-[40px] text-left lowercase text-black">total likes</span>
+						<span class="inline text-[24px] sm:text-[28.8px] lg:text-[40px] font-semibold leading-[24px] sm:leading-[28.8px] lg:leading-[40px] text-left lowercase text-[#ca2c1e]">{stats.likes}</span>
+					</div>
+				</div>
+			</div>
+			
+			{/* Videos Section: 4 vertically oriented videos */}
+			<div class="shrink-0 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-2 sm:gap-2 md:gap-3 lg:gap-8 overflow-hidden w-full">
+				{videos.map((video) => (
+					<div class="flex flex-col gap-1 sm:gap-1 md:gap-2 lg:gap-3 w-full min-w-0 items-center">
+						{/* Video Container - vertically oriented (portrait) */}
+						<div class="relative overflow-hidden rounded-lg bg-transparent w-full flex items-center justify-center">
+							<div class="w-full aspect-[9/16] max-h-[400px] sm:max-h-[450px] md:max-h-[500px] lg:max-h-[600px] mx-auto">
+								<LazyVideo
+									client:visible
+									src={video.src}
+									videoId={video.videoId}
+									pullZone={video.pullZone}
+									priority={video.priority !== undefined ? video.priority : false}
+									autoPlay
+									muted
+									loop
+									playsInline
+									className="w-full h-full object-contain"
+								/>
+							</div>
+						</div>
+						
+						{/* Text under video */}
+						<div class="shrink-0 flex flex-col items-center text-center">
+							<span class="text-sm md:text-base lg:text-lg font-medium lowercase">@{video.handle}</span>
+							<span class="text-xs md:text-sm lg:text-base text-gray-500 lowercase">{video.followers} followers</span>
+						</div>
+					</div>
+				))}
+			</div>
+		</div>
+	</div>
+</section>

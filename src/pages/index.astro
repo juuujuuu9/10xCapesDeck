@@ -27,6 +27,7 @@ import DerrickRoseBrandGrid from '../components/sections/DerrickRoseBrandGrid/De
 import AdidasManUWaterTowerGrid from '../components/sections/DerrickRoseBrandGrid/AdidasManUWaterTowerGrid.astro';
 import AdidasHardenV9EventGrid from '../components/sections/DerrickRoseBrandGrid/AdidasHardenV9EventGrid.astro';
 import FourColumnGrid from '../components/sections/FourColumnGrid/FourColumnGrid.astro';
+import TwoBlockImageContent from '../components/sections/TwoBlockGrid/TwoBlockImageContent.astro';
 
 const logoUrl = bunnyImage('/wp-content/uploads/2025/08/Times10-Logo-2025-2.png', {
 	pullZone: 'wordpress',
@@ -1517,5 +1518,42 @@ const fadeSectionBg = bunnyImage('/wp-content/uploads/2025/09/1dfd153532710783b4
 			]}
 		/>
 		<AdidasHardenV9EventGrid id="adidas-harden-v9-event-grid" />
+		<TwoBlockImageContent
+			id="two-block-image-content"
+			image={{
+				src: '/wp-content/uploads/2025/09/IMG_79720.jpg',
+				alt: 'Content image',
+				pullZone: 'wordpress',
+				priority: false,
+				width: 1200,
+				quality: 85
+			}}
+			stats={{
+				views: '2m+',
+				likes: '500k'
+			}}
+			videos={[
+				{
+					src: 'https://times-10-video-offload.b-cdn.net/xCaseStudies%20_FamousLos32_09.02.25_v2.mp4',
+					handle: 'famouslos32',
+					followers: '1.5m'
+				},
+				{
+					src: 'https://times-10-video-offload.b-cdn.net/xCaseStudies%20_Overtimekicks_09.02.25_v2.mp4',
+					handle: 'overtimekicks',
+					followers: '488k'
+				},
+				{
+					src: 'https://times-10-video-offload.b-cdn.net/xCaseStudies%20_JeffreyBalbui_09.02.25_v2.mp4',
+					handle: 'jeffreybalbui',
+					followers: '283k'
+				},
+				{
+					src: 'https://times-10-video-offload.b-cdn.net/xCaseStudies%20_daayylaan_09.02.25_v2.mp4',
+					handle: 'daayylaan',
+					followers: '240k'
+				}
+			]}
+		/>
 	</body>
 </html>
