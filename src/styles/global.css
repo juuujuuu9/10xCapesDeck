@@ -52,6 +52,30 @@
 		scroll-snap-type: y mandatory;
 	}
 
+	/* Custom scrollbar styling */
+	body::-webkit-scrollbar {
+		width: 12px;
+	}
+
+	body::-webkit-scrollbar-track {
+		background: #000000;
+	}
+
+	body::-webkit-scrollbar-thumb {
+		background: #ca2c1e;
+		border-radius: 6px;
+	}
+
+	body::-webkit-scrollbar-thumb:hover {
+		background: #a02318;
+	}
+
+	/* Firefox scrollbar styling */
+	body {
+		scrollbar-width: thin;
+		scrollbar-color: #ca2c1e #000000;
+	}
+
 	section {
 		padding-left: 3rem;
 		padding-right: 3rem;

@@ -132,15 +132,27 @@ function formatWithBoldPrefix(text: string): string {
 					</button>
 				</div>
 			)}
+			{whatWeDid && keyInitiatives.length === 0 && (
+				<div class="px-4 pt-6 pb-4 shrink-0">
+					<button
+						class="tab-button w-full active"
+						data-tab="overview"
+						type="button"
+						aria-label="Show overview content"
+					>
+						overview
+					</button>
+				</div>
+			)}
 			{!whatWeDid && keyInitiatives.length > 0 && (
 				<div class="px-4 pt-6 pb-4 shrink-0">
 					<button
 						class="tab-button w-full active"
 						data-tab="overview"
 						type="button"
-						aria-label="Show the challenge"
+						aria-label="Show overview content"
 					>
-						the challenge
+						overview
 					</button>
 				</div>
 			)}
@@ -205,126 +217,10 @@ function formatWithBoldPrefix(text: string): string {
 	</div>
 </section>
 
-<script>
-	// Tab switching and card expansion functionality for mobile
-	document.addEventListener('DOMContentLoaded', () => {
-		// Only run on mobile
-		if (window.innerWidth >= 1024) return;
-
-		// Find all case study sections (scope to current component instance)
-		const sections = document.querySelectorAll('section');
-		sections.forEach((section) => {
-			const mobileLayout = section.querySelector('.mobile-layout');
-			if (!mobileLayout) return; // Skip if not this component
-
-			const tabButtons = section.querySelectorAll('.tab-button');
-			const tabContents = section.querySelectorAll('.tab-content');
-			const contentContainer = section.querySelector('.tab-content-container');
-			const contentCard = section.querySelector('.content-card');
-			const tabNav = section.querySelector('.content-card > div:first-child');
-
-			if (!contentCard || !contentContainer) return;
-
-			// Function to expand the card
-			const expandCard = () => {
-				if (mobileLayout) {
-					mobileLayout.classList.add('expanded');
-				}
-				if (contentCard) {
-					contentCard.classList.add('expanded');
-				}
-				if (contentContainer) {
-					contentContainer.classList.add('has-content');
-				}
-			};
-
-			// Function to collapse the card
-			const collapseCard = () => {
-				if (mobileLayout) {
-					mobileLayout.classList.remove('expanded');
-				}
-				if (contentCard) {
-					contentCard.classList.remove('expanded');
-				}
-				if (contentContainer) {
-					contentContainer.classList.remove('has-content');
-				}
-			};
-
-			// Check if card is expanded
-			const isExpanded = () => {
-				return contentCard.classList.contains('expanded');
-			};
-
-			// Handle tab button clicks (if tabs exist)
-			if (tabButtons.length > 0) {
-				tabButtons.forEach((button) => {
-					button.addEventListener('click', (e) => {
-						e.stopPropagation();
-						const targetTab = button.getAttribute('data-tab');
-						if (!targetTab) return;
-
-						// Expand card if not already expanded
-						if (!isExpanded()) {
-							expandCard();
-						}
-
-						// Only update button states and content visibility if there are multiple tabs
-						if (tabContents.length > 0) {
-							// Update button states
-							tabButtons.forEach((btn) => btn.classList.remove('active'));
-							button.classList.add('active');
-
-							// Update content visibility
-							tabContents.forEach((content) => {
-								content.classList.remove('active');
-								if (content.id === `${targetTab}-content`) {
-									content.classList.add('active');
-								}
-							});
-						}
-					});
-				});
-			}
-
-			// Handle clicks on the tab navigation area to expand/collapse
-			if (tabNav) {
-				tabNav.addEventListener('click', (e) => {
-					// Don't toggle if clicking on a tab button (handled above)
-					if (e.target.classList.contains('tab-button')) {
-						return;
-					}
-					
-					// Expand on first click
-					if (!isExpanded()) {
-						expandCard();
-					}
-				});
-			}
-
-			// If no tabs and no whatWeDid, make the card header area clickable to expand
-			if (!tabButtons.length && !whatWeDid) {
-				const cardHeader = section.querySelector('.content-card > div:first-child');
-				if (cardHeader) {
-					cardHeader.style.cursor = 'pointer';
-					cardHeader.addEventListener('click', () => {
-						if (!isExpanded()) {
-							expandCard();
-						}
-					});
-				}
-			}
-
-			// Add click handler to collapse when clicking outside content (on card background)
-			contentCard.addEventListener('click', (e) => {
-				// If clicking on the card itself (not children) and expanded, collapse
-				if (e.target === contentCard && isExpanded()) {
-					collapseCard();
-				}
-			});
-		});
-	});
-</script>
+<!-- 
+	Button initialization is handled by centralized script in index.astro
+	This prevents conflicts when multiple case study sections exist on the page.
+-->
 
 <style>
 	/* RULE-004: Font handling - aktiv-grotesk font family */
@@ -386,6 +282,9 @@ function formatWithBoldPrefix(text: string): string {
 			cursor: pointer;
 			transition: all 0.2s;
 			font-family: 'AktivGrotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+			touch-action: manipulation;
+			-webkit-tap-highlight-color: transparent;
+			user-select: none;
 		}
 
 		.tab-button.w-full {

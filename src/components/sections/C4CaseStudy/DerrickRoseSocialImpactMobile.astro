@@ -152,58 +152,78 @@ const keyFeatures = [
 	</div>
 </section>
 
-<script>
+<script is:inline>
 	// Tab switching functionality for mobile
-	document.addEventListener('DOMContentLoaded', () => {
-		// Only run on mobile
-		if (window.innerWidth >= 1024) return;
+	(function() {
+		// Use media query to check if mobile (more reliable than window.innerWidth)
+		const isMobile = window.matchMedia('(max-width: 1023px)').matches;
+		if (!isMobile) return;
 
-		// Find the section element (scope to current component instance)
-		const sections = document.querySelectorAll('section');
-		sections.forEach((section) => {
-			const mobileLayout = section.querySelector('.mobile-layout');
-			if (!mobileLayout) return; // Skip if not this component
+		function initCaseStudyButtons() {
+			// Find the section element (scope to current component instance)
+			const sections = document.querySelectorAll('section');
+			sections.forEach((section) => {
+				const mobileLayout = section.querySelector('.mobile-layout');
+				if (!mobileLayout) return; // Skip if not this component
 
-			const tabButtons = section.querySelectorAll('.tab-button');
-			const tabContents = section.querySelectorAll('.tab-content');
-			const contentContainer = section.querySelector('.tab-content-container');
-			const contentCard = section.querySelector('.content-card');
+				const tabButtons = section.querySelectorAll('.tab-button');
+				const tabContents = section.querySelectorAll('.tab-content');
+				const contentContainer = section.querySelector('.tab-content-container');
+				const contentCard = section.querySelector('.content-card');
 
-			if (!tabButtons.length || !tabContents.length) {
-				return; // Skip if elements not found
-			}
+				if (!tabButtons.length || !tabContents.length) {
+					return; // Skip if elements not found
+				}
 
-			tabButtons.forEach((button) => {
-				button.addEventListener('click', () => {
-					const targetTab = button.getAttribute('data-tab');
-					if (!targetTab) return;
+				// Skip if already initialized (prevent duplicate listeners)
+				if (contentCard && contentCard.dataset.initialized === 'true') return;
+				if (contentCard) contentCard.dataset.initialized = 'true';
 
-					// Expand card and show content container on first interaction
-					if (mobileLayout) {
-						mobileLayout.classList.add('expanded');
-					}
-					if (contentCard) {
-						contentCard.classList.add('expanded');
-					}
-					if (contentContainer) {
-						contentContainer.classList.add('has-content');
-					}
+				tabButtons.forEach((button) => {
+					// Handle both click and touchstart for better mobile support
+					const handleInteraction = (e) => {
+						e.preventDefault();
+						e.stopPropagation();
+						const targetTab = button.getAttribute('data-tab');
+						if (!targetTab) return;
 
-					// Update button states
-					tabButtons.forEach((btn) => btn.classList.remove('active'));
-					button.classList.add('active');
-
-					// Update content visibility
-					tabContents.forEach((content) => {
-						content.classList.remove('active');
-						if (content.id === `${targetTab}-content`) {
-							content.classList.add('active');
+						// Expand card and show content container on first interaction
+						if (mobileLayout) {
+							mobileLayout.classList.add('expanded');
 						}
-					});
+						if (contentCard) {
+							contentCard.classList.add('expanded');
+						}
+						if (contentContainer) {
+							contentContainer.classList.add('has-content');
+						}
+
+						// Update button states
+						tabButtons.forEach((btn) => btn.classList.remove('active'));
+						button.classList.add('active');
+
+						// Update content visibility
+						tabContents.forEach((content) => {
+							content.classList.remove('active');
+							if (content.id === `${targetTab}-content`) {
+								content.classList.add('active');
+							}
+						});
+					};
+
+					button.addEventListener('click', handleInteraction, { passive: false });
+					button.addEventListener('touchstart', handleInteraction, { passive: false });
 				});
 			});
-		});
-	});
+		}
+
+		// Run immediately if DOM is ready, otherwise wait for DOMContentLoaded
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', initCaseStudyButtons);
+		} else {
+			initCaseStudyButtons();
+		}
+	})();
 </script>
 
 <style>
@@ -259,6 +279,9 @@ const keyFeatures = [
 			cursor: pointer;
 			transition: all 0.2s;
 			font-family: 'AktivGrotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+			touch-action: manipulation;
+			-webkit-tap-highlight-color: transparent;
+			user-select: none;
 		}
 
 		.tab-button:hover {
