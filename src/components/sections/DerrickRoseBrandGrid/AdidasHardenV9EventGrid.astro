@@ -1,0 +1,110 @@
+---
+import { LazyImage } from '../../LazyImage';
+
+// RULE-022: Default section padding pattern
+// RULE-023: Section content containment
+// RULE-021: WordPress URL auto-conversion to Bunny CDN
+
+const images = [
+	{
+		src: '/wp-content/uploads/2025/09/03202025-Adidas-HardenV9Event-107.jpg',
+		alt: 'Adidas Harden Vol. 9 Event',
+		pullZone: 'wordpress',
+		priority: true,
+		width: 1200,
+		quality: 85
+	},
+	{
+		src: '/wp-content/uploads/2025/09/03202025-Adidas-HardenV9Event-95.jpg',
+		alt: 'Adidas Harden Vol. 9 Event',
+		pullZone: 'wordpress',
+		priority: true,
+		width: 1200,
+		quality: 85
+	},
+	{
+		src: '/wp-content/uploads/2025/09/03202025-Adidas-HardenV9Event-63.jpg',
+		alt: 'Adidas Harden Vol. 9 Event',
+		pullZone: 'wordpress',
+		priority: false,
+		width: 1200,
+		quality: 85
+	},
+	{
+		src: '/wp-content/uploads/2025/09/03202025-Adidas-HardenV9Event-192.jpg',
+		alt: 'Adidas Harden Vol. 9 Event',
+		pullZone: 'wordpress',
+		priority: false,
+		width: 1200,
+		quality: 85
+	},
+	{
+		src: '/wp-content/uploads/2025/09/03202025-Adidas-HardenV9Event-57.jpg',
+		alt: 'Adidas Harden Vol. 9 Event',
+		pullZone: 'wordpress',
+		priority: false,
+		width: 1200,
+		quality: 85
+	}
+];
+---
+
+<section id="adidas-harden-v9-event-grid" class="w-full h-dvh max-h-dvh p-2 md:p-4 lg:p-8 snap-start snap-always flex flex-col overflow-hidden box-border">
+	<!-- Mobile: Single column, hide first image of bottom row (index 2) -->
+	<div class="flex-1 min-h-0 grid grid-cols-1 grid-rows-4 gap-2 sm:hidden">
+		{images.map((image, index) => (
+			<div class={`relative overflow-hidden min-h-0 flex items-center justify-center ${index === 2 ? 'hidden' : ''}`}>
+				<LazyImage
+					client:visible
+					src={image.src}
+					alt={image.alt}
+					pullZone={image.pullZone}
+					priority={image.priority !== undefined ? image.priority : index < 2}
+					width={image.width || 1200}
+					quality={image.quality || 85}
+					blurPlaceholder={false}
+					className="w-full h-full object-cover object-center"
+				/>
+			</div>
+		))}
+	</div>
+	<!-- Desktop: Top row 2 images (50/50), bottom row 3 images (1/3rd each) -->
+	<div class="hidden sm:flex sm:flex-col flex-1 min-h-0 gap-2 md:gap-4 lg:gap-8">
+		<!-- Top row: 2 images, 50/50 split -->
+		<div class="flex-1 min-h-0 grid grid-cols-2 gap-2 md:gap-4 lg:gap-8">
+			{images.slice(0, 2).map((image) => (
+				<div class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+					<LazyImage
+						client:visible
+						src={image.src}
+						alt={image.alt}
+						pullZone={image.pullZone}
+						priority={image.priority !== undefined ? image.priority : true}
+						width={image.width || 1200}
+						quality={image.quality || 85}
+						blurPlaceholder={false}
+						className="w-full h-full object-cover object-center"
+					/>
+				</div>
+			))}
+		</div>
+		<!-- Bottom row: 2 images (50/50) on <lg, 3 images (1/3rd each) on lg+ -->
+		<div class="flex-1 min-h-0 grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 lg:gap-8">
+			{images.slice(2, 5).map((image, index) => (
+				<div class={`relative overflow-hidden flex-1 min-h-0 flex items-center justify-center ${index === 0 ? 'hidden lg:flex' : ''}`}>
+					<LazyImage
+						client:visible
+						src={image.src}
+						alt={image.alt}
+						pullZone={image.pullZone}
+						priority={image.priority !== undefined ? image.priority : false}
+						width={image.width || 1200}
+						quality={image.quality || 85}
+						blurPlaceholder={false}
+						className="w-full h-full object-cover object-center"
+					/>
+				</div>
+			))}
+		</div>
+	</div>
+</section>
