@@ -1,0 +1,153 @@
+---
+import { LazyImage } from '../../LazyImage.tsx';
+
+// RULE-022: Default section padding pattern
+// RULE-023: Section content containment
+// RULE-021: WordPress URL auto-conversion to Bunny CDN
+
+interface ImageConfig {
+	src: string;
+	alt: string;
+	pullZone?: string;
+	priority?: boolean;
+	width?: number;
+	quality?: number;
+}
+
+interface Props {
+	images: ImageConfig[];
+	id?: string;
+}
+
+const { images, id = 'four-column-grid' } = Astro.props;
+
+// Ensure we have exactly 6 images (1 + 2 + 2 + 1)
+if (images.length !== 6) {
+	console.warn(`[FourColumnGrid] Expected 6 images, got ${images.length}`);
+}
+
+// Split images into columns: col1 (1), col2 (2), col3 (2), col4 (1)
+const col1Images = images.slice(0, 1);
+const col2Images = images.slice(1, 3);
+const col3Images = images.slice(3, 5);
+const col4Images = images.slice(5, 6);
+---
+
+<section id={id} class="w-full h-dvh max-h-dvh p-2 md:p-4 lg:p-8 snap-start snap-always flex flex-col overflow-hidden box-border">
+	<!-- Mobile: Single column, all images stacked -->
+	<div class="flex-1 min-h-0 grid grid-cols-1 gap-2 sm:hidden">
+		{images.map((image, index) => (
+			<div key={index} class="relative overflow-hidden min-h-0 flex items-center justify-center">
+				<LazyImage
+					client:visible
+					src={image.src}
+					alt={image.alt}
+					pullZone={image.pullZone}
+					priority={image.priority !== undefined ? image.priority : index < 2}
+					width={image.width || 1200}
+					quality={image.quality || 85}
+					blurPlaceholder={false}
+					className={`w-full h-full object-cover ${index === 0 ? 'object-[80%_50%]' : index === 5 ? 'object-[53%_50%]' : 'object-center'}`}
+				/>
+			</div>
+		))}
+	</div>
+	
+	<!-- Tablet: 2 columns, 3 rows (all 6 images) -->
+	<div class="hidden sm:grid sm:grid-cols-2 sm:grid-rows-3 lg:hidden gap-2 md:gap-4 flex-1 min-h-0">
+		{images.map((image, index) => (
+			<div key={index} class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+				<LazyImage
+					client:visible
+					src={image.src}
+					alt={image.alt}
+					pullZone={image.pullZone}
+					priority={image.priority !== undefined ? image.priority : index < 2}
+					width={image.width || 1200}
+					quality={image.quality || 85}
+					blurPlaceholder={false}
+					className={`w-full h-full object-cover ${index === 0 ? 'object-[80%_50%]' : index === 5 ? 'object-[53%_50%]' : 'object-center'}`}
+				/>
+			</div>
+		))}
+	</div>
+	
+	<!-- Desktop: 4 columns - col1 45% and col2 55% of their combined space, col3+col4 55% total -->
+	<div class="hidden lg:grid lg:grid-cols-[41fr_49fr_55fr_55fr] gap-2 md:gap-4 lg:gap-8 flex-1 min-h-0">
+		<!-- Column 1: 1 image -->
+		<div class="flex flex-col gap-2 md:gap-4 lg:gap-8">
+			{col1Images.map((image, index) => (
+				<div key={index} class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+					<LazyImage
+						client:visible
+						src={image.src}
+						alt={image.alt}
+						pullZone={image.pullZone}
+						priority={image.priority !== undefined ? image.priority : index === 0}
+						width={image.width || 1200}
+						quality={image.quality || 85}
+						blurPlaceholder={false}
+						className="w-full h-full object-cover object-[80%_50%]"
+					/>
+				</div>
+			))}
+		</div>
+		
+		<!-- Column 2: 2 images -->
+		<div class="flex flex-col gap-2 md:gap-4 lg:gap-8">
+			{col2Images.map((image, index) => (
+				<div key={index} class={`relative overflow-hidden flex items-center justify-center ${index === 0 ? 'flex-1 min-h-0' : 'h-auto'}`}>
+					<LazyImage
+						client:visible
+						src={image.src}
+						alt={image.alt}
+						pullZone={image.pullZone}
+						priority={image.priority !== undefined ? image.priority : index === 0}
+						width={image.width || 1200}
+						quality={image.quality || 85}
+						blurPlaceholder={false}
+						className={index === 0 ? "w-full h-full object-cover object-center" : "w-full h-auto object-contain"}
+					/>
+				</div>
+			))}
+		</div>
+		
+		<!-- Column 3: 2 images -->
+		<div class="flex flex-col gap-2 md:gap-4 lg:gap-8">
+			{col3Images.map((image, index) => (
+				<div key={index} class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+					<LazyImage
+						client:visible
+						src={image.src}
+						alt={image.alt}
+						pullZone={image.pullZone}
+						priority={image.priority !== undefined ? image.priority : index === 0}
+						width={image.width || 1200}
+						quality={image.quality || 85}
+						blurPlaceholder={false}
+						className="w-full h-full object-cover object-center"
+					/>
+				</div>
+			))}
+		</div>
+		
+		<!-- Column 4: 1 image -->
+		<div class="flex flex-col gap-2 md:gap-4 lg:gap-8">
+			{col4Images.map((image, index) => (
+				<div key={index} class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+					<LazyImage
+						client:visible
+						src={image.src}
+						alt={image.alt}
+						pullZone={image.pullZone}
+						priority={image.priority !== undefined ? image.priority : index === 0}
+						width={image.width || 1200}
+						quality={image.quality || 85}
+						blurPlaceholder={false}
+						className="w-full h-full object-cover object-[53%_50%]"
+					/>
+				</div>
+			))}
+		</div>
+	</div>
+</section>
