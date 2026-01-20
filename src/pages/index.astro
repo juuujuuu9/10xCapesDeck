@@ -23,6 +23,7 @@ import DerrickRoseSocialImpactMobile from '../components/sections/C4CaseStudy/De
 import TwoBlockImageGrid from '../components/sections/TwoBlockGrid/TwoBlockImageGrid.astro';
 import ThreeColumnTwoRowGrid from '../components/sections/ThreeColumnTwoRowGrid/ThreeColumnTwoRowGrid.astro';
 import DerrickRoseBrandGrid from '../components/sections/DerrickRoseBrandGrid/DerrickRoseBrandGrid.astro';
+import AdidasManUWaterTowerGrid from '../components/sections/DerrickRoseBrandGrid/AdidasManUWaterTowerGrid.astro';
 
 const logoUrl = bunnyImage('/wp-content/uploads/2025/08/Times10-Logo-2025-2.png', {
 	pullZone: 'wordpress',
@@ -124,6 +125,13 @@ const c4FrozenBombsicleBg = bunnyImage('/wp-content/uploads/2025/02/C4-Frozen-Bo
 
 // RULE-021: WordPress URL auto-conversion to Bunny CDN
 const endingLargeImage = bunnyImage('/wp-content/uploads/2025/02/IMG_3482.jpg', {
+	pullZone: 'wordpress',
+	width: 1920,
+	quality: 85
+});
+
+// RULE-021: WordPress URL auto-conversion to Bunny CDN
+const derrickRoseFadeSectionBg = bunnyImage('/wp-content/uploads/2025/09/3f06b6b249df70cb718c53dd30dd7ccd39f7aff8.jpg', {
 	pullZone: 'wordpress',
 	width: 1920,
 	quality: 85
@@ -1135,5 +1143,70 @@ const endingLargeImage = bunnyImage('/wp-content/uploads/2025/02/IMG_3482.jpg', 
 			]}
 		/>
 		<DerrickRoseBrandGrid id="derrick-rose-brand-grid" />
+		<section 
+			id="derrick-rose-fade-section"
+			class="w-full h-dvh snap-start snap-always bg-no-repeat flex items-center justify-center relative bg-black"
+			style={`background-image: url('${derrickRoseFadeSectionBg}'); background-position: 50% 50%; background-size: cover;`}
+		>
+			<div 
+				id="derrick-rose-fade-section-overlay"
+				class="absolute inset-0 bg-black transition-opacity duration-1000 ease-in-out"
+			></div>
+		</section>
+		<script>
+			// Fade in/out black overlay when derrick rose fade section enters/exits viewport
+			(function() {
+				const overlay = document.getElementById('derrick-rose-fade-section-overlay');
+				if (!overlay) return;
+
+				// Check for reduced motion preference
+				const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+				
+				// If reduced motion, hide overlay immediately
+				if (prefersReducedMotion) {
+					overlay.style.opacity = '0';
+					return;
+				}
+
+				// Use Intersection Observer to trigger fade in/out
+				const section = document.getElementById('derrick-rose-fade-section');
+				if (!section) return;
+
+				const observer = new IntersectionObserver((entries) => {
+					entries.forEach((entry) => {
+						if (entry.isIntersecting) {
+							// Fade out the black overlay to reveal background image
+							overlay.style.opacity = '0';
+						} else {
+							// Fade in the black overlay when section exits viewport
+							overlay.style.opacity = '1';
+						}
+					});
+				}, {
+					threshold: 0.1,
+					rootMargin: '0px'
+				});
+
+				observer.observe(section);
+			})();
+		</script>
+		<C4CaseStudy
+			id="adidas-manu-watertower"
+			image={{
+				src: '/wp-content/uploads/2025/09/Adidas-ManU-WaterTower-77.jpg',
+				alt: 'Adidas Manchester United Water Tower Place activation',
+				pullZone: 'wordpress',
+				width: 1200,
+				quality: 85
+			}}
+			challenge="Manchester United's U.S. tour is a prime chance to activate fans in a key market. With the new Home Jersey and US Pack launch, adidas Water Tower Place can drive traffic, boost sales, and spark buzz through exclusive player access and premium fan experiences."
+			whatWeDid=""
+			keyInitiatives={[
+				'Designed and executed the full fan journey from interactive stations (custom tote bags, heat press decals, claw machine) to exclusive photo and autograph moments, creating a seamless, branded in-store experience.',
+				'Developed and launched a multi-channel media strategy with pre-event hype, CRM integration, digital flyers, and gift-with-purchase logistics to drive attendance and engagement.',
+				'Managed end-to-end event execution including staffing, guest flow, VIP experiences, and professional content capture with a same-day turn around and a recap deck to inform future activations.'
+			]}
+		/>
+		<AdidasManUWaterTowerGrid id="adidas-manu-watertower-grid" />
 	</body>
 </html>

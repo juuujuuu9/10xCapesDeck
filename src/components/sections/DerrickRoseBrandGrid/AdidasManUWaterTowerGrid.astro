@@ -1,0 +1,97 @@
+---
+import { LazyImage } from '../../LazyImage.tsx';
+
+// RULE-022: Default section padding pattern
+// RULE-023: Section content containment
+// RULE-021: WordPress URL auto-conversion to Bunny CDN
+
+const images = [
+	{
+		src: '/wp-content/uploads/2025/09/f61ee2b4f6a88e36ffabe6115ce78f56fe41bbd1.jpg',
+		alt: 'Adidas Manchester United Water Tower',
+		pullZone: 'wordpress',
+		priority: true,
+		width: 1200,
+		quality: 85
+	},
+	{
+		src: '/wp-content/uploads/2025/09/0f35757396e3d2ef81d28eeb1ff7466f53e57b68.jpg',
+		alt: 'Adidas Manchester United Water Tower',
+		pullZone: 'wordpress',
+		priority: true,
+		width: 1200,
+		quality: 85
+	},
+	{
+		src: '/wp-content/uploads/2025/09/b22dbe1943cc39d50f4f1d45a578ca3338a6224c.jpg',
+		alt: 'Adidas Manchester United Water Tower',
+		pullZone: 'wordpress',
+		priority: true,
+		width: 1200,
+		quality: 85
+	},
+	{
+		src: '/wp-content/uploads/2025/09/Adidas-ManU-WaterTower-42.jpg',
+		alt: 'Adidas Manchester United Water Tower',
+		pullZone: 'wordpress',
+		priority: false,
+		width: 1200,
+		quality: 85
+	},
+	{
+		src: '/wp-content/uploads/2025/09/9a50d901187a2a703e0aee36fd4d1715fdcc5762.jpg',
+		alt: 'Adidas Manchester United Water Tower',
+		pullZone: 'wordpress',
+		priority: false,
+		width: 1200,
+		quality: 85
+	},
+	{
+		src: '/wp-content/uploads/2025/09/7dbc047a846d858a423d1ad79a4da03e507f9638.jpg',
+		alt: 'Adidas Manchester United Water Tower',
+		pullZone: 'wordpress',
+		priority: false,
+		width: 1200,
+		quality: 85
+	}
+];
+---
+
+<section id="adidas-manu-watertower-grid" class="w-full h-dvh max-h-dvh p-2 md:p-4 lg:p-8 snap-start snap-always flex flex-col overflow-hidden box-border">
+	<!-- Mobile: 3 images, single column -->
+	<div class="flex-1 min-h-0 grid grid-cols-1 grid-rows-3 gap-2 sm:hidden">
+		{images.slice(0, 3).map((image, index) => (
+			<div key={index} class="relative overflow-hidden min-h-0 flex items-center justify-center">
+				<LazyImage
+					client:visible
+					src={image.src}
+					alt={image.alt}
+					pullZone={image.pullZone}
+					priority={image.priority !== undefined ? image.priority : index < 2}
+					width={image.width || 1200}
+					quality={image.quality || 85}
+					blurPlaceholder={false}
+					className={`w-full h-full object-cover ${index === 3 ? 'object-right' : 'object-center'}`}
+				/>
+			</div>
+		))}
+	</div>
+	<!-- Desktop: All 6 images -->
+	<div class="hidden sm:grid sm:grid-cols-2 sm:grid-rows-3 lg:grid-cols-3 lg:grid-rows-2 gap-2 md:gap-4 lg:gap-8 flex-1 min-h-0">
+		{images.map((image, index) => (
+			<div key={index} class="relative overflow-hidden flex-1 min-h-0 flex items-center justify-center">
+				<LazyImage
+					client:visible
+					src={image.src}
+					alt={image.alt}
+					pullZone={image.pullZone}
+					priority={image.priority !== undefined ? image.priority : index < 3}
+					width={image.width || 1200}
+					quality={image.quality || 85}
+					blurPlaceholder={false}
+					className={`w-full h-full object-cover ${index === 3 ? 'object-right' : 'object-center'}`}
+				/>
+			</div>
+		))}
+	</div>
+</section>
