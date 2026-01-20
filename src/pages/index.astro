@@ -165,6 +165,37 @@ const endingLargeImage = bunnyImage('/wp-content/uploads/2025/02/IMG_3482.jpg', 
 		/>
 	</head>
 	<body class="font-sans overflow-x-hidden bg-[#fdfffd]">
+		<script>
+			// Global error handler to prevent jQuery errors from breaking the page
+			// jQuery may be injected by browser extensions or dev tools
+			(function() {
+				// Catch unhandled errors (including jQuery selector errors)
+				window.addEventListener('error', function(event) {
+					// Check if it's the jQuery selector error
+					if (event.message && (
+						event.message.includes("is not a valid selector") ||
+						event.message.includes("*,:x") ||
+						event.filename && event.filename.includes('jquery')
+					)) {
+						// Prevent the error from breaking the page
+						event.preventDefault();
+						console.warn('[Error Handler] Caught jQuery selector error (likely from browser extension):', event.message);
+						return false;
+					}
+				}, true); // Use capture phase to catch errors early
+
+				// Also catch unhandled promise rejections
+				window.addEventListener('unhandledrejection', function(event) {
+					if (event.reason && (
+						event.reason.message && event.reason.message.includes("is not a valid selector") ||
+						event.reason.message && event.reason.message.includes("*,:x")
+					)) {
+						event.preventDefault();
+						console.warn('[Error Handler] Caught jQuery promise rejection:', event.reason);
+					}
+				});
+			})();
+		</script>
 	<button
 		class="fixed top-3 right-3 md:right-6 z-50 p-2 hover:opacity-80 transition-opacity bg-[#fdfffd] backdrop-blur-[2px] rounded-full"
 		aria-label="Menu"
