@@ -47,6 +47,13 @@ const logoDesktop = bunnyImage('/wp-content/uploads/2025/08/Times10-Logo-2025-2.
 	quality: 85
 });
 
+// Logo for final section (225px width)
+const logoFinal = bunnyImage('/wp-content/uploads/2025/08/Times10-Logo-2025-2.png', {
+	pullZone: 'wordpress',
+	width: 225,
+	quality: 85
+});
+
 // Brand logos for the grid
 const brandImages = [
 	{ path: '/wp-content/uploads/2025/08/adidas.png', alt: 'Adidas' },
@@ -1555,5 +1562,16 @@ const fadeSectionBg = bunnyImage('/wp-content/uploads/2025/09/1dfd153532710783b4
 				}
 			]}
 		/>
+		<section id="home-final" class="bg-[#f4f4f0] w-full max-w-screen mx-auto h-dvh flex items-end justify-center pb-[20vh] snap-start snap-always px-4 md:px-0">
+			<img
+				src={logoFinal}
+				alt="times10 logo"
+				class="w-[225px] max-h-full object-contain"
+				loading="lazy"
+				crossorigin="anonymous"
+				width="225"
+				height="56"
+			/>
+		</section>
 	</body>
 </html>
