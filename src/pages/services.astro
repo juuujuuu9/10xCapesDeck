@@ -7,6 +7,11 @@ import ShortFormSocial from '../components/sections/ShortFormSocial/ShortFormSoc
 import StackedVideos from '../components/sections/StackedVideos/StackedVideos.astro';
 import ThreeImageGrid from '../components/sections/ThreeImageGrid/ThreeImageGrid.astro';
 import ThreeImageGridFlipped from '../components/sections/ThreeImageGrid/ThreeImageGridFlipped.astro';
+import TwoBlockGrid from '../components/sections/TwoBlockGrid/TwoBlockGrid.astro';
+import AdidasWorldCup from '../components/sections/TwoBlockGrid/AdidasWorldCup.astro';
+import TradeshowBooth from '../components/sections/TwoBlockGrid/TradeshowBooth.astro';
+import InfluencerMarketing from '../components/sections/InfluencerMarketing/InfluencerMarketing.astro';
+import InfluencerMarketing2 from '../components/sections/InfluencerMarketing/InfluencerMarketing2.astro';
 import Website from '../components/sections/Website/Website.astro';
 import Navigation from '../components/Navigation.astro';
 
@@ -32,6 +37,27 @@ const designSlideBg = bunnyImage('/wp-content/uploads/2025/09/10.1.21-C4-STARBUR
 const websiteSlideBg = bunnyImage('/wp-content/uploads/2025/02/MyArcade-Mike-3.jpg', {
 	pullZone: 'wordpress',
 	width: 1920,
+	quality: 85
+});
+
+// RULE-021: WordPress URL auto-conversion to Bunny CDN
+const activationsSlideBg = bunnyImage('/wp-content/uploads/2025/04/RosesFlowerShop-WhiteSoxOpeningDay-Selects-040125-128-scaled.jpg', {
+	pullZone: 'wordpress',
+	width: 1920,
+	quality: 85
+});
+
+// RULE-021: WordPress URL auto-conversion to Bunny CDN
+const influencerMarketingSlideBg = bunnyImage('/wp-content/uploads/2025/08/PuraVida-061824-62-scaled.jpg', {
+	pullZone: 'wordpress',
+	width: 1200,
+	quality: 85
+});
+
+// RULE-021: WordPress URL auto-conversion to Bunny CDN
+const influencerMarketingSlideBgMobile = bunnyImage('/wp-content/uploads/2025/03/Clew-Danrue-ChanelWestCoast-Capes-scaled.jpg', {
+	pullZone: 'wordpress',
+	width: 1200,
 	quality: 85
 });
 ---
@@ -306,6 +332,191 @@ const websiteSlideBg = bunnyImage('/wp-content/uploads/2025/02/MyArcade-Mike-3.j
 				}
 			]}
 		/>
+		
+		<!-- Activations & Sampling Section -->
+		<TitleSlide 
+			id="activations-title"
+			backgroundImage={activationsSlideBg}
+			textParts={[
+				{ text: 'activations & ', color: '#fff' },
+				{ text: 'sampling', color: '#ca2c1e' }
+			]}
+			overlayOpacity={75}
+		/>
+		<TwoBlockGrid
+			id="activations-grid" 
+			block1={{
+				col1: [
+					{ text: 'c4 wwe nashville summer slam' },
+					{ 
+						image: {
+							src: '/wp-content/uploads/2025/02/C4-NASHVILLE-SUMMER-SLAM-DAY-1.jpg',
+							alt: 'C4 Nashville Summer Slam Day 1',
+							pullZone: 'wordpress',
+							width: 1200,
+							quality: 85
+						}
+					},
+					{ 
+						image: {
+							src: '/wp-content/uploads/2025/02/C4-NASHVILLE-SUMMR-SLAM-DAY-47.jpg',
+							alt: 'C4 Nashville Summer Slam Day 47',
+							pullZone: 'wordpress',
+							width: 1200,
+							quality: 85
+						}
+					}
+				],
+				col2: [
+					{ 
+						video: {
+							src: '/C4 Nashville Recap v3-2.mp4',
+							pullZone: 'storage',
+							priority: true
+						}
+					},
+					{ 
+						image: {
+							src: '/wp-content/uploads/2025/02/C4-NASHVILLE-SUMMER-SLAM-DAY-55-e1740534310474.jpeg',
+							alt: 'C4 Nashville Summer Slam Day 55',
+							pullZone: 'wordpress',
+							width: 1200,
+							quality: 85
+						}
+					}
+				]
+			}}
+			block2={{
+				col1: [
+					{ text: 'c4 sxsw' },
+					{ 
+						image: {
+							src: '/wp-content/uploads/2025/02/031222_C4_SXSW_DAY-2_QUICKTURN-44.jpg',
+							alt: 'C4 SXSW Day 2',
+							pullZone: 'wordpress',
+							width: 1200,
+							quality: 85
+						}
+					},
+					{ 
+						image: {
+							src: '/wp-content/uploads/2025/02/031122_C4_SXSW_DAY-1_QUICKTURN-24.jpg',
+							alt: 'C4 SXSW Day 1',
+							pullZone: 'wordpress',
+							width: 1200,
+							quality: 85
+						}
+					}
+				],
+				col2: [
+					{ 
+						video: {
+							src: '/C4 - SXSW Recap (2nd Week).mp4',
+							pullZone: 'storage',
+							priority: false
+						}
+					}
+				]
+			}}
+		/>
+		<AdidasWorldCup 
+			id="adidas-world-cup"
+			title="adidas club world cup"
+			block1={[
+				{
+					src: '/wp-content/uploads/2025/08/cwc1.jpg',
+					alt: 'Adidas Club World Cup',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				},
+				{
+					src: '/wp-content/uploads/2025/08/cwc2.jpg',
+					alt: 'Adidas Club World Cup',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				},
+				{
+					src: '/wp-content/uploads/2025/08/cwc3.jpg',
+					alt: 'Adidas Club World Cup',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				}
+			]}
+			block2={[
+				{
+					src: '/wp-content/uploads/2025/08/cwc4.jpg',
+					alt: 'Adidas Club World Cup',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				},
+				{
+					src: '/wp-content/uploads/2025/08/cwc5.jpg',
+					alt: 'Adidas Club World Cup',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				}
+			]}
+		/>
+		<TradeshowBooth 
+			id="tradeshow-booth"
+			title="tradeshow booth"
+			col1={[
+				{
+					src: '/wp-content/uploads/2025/08/pv-177.jpg',
+					alt: 'Tradeshow Booth',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				},
+				{
+					src: '/wp-content/uploads/2025/08/pv-179-clean-1-1.jpg',
+					alt: 'Tradeshow Booth',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				}
+			]}
+			col2={{
+				src: '/wp-content/uploads/2025/08/Attomax-clean-1-1.jpg',
+				alt: 'Tradeshow Booth',
+				pullZone: 'wordpress',
+				width: 1200,
+				quality: 85
+			}}
+			col3={[
+				{
+					src: '/wp-content/uploads/2025/04/Clew-Pouches_Champs_All-JPEG-54-1_1.jpg',
+					alt: 'Tradeshow Booth',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				},
+				{
+					src: '/wp-content/uploads/2025/04/Clew-Pouches_Champs_All-JPEG-50_1.jpg',
+					alt: 'Tradeshow Booth',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				}
+			]}
+		/>
+		<TitleSlide 
+			id="influencer-marketing-title"
+			backgroundImage={influencerMarketingSlideBg}
+			backgroundImageMobile={influencerMarketingSlideBgMobile}
+			textParts={[
+				{ text: 'influencer ', color: '#fff' },
+				{ text: 'marketing', color: '#ca2c1e' }
+			]}
+			overlayOpacity={75}
+		/>
+		<InfluencerMarketing id="influencer-marketing" />
+		<InfluencerMarketing2 id="influencer-marketing-2" />
 		
 		<!-- Website Section -->
 		<TitleSlide 
