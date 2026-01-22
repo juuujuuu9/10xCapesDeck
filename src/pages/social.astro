@@ -21,8 +21,32 @@ const socialContentBg = bunnyImage('/wp-content/uploads/2025/04/03202025-Adidas-
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<title>times10 - Social Content</title>
+		<style>
+			/* Fade-in animation for sections when landing from hash navigation */
+			.section-content {
+				opacity: 1;
+				transition: opacity 0.6s ease-in-out;
+			}
+			
+			/* Only hide content if landing from another page with hash */
+			body.hash-navigation .section-content {
+				opacity: 0;
+			}
+			
+			.section-content.fade-in {
+				opacity: 1;
+			}
+			
+			/* Respect prefers-reduced-motion */
+			@media (prefers-reduced-motion: reduce) {
+				.section-content {
+					opacity: 1;
+					transition: none;
+				}
+			}
+		</style>
 	</head>
-	<body class="font-sans overflow-x-hidden bg-[#fdfffd]">
+	<body class="font-sans overflow-x-hidden bg-black">
 		<script>
 			// Global error handler to prevent jQuery errors from breaking the page
 			// jQuery may be injected by browser extensions or dev tools
@@ -154,6 +178,17 @@ const socialContentBg = bunnyImage('/wp-content/uploads/2025/04/03202025-Adidas-
 					
 					if (sections.length === 0) return;
 					
+					// Check if we're landing from another page with a hash
+					const initialHash = window.location.hash.slice(1);
+					const isCrossPageNavigation = document.referrer && 
+						document.referrer !== window.location.href &&
+						initialHash.length > 0;
+					
+					// Add class to body if landing from another page with hash
+					if (isCrossPageNavigation) {
+						document.body.classList.add('hash-navigation');
+					}
+					
 					// Track if we're updating hash programmatically (to prevent scroll loops)
 					let isUpdatingHash = false;
 					
@@ -189,8 +224,22 @@ const socialContentBg = bunnyImage('/wp-content/uploads/2025/04/03202025-Adidas-
 						}
 					});
 					
+					// Helper function to fade in section content
+					function fadeInSectionContent(section: HTMLElement): void {
+						const content = section.querySelector('.section-content');
+						if (content) {
+							// Small delay to ensure scroll is complete
+							setTimeout(() => {
+								content.classList.add('fade-in');
+								// Remove hash-navigation class after fade-in completes
+								setTimeout(() => {
+									document.body.classList.remove('hash-navigation');
+								}, 600); // Match transition duration
+							}, 100);
+						}
+					}
+					
 					// Handle initial hash on page load
-					const initialHash = window.location.hash.slice(1); // Remove #
 					if (initialHash) {
 						const targetSection = document.getElementById(initialHash);
 						if (targetSection) {
@@ -198,6 +247,10 @@ const socialContentBg = bunnyImage('/wp-content/uploads/2025/04/03202025-Adidas-
 							setTimeout(() => {
 								isUpdatingHash = true;
 								targetSection.scrollIntoView({ behavior: 'instant' });
+								// Fade in content after scroll (only if cross-page navigation)
+								if (isCrossPageNavigation) {
+									fadeInSectionContent(targetSection as HTMLElement);
+								}
 								// Reset flag after scroll completes
 								setTimeout(() => {
 									isUpdatingHash = false;
@@ -230,6 +283,10 @@ const socialContentBg = bunnyImage('/wp-content/uploads/2025/04/03202025-Adidas-
 									// Use replaceState to avoid adding history entries
 									window.history.replaceState(null, '', newHash);
 								}
+								// Fade in content when section becomes active (only if hash navigation)
+								if (document.body.classList.contains('hash-navigation')) {
+									fadeInSectionContent(activeSection);
+								}
 							}
 						},
 						{
@@ -251,6 +308,10 @@ const socialContentBg = bunnyImage('/wp-content/uploads/2025/04/03202025-Adidas-
 							if (targetSection) {
 								isUpdatingHash = true;
 								targetSection.scrollIntoView({ behavior: 'smooth' });
+								// Fade in content (only if hash navigation mode)
+								if (document.body.classList.contains('hash-navigation')) {
+									fadeInSectionContent(targetSection as HTMLElement);
+								}
 								setTimeout(() => {
 									isUpdatingHash = false;
 								}, 500);

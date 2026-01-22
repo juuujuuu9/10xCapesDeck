@@ -31,7 +31,8 @@ function groupVideosIntoRows(videoList: typeof videos) {
 const videoRows = groupVideosIntoRows(videos);
 ---
 
-<section id={id} class="w-full h-dvh p-2 md:p-4 lg:p-8 snap-start snap-always flex flex-col overflow-hidden box-border">
+<section id={id} class="w-full h-dvh p-2 md:p-4 lg:p-8 snap-start snap-always flex flex-col overflow-hidden box-border bg-white">
+	<div class="section-content w-full h-full flex flex-col">
 	{title && (
 		<div class="w-full text-center mb-4 shrink-0 sticky top-2 z-10 bg-white">
 			<h2 class="text-[#ca2c1e] text-[2rem] md:text-[48px] lowercase font-bold leading-none tracking-wide">
@@ -153,5 +154,6 @@ const videoRows = groupVideosIntoRows(videos);
 				})}
 			</div>
 		</div>
+	</div>
 	</div>
 </section>
