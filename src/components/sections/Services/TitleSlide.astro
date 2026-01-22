@@ -1,6 +1,4 @@
 ---
-import { bunnyImage } from '../../../lib/bunny-cdn';
-
 interface Props {
 	backgroundImage: string;
 	backgroundImageMobile?: string;
@@ -10,29 +8,21 @@ interface Props {
 }
 
 const { backgroundImage, backgroundImageMobile, textParts, overlayOpacity = 75, id } = Astro.props;
-
-// RULE-021: WordPress URL auto-conversion to Bunny CDN
-// RULE-014: WebP format for optimal compression
-const pullZone = backgroundImage?.startsWith('/wp-content/') ? 'wordpress' : 'storage';
-const processedBg = bunnyImage(backgroundImage, { pullZone, width: 1920, quality: 85 });
-const processedMobileBg = backgroundImageMobile 
-	? bunnyImage(backgroundImageMobile, { pullZone: backgroundImageMobile.startsWith('/wp-content/') ? 'wordpress' : 'storage', width: 1200, quality: 85 })
-	: processedBg;
-const mobileBg = processedMobileBg;
+const mobileBg = backgroundImageMobile || backgroundImage;
 ---
 
 <section 
 	id={id}
 	class="title-slide-responsive relative w-full max-w-screen mx-auto h-dvh flex items-center justify-center snap-start snap-always overflow-hidden bg-cover bg-center bg-no-repeat px-4 md:px-0"
-	style={`--bg-mobile: url('${mobileBg}'); --bg-desktop: url('${processedBg}');`}
+	style={`--bg-mobile: '${mobileBg}'; --bg-desktop: '${backgroundImage}';`}
 >
 	<style>
 		.title-slide-responsive {
-			background-image: var(--bg-mobile);
+			background-image: url(var(--bg-mobile));
 		}
 		@media (min-width: 768px) {
 			.title-slide-responsive {
-				background-image: var(--bg-desktop);
+				background-image: url(var(--bg-desktop));
 			}
 		}
 	</style>
