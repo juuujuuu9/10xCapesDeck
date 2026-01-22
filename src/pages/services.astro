@@ -60,6 +60,15 @@ const influencerMarketingSlideBgMobile = bunnyImage('/wp-content/uploads/2025/03
 	width: 1200,
 	quality: 85
 });
+
+// RULE-014: LCP optimization - preload strategy card background image
+// Strategy card is likely LCP element on mobile (3rd card, visible above fold)
+// Preload matches ServiceCard component's URL generation (width: 1920) for cache hit
+const strategyCardBg = bunnyImage('/wp-content/uploads/2025/09/iyf-hero.jpg', {
+	pullZone: 'wordpress',
+	width: 1920,
+	quality: 85
+});
 ---
 
 <html lang="en">
@@ -69,6 +78,8 @@ const influencerMarketingSlideBgMobile = bunnyImage('/wp-content/uploads/2025/03
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<title>times10 - Services</title>
+		<!-- RULE-014: Preload LCP image for mobile - strategy card background -->
+		<link rel="preload" as="image" href={strategyCardBg} fetchpriority="high" />
 	</head>
 	<body class="font-sans overflow-x-hidden bg-[#fdfffd]">
 		<script>
