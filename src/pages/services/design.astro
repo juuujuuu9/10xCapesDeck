@@ -1,0 +1,297 @@
+---
+import '../../styles/global.css';
+import { bunnyImage } from '../../lib/bunny-cdn';
+import TitleSlide from '../../components/sections/Services/TitleSlide.astro';
+import ThreeImageGrid from '../../components/sections/ThreeImageGrid/ThreeImageGrid.astro';
+import ThreeImageGridFlipped from '../../components/sections/ThreeImageGrid/ThreeImageGridFlipped.astro';
+import Navigation from '../../components/Navigation.astro';
+
+const designSlideBg = bunnyImage('/wp-content/uploads/2025/09/10.1.21-C4-STARBURST-TRUCK-24.jpg', {
+	pullZone: 'wordpress',
+	width: 1920,
+	quality: 85
+});
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/png" href="/favicon.png" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>times10 - Design</title>
+	</head>
+	<body class="font-sans overflow-x-hidden bg-[#fdfffd]">
+		<script>
+			// Global error handler to prevent jQuery errors from breaking the page
+			// jQuery may be injected by browser extensions or dev tools
+			(function() {
+				// Catch unhandled errors (including jQuery selector errors)
+				window.addEventListener('error', function(event) {
+					// Check if it's the jQuery selector error
+					if (event.message && (
+						event.message.includes("is not a valid selector") ||
+						event.message.includes("*,:x") ||
+						event.filename && event.filename.includes('jquery')
+					)) {
+						// Prevent the error from breaking the page
+						event.preventDefault();
+						console.warn('[Error Handler] Caught jQuery selector error (likely from browser extension):', event.message);
+						return false;
+					}
+				}, true); // Use capture phase to catch errors early
+
+				// Also catch unhandled promise rejections
+				window.addEventListener('unhandledrejection', function(event) {
+					if (event.reason && (
+						event.reason.message && event.reason.message.includes("is not a valid selector") ||
+						event.reason.message && event.reason.message.includes("*,:x")
+					)) {
+						event.preventDefault();
+						console.warn('[Error Handler] Caught jQuery promise rejection:', event.reason);
+					}
+				});
+			})();
+		</script>
+	<Navigation />
+		<script>
+			// Development: Save and restore scroll position
+			// Remove this in production by deleting the script or setting ENABLE_SCROLL_RESTORE=false
+			(function() {
+				const STORAGE_KEY = 'dev-scroll-section';
+				
+				function initScrollRestore() {
+					const sections = document.querySelectorAll('section[class*="snap-start"]');
+					if (sections.length === 0) return;
+					
+					// Restore scroll position on load
+					const savedIndex = sessionStorage.getItem(STORAGE_KEY);
+					if (savedIndex !== null) {
+						const index = parseInt(savedIndex, 10);
+						if (index >= 0 && index < sections.length) {
+							// Small delay to ensure layout is complete
+							setTimeout(() => {
+								sections[index].scrollIntoView({ behavior: 'instant' });
+							}, 100);
+						}
+					}
+					
+					// Track current section using IntersectionObserver
+					const observer = new IntersectionObserver((entries) => {
+						entries.forEach((entry) => {
+							if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+								const index = Array.from(sections).indexOf(entry.target);
+								if (index !== -1) {
+									sessionStorage.setItem(STORAGE_KEY, index.toString());
+								}
+							}
+						});
+					}, {
+						threshold: 0.5,
+						rootMargin: '-20% 0px -20% 0px'
+					});
+					
+					// Observe all sections
+					sections.forEach((section) => observer.observe(section));
+				}
+				
+				// Wait for DOM to be ready
+				if (document.readyState === 'loading') {
+					document.addEventListener('DOMContentLoaded', initScrollRestore);
+				} else {
+					initScrollRestore();
+				}
+			})();
+		</script>
+		<TitleSlide 
+			id="design-title"
+			backgroundImage={designSlideBg}
+			textParts={[
+				{ text: 'design', color: '#fff' }
+			]}
+			overlayOpacity={75}
+		/>
+		<ThreeImageGrid 
+			id="design-grid-1"
+			images={[
+				{
+					src: '/wp-content/uploads/2025/08/ManU-Social_newsroom-ask_post_v2.png',
+					alt: 'Manchester United Social',
+					label: 'digital ads',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85,
+					type: 'image'
+				},
+				{
+					src: '/wp-content/uploads/2025/04/Clew-Champs-LEDTruck-3.jpg',
+					alt: 'Clew Champs LED Truck',
+					label: 'ooh',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85,
+					type: 'image'
+				},
+				{
+					src: '/wp-content/uploads/2025/03/Instacart-1-16x9-1.mp4',
+					alt: 'Instacart Video',
+					label: 'digital banner',
+					pullZone: 'wordpress',
+					type: 'video'
+				}
+			]}
+		/>
+		<ThreeImageGridFlipped 
+			id="design-grid-2"
+			images={[
+				{
+					src: '/wp-content/uploads/2025/02/website-banner_black-background-1.mp4',
+					alt: 'Website Banner',
+					label: 'booth',
+					pullZone: 'wordpress',
+					type: 'video'
+				},
+				{
+					src: '/wp-content/uploads/2025/03/Both-Render-5.5_0004.jpg',
+					alt: '3D Render',
+					label: '3d render',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85,
+					type: 'image'
+				},
+				{
+					src: '/wp-content/uploads/2025/03/Ryu-Pointing-Animation-2.mp4',
+					alt: 'Ryu Animation',
+					label: 'animation',
+					pullZone: 'wordpress',
+					type: 'video'
+				}
+			]}
+		/>
+		<script>
+			// Hash Scroll Manager - Updates URL hash as user scrolls through sections
+			(function() {
+				function initHashScroll() {
+					// Find all sections with snap-start class
+					const sections = document.querySelectorAll('section[class*="snap-start"]');
+					
+					if (sections.length === 0) return;
+					
+					// Track if we're updating hash programmatically (to prevent scroll loops)
+					let isUpdatingHash = false;
+					
+					// Generate section IDs if they don't exist
+					function generateSectionId(section: Element, index: number): string {
+						// Try to find text content that could be used as ID
+						const heading = section.querySelector('h1, h2, h3, h4, h5, h6');
+						if (heading) {
+							const text = heading.textContent?.trim().toLowerCase() || '';
+							if (text) {
+								// Convert to slug: lowercase, replace spaces with hyphens, remove special chars
+								const slug = text
+									.replace(/[^\w\s-]/g, '')
+									.replace(/\s+/g, '-')
+									.replace(/-+/g, '-')
+									.replace(/^-|-$/g, '');
+								if (slug.length > 0) {
+									return slug;
+								}
+							}
+						}
+						
+						// Fallback to section-{index}
+						return `section-${index + 1}`;
+					}
+					
+					sections.forEach((section, index) => {
+						if (!(section instanceof HTMLElement) || !section.id) {
+							const sectionId = generateSectionId(section, index);
+							if (section instanceof HTMLElement) {
+								section.id = sectionId;
+							}
+						}
+					});
+					
+					// Handle initial hash on page load
+					const initialHash = window.location.hash.slice(1); // Remove #
+					if (initialHash) {
+						const targetSection = document.getElementById(initialHash);
+						if (targetSection) {
+							// Small delay to ensure layout is complete
+							setTimeout(() => {
+								isUpdatingHash = true;
+								targetSection.scrollIntoView({ behavior: 'instant' });
+								// Reset flag after scroll completes
+								setTimeout(() => {
+									isUpdatingHash = false;
+								}, 100);
+							}, 100);
+						}
+					}
+					
+					// Use Intersection Observer to detect visible sections
+					const observer = new IntersectionObserver(
+						(entries) => {
+							// Don't update hash if we're programmatically scrolling
+							if (isUpdatingHash) return;
+							
+							// Find the section with highest intersection ratio
+							let maxRatio = 0;
+							let activeSection: HTMLElement | null = null;
+							
+							for (const entry of entries) {
+								if (entry.isIntersecting && entry.intersectionRatio > maxRatio) {
+									maxRatio = entry.intersectionRatio;
+									if (entry.target instanceof HTMLElement) {
+										activeSection = entry.target;
+									}
+								}
+							}
+							
+							// Update hash if we found an active section
+							if (activeSection && activeSection.id) {
+								const newHash = `#${activeSection.id}`;
+								if (window.location.hash !== newHash) {
+									// Use replaceState to avoid adding history entries
+									window.history.replaceState(null, '', newHash);
+								}
+							}
+						},
+						{
+							// Trigger when section is mostly visible (50%+)
+							threshold: [0.5, 0.75, 1.0],
+							// Add some margin to trigger slightly before section is fully visible
+							rootMargin: '-10% 0px -10% 0px'
+						}
+					);
+					
+					// Observe all sections
+					sections.forEach((section) => observer.observe(section));
+					
+					// Handle browser back/forward buttons
+					window.addEventListener('popstate', () => {
+						const hash = window.location.hash.slice(1);
+						if (hash) {
+							const targetSection = document.getElementById(hash);
+							if (targetSection) {
+								isUpdatingHash = true;
+								targetSection.scrollIntoView({ behavior: 'smooth' });
+								setTimeout(() => {
+									isUpdatingHash = false;
+								}, 500);
+							}
+						}
+					});
+				}
+				
+				// Initialize hash scroll functionality
+				if (document.readyState === 'loading') {
+					document.addEventListener('DOMContentLoaded', initHashScroll);
+				} else {
+					initHashScroll();
+				}
+			})();
+		</script>
+	</body>
+</html>

@@ -1,0 +1,140 @@
+---
+// Reusable navigation component with hamburger menu button and menu tray
+// RULE-005: Extract logic to typed modules/components
+---
+
+<button
+	id="menu-toggle"
+	class="fixed top-3 right-3 md:right-6 z-50 p-2 hover:opacity-80 transition-opacity bg-[#fdfffd] backdrop-blur-[2px] rounded-full"
+	aria-label="Menu"
+	aria-expanded="false"
+	type="button"
+>
+	<svg id="menu-icon" class="transition-transform duration-300" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+		<g id="menu-icon-hamburger">
+			<path fill="#d63a2e" d="M32 96v64h448V96H32zm0 128v64h448v-64H32zm0 128v64h448v-64H32z"></path>
+		</g>
+		<g id="menu-icon-close" class="hidden">
+			<line x1="96" y1="96" x2="416" y2="416" stroke="#d63a2e" stroke-width="64" stroke-linecap="round"/>
+			<line x1="416" y1="96" x2="96" y2="416" stroke="#d63a2e" stroke-width="64" stroke-linecap="round"/>
+		</g>
+	</svg>
+</button>
+
+<!-- Menu Tray -->
+<div
+	id="menu-tray"
+	class="fixed inset-0 w-full h-dvh bg-black z-40 transform -translate-y-full transition-transform duration-300 ease-in-out overflow-y-auto"
+	aria-hidden="true"
+>
+	<div class="container mx-auto px-8 py-16 lg:py-24">
+		<div class="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
+			<!-- Column 1: MENU -->
+			<div>
+				<h2 class="text-gray-400 lowercase text-sm font-medium mb-8 tracking-wider">menu</h2>
+				<nav class="flex flex-col gap-6">
+					<a href="/index.html#home" class="text-white text-xl hover:text-gray-300 transition-colors menu-link">home</a>
+					<a href="/index.html#reel" class="text-white text-xl hover:text-gray-300 transition-colors flex items-center gap-2 menu-link">
+						showreel
+						<svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+							<circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.2"/>
+							<polygon points="10,8 16,12 10,16" fill="currentColor"/>
+						</svg>
+					</a>
+					<a href="#brands" class="text-white text-xl hover:text-gray-300 transition-colors menu-link">brands</a>
+				</nav>
+			</div>
+			
+			<!-- Column 2: SERVICES -->
+			<div>
+				<h2 class="text-gray-400 lowercase text-sm font-medium mb-8 tracking-wider">services</h2>
+				<nav class="flex flex-col gap-6">
+					<a href="/services#services" class="text-white text-xl hover:text-gray-300 transition-colors menu-link">overview</a>
+					<a href="/services#social-content-title" class="text-white text-xl hover:text-gray-300 transition-colors menu-link">social</a>
+					<a href="/services#photo-title" class="text-white text-xl hover:text-gray-300 transition-colors menu-link">photo</a>
+					<a href="/services#design-title" class="text-white text-xl hover:text-gray-300 transition-colors menu-link">design</a>
+					<a href="/services#website-title" class="text-white text-xl hover:text-gray-300 transition-colors menu-link">website</a>
+				</nav>
+			</div>
+			
+			<!-- Column 3: RECENT WORK -->
+			<div>
+				<h2 class="text-gray-400 lowercase text-sm font-medium mb-8 tracking-wider">case studies</h2>
+				<nav class="flex flex-col gap-6">
+					<a href="#work" class="text-white text-xl hover:text-gray-300 transition-colors flex items-center gap-2 menu-link">
+						c4 energy
+						<span class="bg-[#ca2c1e] text-white text-xs px-2 py-0.5 rounded-full font-medium">new</span>
+					</a>
+					<a href="#work" class="text-white text-xl hover:text-gray-300 transition-colors menu-link">manchester united</a>
+					<a href="#work" class="text-gray-400 text-xl hover:text-gray-300 transition-colors menu-link">d rose / fog</a>
+					<a href="#work" class="text-gray-400 text-xl hover:text-gray-300 transition-colors menu-link">spotify wrapped</a>
+					<a href="#work" class="text-gray-400 text-xl hover:text-gray-300 transition-colors menu-link">nike air max</a>
+				</nav>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	// RULE-008: Accessibility - keyboard navigation and ARIA support
+	(function() {
+		const menuToggle = document.getElementById('menu-toggle');
+		const menuTray = document.getElementById('menu-tray');
+		const menuIconHamburger = document.getElementById('menu-icon-hamburger');
+		const menuIconClose = document.getElementById('menu-icon-close');
+		
+		if (!menuToggle || !menuTray || !menuIconHamburger || !menuIconClose) return;
+		
+		let isOpen = false;
+		
+		function toggleMenu() {
+			isOpen = !isOpen;
+			
+			if (isOpen) {
+				// Open menu
+				menuTray!.classList.remove('-translate-y-full');
+				menuTray!.setAttribute('aria-hidden', 'false');
+				menuToggle!.setAttribute('aria-expanded', 'true');
+				menuIconHamburger!.classList.add('hidden');
+				menuIconClose!.classList.remove('hidden');
+				// Prevent body scroll when menu is open
+				document.body.style.overflow = 'hidden';
+			} else {
+				// Close menu
+				menuTray!.classList.add('-translate-y-full');
+				menuTray!.setAttribute('aria-hidden', 'true');
+				menuToggle!.setAttribute('aria-expanded', 'false');
+				menuIconHamburger!.classList.remove('hidden');
+				menuIconClose!.classList.add('hidden');
+				// Restore body scroll
+				document.body.style.overflow = '';
+			}
+		}
+		
+		menuToggle.addEventListener('click', toggleMenu);
+		
+		// Close menu on Escape key
+		document.addEventListener('keydown', function(e) {
+			if (e.key === 'Escape' && isOpen) {
+				toggleMenu();
+			}
+		});
+		
+		// Close menu when clicking outside (on the tray itself)
+		menuTray.addEventListener('click', function(e) {
+			if (e.target === menuTray && isOpen) {
+				toggleMenu();
+			}
+		});
+		
+		// Close menu when clicking on menu links
+		const menuLinks = menuTray.querySelectorAll('.menu-link');
+		menuLinks.forEach(link => {
+			link.addEventListener('click', function() {
+				if (isOpen) {
+					toggleMenu();
+				}
+			});
+		});
+	})();
+</script>
