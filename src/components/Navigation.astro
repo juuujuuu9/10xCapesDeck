@@ -22,10 +22,12 @@
 </button>
 
 <!-- Menu Tray -->
+<!-- RULE-008: Use inert attribute to prevent focus when hidden (fixes aria-hidden accessibility issue) -->
 <div
 	id="menu-tray"
 	class="fixed inset-0 w-full h-dvh bg-black z-40 transform -translate-y-full transition-transform duration-300 ease-in-out overflow-y-auto"
 	aria-hidden="true"
+	inert
 >
 	<div class="container mx-auto px-8 py-16 lg:py-24">
 		<div class="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
@@ -95,6 +97,7 @@
 				// Open menu
 				menuTray!.classList.remove('-translate-y-full');
 				menuTray!.setAttribute('aria-hidden', 'false');
+				menuTray!.removeAttribute('inert'); // RULE-008: Remove inert to allow focus
 				menuToggle!.setAttribute('aria-expanded', 'true');
 				menuIconHamburger!.classList.add('hidden');
 				menuIconClose!.classList.remove('hidden');
@@ -104,6 +107,7 @@
 				// Close menu
 				menuTray!.classList.add('-translate-y-full');
 				menuTray!.setAttribute('aria-hidden', 'true');
+				menuTray!.setAttribute('inert', ''); // RULE-008: Add inert to prevent focus when hidden
 				menuToggle!.setAttribute('aria-expanded', 'false');
 				menuIconHamburger!.classList.remove('hidden');
 				menuIconClose!.classList.add('hidden');

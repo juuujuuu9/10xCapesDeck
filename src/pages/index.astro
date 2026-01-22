@@ -5,15 +5,16 @@ import ReelSection from '../components/sections/ReelSection/ReelSection.astro';
 import Navigation from '../components/Navigation.astro';
 
 // RULE-015: Responsive logo sizes for FCP optimization
+// Optimized for actual display size: mobile 320px, desktop ~560px (Lighthouse LCP)
 const logoMobile = bunnyImage('/wp-content/uploads/2025/08/Times10-Logo-2025-2.png', {
 	pullZone: 'wordpress',
-	width: 320,
+	width: 400, // 1.25x for mobile (320px display)
 	quality: 85
 });
 
 const logoDesktop = bunnyImage('/wp-content/uploads/2025/08/Times10-Logo-2025-2.png', {
 	pullZone: 'wordpress',
-	width: 400,
+	width: 600, // ~1.1x for desktop (~560px display) - optimized for LCP
 	quality: 85
 });
 
@@ -51,6 +52,9 @@ const brandImages = [
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<title>times10</title>
+
+		<!-- RULE-014: Preconnect to Bunny CDN for faster LCP (300ms savings) -->
+		<link rel="preconnect" href="https://capeswp.b-cdn.net" crossorigin />
 
 		<!-- RULE-014: Preload critical assets for FCP -->
 		<!-- Logo is in first visible section, preload helps FCP -->
@@ -160,28 +164,31 @@ const brandImages = [
 				}
 			})();
 		</script>
+		<main>
 		<section id="home" class="bg-[#f4f4f0] w-full max-w-screen mx-auto h-dvh flex items-center justify-center snap-start snap-always px-4 md:px-0">
 			<img
 				src={logoDesktop}
-				srcset={`${logoMobile} 320w, ${logoDesktop} 400w`}
-				sizes="(max-width: 639px) 320px, 400px"
+				srcset={`${logoMobile} 400w, ${logoDesktop} 600w`}
+				sizes="(max-width: 639px) 320px, 560px"
 				alt="times10 logo"
 				class="sm:max-w-[400px] max-w-80 max-h-full object-contain"
 				loading="eager"
+				fetchpriority="high"
 				crossorigin="anonymous"
-				width="400"
-				height="100"
+				width="600"
+				height="128"
 			/>
 		</section>
 		<section id="brands" class="w-full max-w-screen mx-auto h-dvh flex flex-col items-center justify-center snap-start snap-always px-4 md:px-4 lg:px-0">
 			<h2 class="mb-12 sm:text-4xl text-2xl font-bold text-center">brands we've worked with</h2>
 			<div class="grid grid-cols-5 gap-2 md:gap-4 lg:gap-8 w-full xl:max-w-4xl lg:max-w-3xl md:max-w-2xl sm:max-w-1xl h-auto">
-				{brandImages.map((brand) => {
-					const imageUrl = bunnyImage(brand.path, {
-						pullZone: 'wordpress',
-						width: 300,
-						quality: 75
-					});
+			{brandImages.map((brand) => {
+				// RULE-015: Optimize for display size (122px) - use 150px for 1.25x retina
+				const imageUrl = bunnyImage(brand.path, {
+					pullZone: 'wordpress',
+					width: 150, // Displayed at 122px, 150px provides 1.25x for retina
+					quality: 75
+				});
 					return (
 						<div class="aspect-square flex items-center justify-center">
 							<img
@@ -205,6 +212,7 @@ const brandImages = [
 				priority: true
 			}}
 		/>
+		</main>
 		<script>
 			// Hash Scroll Manager - Handles both same-page and cross-page hash navigation
 			// @ts-ignore - Inline script types
