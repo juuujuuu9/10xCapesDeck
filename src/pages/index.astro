@@ -201,15 +201,17 @@ const brandImages = [
 		</script>
 		<main>
 		<section id="home" class="bg-[#f4f4f0] w-full max-w-screen mx-auto h-dvh flex items-center justify-center snap-start snap-always px-4 md:px-0">
-			<img
-				src={logoDesktop}
-				alt="times10 logo"
-				class="w-[320px] sm:w-[400px] h-auto object-contain"
-				loading="eager"
-				fetchpriority="high"
-				width="560"
-				height="119"
-			/>
+			<div class="w-[320px] sm:w-[400px]" style="aspect-ratio: 560 / 119;">
+				<img
+					src={logoDesktop}
+					alt="times10 logo"
+					class="w-full h-full object-contain"
+					loading="eager"
+					fetchpriority="high"
+					width="560"
+					height="119"
+				/>
+			</div>
 		</section>
 		<section id="brands" class="w-full max-w-screen mx-auto h-dvh flex flex-col items-center justify-center snap-start snap-always px-4 md:px-4 lg:px-0">
 			<h2 class="mb-12 sm:text-4xl text-2xl font-bold text-center">brands we've worked with</h2>
