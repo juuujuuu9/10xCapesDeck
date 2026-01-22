@@ -15,7 +15,7 @@ const {
 } = Astro.props;
 ---
 
-<section id={id} class="w-full h-dvh max-h-dvh pl-2 pr-2 md:pl-4 md:pr-2 lg:pl-8 lg:pr-40! snap-start snap-always flex flex-col overflow-hidden box-border">
+<section id={id} class="w-full h-dvh max-h-dvh pl-2 pr-2 md:pl-4 md:pr-2 lg:pl-8 lg:pr-40 snap-start snap-always flex flex-col overflow-hidden box-border">
 	<div class="w-full flex-1 min-h-0 flex flex-col lg:flex-row justify-center lg:justify-start items-center lg:items-stretch gap-2 md:gap-4 lg:gap-8">
 		{/* Left side: Text content */}
 		<div class="lg:flex-none pl-0 xl:pl-8 lg:w-[40%] flex flex-col items-center lg:items-start justify-center">
@@ -28,7 +28,7 @@ const {
 		{/* Right side: Two iPhone images/videos */}
 		<div class="lg:flex-1 w-full lg:w-[60%] min-h-0 min-w-0 max-w-full relative flex flex-row items-center justify-center gap-2 md:gap-4 lg:gap-8 overflow-hidden">
 			{/* First iPhone - Video */}
-			<div class="flex-1 min-w-0 w-full max-w-[300px] lg:max-w-none lg:w-auto h-auto max-h-full lg:max-w-[50%] xl:max-w-[40%] relative overflow-hidden flex items-center justify-center">
+			<div class="flex-1 min-w-0 w-full max-w-[300px] lg:max-w-none lg:w-auto h-auto max-h-full lg:max-w-[50%] xl:max-w-[40%] relative overflow-hidden flex items-center justify-center aspect-[9/16] lg:aspect-auto">
 				<LazyVideo
 					client:load
 					src={videoSrc}
@@ -37,7 +37,7 @@ const {
 					muted
 					loop
 					playsInline
-					className="w-full h-auto max-h-full object-contain"
+					className="w-full h-full object-contain"
 				/>
 			</div>
 
