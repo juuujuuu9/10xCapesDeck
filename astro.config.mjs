@@ -12,7 +12,14 @@ export default defineConfig({
     port: 4321, // Explicit port
   },
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    build: {
+      cssCodeSplit: true, // Split CSS per page to avoid loading unnecessary CSS
+    }
+  },
+  build: {
+    cssMinify: true, // Minify CSS for production
+    inlineStylesheets: 'auto', // Inline small CSS files automatically
   },
 
   integrations: [react()]

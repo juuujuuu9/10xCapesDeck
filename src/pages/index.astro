@@ -43,6 +43,51 @@ const brandImages = [
 		<meta name="generator" content={Astro.generator} />
 		<title>times10</title>
 
+		<!-- RULE-014: Defer non-critical CSS to prevent render blocking -->
+		<script is:inline>
+			// Defer non-critical CSS using media="print" trick
+			// This prevents CSS from blocking initial render
+			(function() {
+				function deferStylesheet(link) {
+					// Skip if already processed
+					if (link.dataset.deferred) {
+						return;
+					}
+					// Only defer CSS files from other pages (like case-studies)
+					// Allow current page CSS to load normally
+					if (link.href && link.href.includes('case-studies')) {
+						link.setAttribute('media', 'print');
+						link.setAttribute('onload', "this.media='all'");
+						link.dataset.deferred = 'true';
+					}
+				}
+
+				// Process stylesheets as they're added to the DOM
+				const observer = new MutationObserver((mutations) => {
+					mutations.forEach((mutation) => {
+						mutation.addedNodes.forEach((node) => {
+							if (node.nodeName === 'LINK' && node.getAttribute('rel') === 'stylesheet') {
+								deferStylesheet(node);
+							}
+						});
+					});
+				});
+
+				// Start observing before DOM is ready
+				if (document.head) {
+					observer.observe(document.head, { childList: true, subtree: true });
+					// Also process any existing stylesheets
+					document.querySelectorAll('link[rel="stylesheet"]').forEach(deferStylesheet);
+				} else {
+					// Wait for head to be available
+					document.addEventListener('DOMContentLoaded', () => {
+						observer.observe(document.head, { childList: true, subtree: true });
+						document.querySelectorAll('link[rel="stylesheet"]').forEach(deferStylesheet);
+					});
+				}
+			})();
+		</script>
+
 		<!-- RULE-014: Preconnect to Bunny CDN for faster LCP (300ms savings) -->
 		<link rel="preconnect" href="https://capeswp.b-cdn.net" crossorigin />
 
