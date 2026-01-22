@@ -115,13 +115,20 @@ const brandImages = [
 			})();
 		</script>
 	<Navigation />
+		<!-- RULE-014: Defer non-critical scripts to improve FCP -->
 		<script>
 			// Development: Save and restore scroll position
 			// Remove this in production by deleting the script or setting ENABLE_SCROLL_RESTORE=false
 			(function() {
-				const STORAGE_KEY = 'dev-scroll-section';
+				// Defer to idle time to avoid blocking render
+				if ('requestIdleCallback' in window) {
+					requestIdleCallback(initScrollRestore, { timeout: 2000 });
+				} else {
+					setTimeout(initScrollRestore, 100);
+				}
 				
 				function initScrollRestore() {
+					const STORAGE_KEY = 'dev-scroll-section';
 					const sections = document.querySelectorAll('section[class*="snap-start"]');
 					if (sections.length === 0) return;
 					
@@ -155,28 +162,21 @@ const brandImages = [
 					// Observe all sections
 					sections.forEach((section) => observer.observe(section));
 				}
-				
-				// Wait for DOM to be ready
-				if (document.readyState === 'loading') {
-					document.addEventListener('DOMContentLoaded', initScrollRestore);
-				} else {
-					initScrollRestore();
-				}
 			})();
 		</script>
 		<main>
 		<section id="home" class="bg-[#f4f4f0] w-full max-w-screen mx-auto h-dvh flex items-center justify-center snap-start snap-always px-4 md:px-0">
 			<img
 				src={logoDesktop}
-				srcset={`${logoMobile} 400w, ${logoDesktop} 600w`}
+				srcset={`${logoMobile} 400w, ${logoDesktop} 560w`}
 				sizes="(max-width: 639px) 320px, 560px"
 				alt="times10 logo"
 				class="sm:max-w-[400px] max-w-80 max-h-full object-contain"
 				loading="eager"
 				fetchpriority="high"
 				crossorigin="anonymous"
-				width="600"
-				height="128"
+				width="560"
+				height="119"
 			/>
 		</section>
 		<section id="brands" class="w-full max-w-screen mx-auto h-dvh flex flex-col items-center justify-center snap-start snap-always px-4 md:px-4 lg:px-0">
@@ -213,10 +213,18 @@ const brandImages = [
 			}}
 		/>
 		</main>
+		<!-- RULE-014: Defer hash scroll script to improve FCP -->
 		<script>
 			// Hash Scroll Manager - Handles both same-page and cross-page hash navigation
 			// @ts-ignore - Inline script types
 			(function() {
+				// Defer to idle time to avoid blocking render
+				if ('requestIdleCallback' in window) {
+					requestIdleCallback(initHashScroll, { timeout: 2000 });
+				} else {
+					setTimeout(initHashScroll, 100);
+				}
+				
 				function initHashScroll() {
 					// Track if we're updating hash programmatically (to prevent scroll loops)
 					let isUpdatingHash = false;
@@ -286,26 +294,15 @@ const brandImages = [
 					// This handles both same-page navigation and cross-page navigation
 					const initialHash = window.location.hash.slice(1); // Remove #
 					if (initialHash) {
-						// Try immediately if page is already loaded
-						if (document.readyState === 'complete') {
-							// Page is fully loaded, try scrolling
+						// Use requestAnimationFrame to ensure DOM is ready
+						requestAnimationFrame(() => {
 							if (!scrollToHash(initialHash)) {
-								// Element not found, retry with delay (might be dynamically added)
+								// Retry after a short delay if element still not found
 								setTimeout(() => {
 									scrollToHash(initialHash);
 								}, 300);
 							}
-						} else {
-							// Wait for page to be fully loaded (including images, etc.)
-							window.addEventListener('load', () => {
-								if (!scrollToHash(initialHash)) {
-									// Retry after a short delay if element still not found
-									setTimeout(() => {
-										scrollToHash(initialHash);
-									}, 300);
-								}
-							}, { once: true });
-						}
+						});
 					}
 					
 					// Use Intersection Observer to detect visible sections
@@ -361,13 +358,6 @@ const brandImages = [
 							}
 						}
 					});
-				}
-				
-				// Initialize hash scroll functionality
-				if (document.readyState === 'loading') {
-					document.addEventListener('DOMContentLoaded', initHashScroll);
-				} else {
-					initHashScroll();
 				}
 			})();
 		</script>

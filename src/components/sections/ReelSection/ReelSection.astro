@@ -34,7 +34,7 @@ const videoSrc = video.src.startsWith('http')
 
 <section id={id} class={`bg-black w-full max-w-screen mx-auto h-dvh flex flex-col items-center justify-center snap-start snap-always px-0 ${className}`}>
 	<LazyVideo
-		client:load
+		client:visible
 		src={videoSrc}
 		poster={posterUrl}
 		autoPlay
