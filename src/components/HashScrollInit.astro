@@ -4,6 +4,30 @@
 // RULE-027: Use this component for all new pages with hash navigation
 ---
 
+<!-- Inline script runs immediately to prevent browser's default hash scroll -->
+<script is:inline>
+	// Prevent browser's default hash scroll behavior for cross-page navigation
+	// This runs immediately before any other scripts
+	(function() {
+		const hash = window.location.hash.slice(1);
+		if (hash) {
+			// Store hash in sessionStorage for the hash-scroll utility
+			// This ensures it's available even if browser scrolls before our script runs
+			sessionStorage.setItem('pendingHashScroll', hash);
+			
+			// Scroll to top immediately to prevent browser's default hash scroll
+			// Use multiple methods to ensure it works across browsers
+			window.scrollTo(0, 0);
+			if (document.documentElement) {
+				document.documentElement.scrollTop = 0;
+			}
+			if (document.body) {
+				document.body.scrollTop = 0;
+			}
+		}
+	})();
+</script>
+
 <script type="module">
 	import { initHashScroll } from '../lib/hash-scroll';
 	

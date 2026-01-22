@@ -2,6 +2,8 @@
 import '../styles/global.css';
 import { bunnyImage } from '../lib/bunny-cdn';
 import ReelSection from '../components/sections/ReelSection/ReelSection.astro';
+import NavigationLinks from '../components/sections/NavigationLinks/NavigationLinks.astro';
+import HashScrollInit from '../components/HashScrollInit.astro';
 import Navigation from '../components/Navigation.astro';
 
 // Logo from public folder - using local file
@@ -163,6 +165,11 @@ const brandImages = [
 				}
 				
 				function initScrollRestore() {
+					// Skip scroll restore if there's a hash in the URL (hash-scroll handles it)
+					if (window.location.hash) {
+						return;
+					}
+					
 					const STORAGE_KEY = 'dev-scroll-section';
 					const sections = document.querySelectorAll('section[class*="snap-start"]');
 					if (sections.length === 0) return;
@@ -248,167 +255,14 @@ const brandImages = [
 				priority: true
 			}}
 		/>
-		<section class="w-full max-w-screen mx-auto h-dvh flex items-center justify-center snap-start snap-always bg-black p-2 md:p-4 lg:p-8">
-			<div class="flex flex-col gap-0 w-full max-w-2xl">
-				<a href="/services#services" class="flex items-center justify-between w-full py-4 text-white hover:opacity-70 transition-opacity">
-					<span class="text-base md:text-lg font-medium">services</span>
-					<span class="text-base md:text-lg text-[#ca2c1e]">→</span>
-				</a>
-				<div class="w-full h-px bg-gray-600"></div>
-				<a href="/case-studies#case-studies-title" class="flex items-center justify-between w-full py-4 text-white hover:opacity-70 transition-opacity">
-					<span class="text-base md:text-lg font-medium">case studies</span>
-					<span class="text-base md:text-lg text-[#ca2c1e]">→</span>
-				</a>
-			</div>
-		</section>
+		<NavigationLinks
+			id="navigation-links"
+			links={[
+				{ href: '/services#services', label: 'services' },
+				{ href: '/case-studies#case-studies-title', label: 'case studies' }
+			]}
+		/>
 		</main>
-		<!-- RULE-014: Defer hash scroll script to improve FCP -->
-		<script>
-			// Hash Scroll Manager - Handles both same-page and cross-page hash navigation
-			// @ts-ignore - Inline script types
-			(function() {
-				// Defer to idle time to avoid blocking render
-				if ('requestIdleCallback' in window) {
-					requestIdleCallback(initHashScroll, { timeout: 2000 });
-				} else {
-					setTimeout(initHashScroll, 100);
-				}
-				
-				function initHashScroll() {
-					// Track if we're updating hash programmatically (to prevent scroll loops)
-					let isUpdatingHash = false;
-					
-					// Helper function to generate section IDs
-					function generateSectionId(section: Element, index: number): string {
-						const heading = section.querySelector('h1, h2, h3, h4, h5, h6');
-						if (heading) {
-							const text = heading.textContent?.trim().toLowerCase() || '';
-							if (text) {
-								const slug = text
-									.replace(/[^\w\s-]/g, '')
-									.replace(/\s+/g, '-')
-									.replace(/-+/g, '-')
-									.replace(/^-|-$/g, '');
-								if (slug.length > 0) {
-									return slug;
-								}
-							}
-						}
-						return `section-${index + 1}`;
-					}
-					
-					// Helper function to ensure all sections have IDs
-					function ensureSectionIds(): void {
-						const sections = document.querySelectorAll<HTMLElement>('section[class*="snap-start"]');
-						sections.forEach((section, index) => {
-							if (!section.id) {
-								const sectionId = generateSectionId(section, index);
-								section.id = sectionId;
-							}
-						});
-					}
-					
-					// Helper function to scroll to hash target
-					function scrollToHash(hash: string): boolean {
-						// Ensure IDs are generated before looking for the target
-						ensureSectionIds();
-						
-						const targetSection = document.getElementById(hash);
-						if (targetSection) {
-							// Use requestAnimationFrame to ensure layout is complete
-							requestAnimationFrame(() => {
-								requestAnimationFrame(() => {
-									isUpdatingHash = true;
-									targetSection.scrollIntoView({ behavior: 'instant' });
-									// Reset flag after scroll completes
-									setTimeout(() => {
-										isUpdatingHash = false;
-									}, 100);
-								});
-							});
-							return true;
-						}
-						return false;
-					}
-					
-					// Find all sections with snap-start class
-					const sections = document.querySelectorAll<HTMLElement>('section[class*="snap-start"]');
-					
-					if (sections.length === 0) return;
-					
-					// Generate section IDs if they don't exist
-					ensureSectionIds();
-					
-					// Handle initial hash on page load
-					// This handles both same-page navigation and cross-page navigation
-					const initialHash = window.location.hash.slice(1); // Remove #
-					if (initialHash) {
-						// Use requestAnimationFrame to ensure DOM is ready
-						requestAnimationFrame(() => {
-							if (!scrollToHash(initialHash)) {
-								// Retry after a short delay if element still not found
-								setTimeout(() => {
-									scrollToHash(initialHash);
-								}, 300);
-							}
-						});
-					}
-					
-					// Use Intersection Observer to detect visible sections
-					const observer = new IntersectionObserver(
-						(entries) => {
-							// Don't update hash if we're programmatically scrolling
-							if (isUpdatingHash) return;
-							
-							// Find the section with highest intersection ratio
-							let maxRatio = 0;
-							let activeSection: HTMLElement | null = null;
-							
-							for (const entry of entries) {
-								if (entry.isIntersecting && entry.intersectionRatio > maxRatio) {
-									maxRatio = entry.intersectionRatio;
-									if (entry.target instanceof HTMLElement) {
-										activeSection = entry.target;
-									}
-								}
-							}
-							
-							// Update hash if we found an active section
-							if (activeSection && activeSection.id) {
-								const newHash = `#${activeSection.id}`;
-								if (window.location.hash !== newHash) {
-									// Use replaceState to avoid adding history entries
-									window.history.replaceState(null, '', newHash);
-								}
-							}
-						},
-						{
-							// Trigger when section is mostly visible (50%+)
-							threshold: [0.5, 0.75, 1.0],
-							// Add some margin to trigger slightly before section is fully visible
-							rootMargin: '-10% 0px -10% 0px'
-						}
-					);
-					
-					// Observe all sections
-					sections.forEach((section) => observer.observe(section));
-					
-					// Handle browser back/forward buttons
-					window.addEventListener('popstate', () => {
-						const hash = window.location.hash.slice(1);
-						if (hash) {
-							const targetSection = document.getElementById(hash);
-							if (targetSection) {
-								isUpdatingHash = true;
-								targetSection.scrollIntoView({ behavior: 'smooth' });
-								setTimeout(() => {
-									isUpdatingHash = false;
-								}, 500);
-							}
-						}
-					});
-				}
-			})();
-		</script>
+		<HashScrollInit />
 	</body>
 </html>
