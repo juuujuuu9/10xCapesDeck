@@ -42,20 +42,23 @@ export interface BunnyImageOptions {
 	quality?: number;
 	aspectRatio?: string;
 	pullZone?: string; // Optional: specify a named pull zone (e.g., "images", "assets")
+	format?: 'webp' | 'avif' | 'jpg' | 'png' | 'auto'; // Image format - defaults to 'webp' for optimal compression
 }
 
 /**
  * Generate Bunny CDN image URL with transform parameters
  * RULE-015: Use Transform API for responsive sizes
+ * RULE-014: Speed First - WebP format for optimal compression
  * 
  * @param path - Image path relative to pull zone root
  * @param options - Image options including optional pullZone name
  * @example
  * bunnyImage('/hero.jpg', { width: 1920, pullZone: 'images' })
  * // Uses PUBLIC_BUNNY_CDN_URL_IMAGES if set, otherwise falls back to PUBLIC_BUNNY_CDN_URL
+ * // Automatically converts to WebP format for optimal compression
  */
 export function bunnyImage(path: string, options: BunnyImageOptions = {}): string {
-	const { width, height, quality, aspectRatio, pullZone } = options;
+	const { width, height, quality, aspectRatio, pullZone, format = 'webp' } = options;
 	const cdnUrl = getCdnUrl(pullZone);
 	if (!cdnUrl) {
 		// CDN URL not configured - return raw path (will fail to load unless served from origin)
@@ -81,6 +84,11 @@ export function bunnyImage(path: string, options: BunnyImageOptions = {}): strin
 	if (height) params.set('height', height.toString());
 	if (quality) params.set('quality', quality.toString());
 	if (aspectRatio) params.set('aspect_ratio', aspectRatio);
+	// RULE-014: Explicitly request WebP format for optimal compression
+	// Bunny CDN will convert images to WebP format on-the-fly
+	if (format !== 'auto') {
+		params.set('format', format);
+	}
 
 	const queryString = params.toString();
 	const cleanPath = path.startsWith('/') ? path : `/${path}`;
