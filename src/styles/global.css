@@ -32,7 +32,7 @@
 		url('/fonts/AktivGrotesk-Bold.woff') format('woff');
 	font-weight: 700;
 	font-style: normal;
-	font-display: swap;
+	font-display: optional; /* Prevents layout shift - only uses font if ready immediately, otherwise uses fallback */
 }
 
 @theme {
@@ -50,6 +50,9 @@
 		height: 100%;
 		overflow-y: scroll;
 		scroll-snap-type: y mandatory;
+		/* Prevent layout shift from font loading */
+		font-size: 16px;
+		line-height: 1.5;
 	}
 
 	/* Custom scrollbar styling */
