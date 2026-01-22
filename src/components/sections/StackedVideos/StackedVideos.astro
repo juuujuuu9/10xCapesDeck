@@ -30,7 +30,7 @@ const stackedVideos = videos.slice(0, 4);
 	)}
 	<div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 lg:gap-8 overflow-hidden auto-rows-fr">
 		{stackedVideos.map((video, index) => (
-			<div class="relative overflow-hidden w-full min-h-0 aspect-video">
+			<div class="relative overflow-hidden w-full min-h-0">
 				<LazyVideo
 					client:load
 					src={video.src}
