@@ -312,6 +312,29 @@ PUBLIC_BUNNY_STREAM_URL=https://vz-xxxxx.b-cdn.net
 - This ensures consistent ordering and makes it easy to find the latest additions
 - Pattern: Add new sections after all existing sections and scripts, before `</body>`
 
+### RULE-027: Hash Scroll Initialization 🔴
+**Use optimized hash-scroll component for all new pages**
+- All new pages with hash navigation MUST use `<HashScrollInit />` component
+- Component location: `src/components/HashScrollInit.astro`
+- Never duplicate hash-scroll logic inline in new pages
+- The component uses the mobile-optimized `initHashScroll()` utility from `src/lib/hash-scroll.ts`
+- This ensures mobile-optimized performance (DOMContentLoaded vs load event, single RAF, etc.)
+- The utility handles: cross-page navigation, same-page hash links, browser back/forward, prefers-reduced-motion
+- Required for pages with sections using `snap-start` class
+- Usage pattern:
+  ```astro
+  ---
+  import HashScrollInit from '../components/HashScrollInit.astro';
+  ---
+  
+  <!-- Page content -->
+  
+  <HashScrollInit />
+  ```
+- Place component at end of page, just before closing `</body>` tag
+- Legacy pages may have inline hash-scroll logic - do not update unless requested
+- New pages must use the component to ensure consistent mobile performance optimizations
+
 ---
 
 ## Rule Symbols
@@ -476,6 +499,8 @@ You: "Yes"
 **Required utilities for this project:**
 - `src/lib/bunny-cdn.ts` - CDN URL generation functions
 - `src/lib/intersection-observer.ts` - Singleton lazy load manager
+- `src/lib/hash-scroll.ts` - Mobile-optimized hash navigation utility
+- `src/components/HashScrollInit.astro` - Hash scroll initialization component (RULE-027)
 - `src/components/LazyImage.tsx` - Optimized image component
 - `src/components/LazyVideo.tsx` - Optimized video component
 
@@ -492,6 +517,6 @@ You: "Yes"
 
 ---
 
-**Last updated:** 2026-01-16  
-**Active rules:** 26  
+**Last updated:** 2026-01-16 
+**Active rules:** 27 
 **Philosophy:** Radical simplicity + Performance at scale

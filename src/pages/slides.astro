@@ -639,25 +639,19 @@ const fadeSectionBg = bunnyImage('/wp-content/uploads/2025/09/1dfd153532710783b4
 			})();
 		</script>
 		<script>
-			// Hash Scroll Manager - Updates URL hash as user scrolls through sections
+			// Hash Scroll Manager - Handles both same-page and cross-page hash navigation
+			// @ts-ignore - Inline script types
 			(function() {
 				function initHashScroll() {
-					// Find all sections with snap-start class
-					const sections = document.querySelectorAll('section[class*="snap-start"]');
-					
-					if (sections.length === 0) return;
-					
 					// Track if we're updating hash programmatically (to prevent scroll loops)
 					let isUpdatingHash = false;
 					
-					// Generate section IDs if they don't exist
+					// Helper function to generate section IDs
 					function generateSectionId(section: Element, index: number): string {
-						// Try to find text content that could be used as ID
 						const heading = section.querySelector('h1, h2, h3, h4, h5, h6');
 						if (heading) {
 							const text = heading.textContent?.trim().toLowerCase() || '';
 							if (text) {
-								// Convert to slug: lowercase, replace spaces with hyphens, remove special chars
 								const slug = text
 									.replace(/[^\w\s-]/g, '')
 									.replace(/\s+/g, '-')
@@ -668,34 +662,74 @@ const fadeSectionBg = bunnyImage('/wp-content/uploads/2025/09/1dfd153532710783b4
 								}
 							}
 						}
-						
-						// Fallback to section-{index}
 						return `section-${index + 1}`;
 					}
 					
-					sections.forEach((section, index) => {
-						if (!(section instanceof HTMLElement) || !section.id) {
-							const sectionId = generateSectionId(section, index);
-							if (section instanceof HTMLElement) {
+					// Helper function to ensure all sections have IDs
+					function ensureSectionIds(): void {
+						const sections = document.querySelectorAll<HTMLElement>('section[class*="snap-start"]');
+						sections.forEach((section, index) => {
+							if (!section.id) {
+								const sectionId = generateSectionId(section, index);
 								section.id = sectionId;
 							}
+						});
+					}
+					
+					// Helper function to scroll to hash target
+					function scrollToHash(hash: string): boolean {
+						// Ensure IDs are generated before looking for the target
+						ensureSectionIds();
+						
+						const targetSection = document.getElementById(hash);
+						if (targetSection) {
+							// Use requestAnimationFrame to ensure layout is complete
+							requestAnimationFrame(() => {
+								requestAnimationFrame(() => {
+									isUpdatingHash = true;
+									targetSection.scrollIntoView({ behavior: 'instant' });
+									// Reset flag after scroll completes
+									setTimeout(() => {
+										isUpdatingHash = false;
+									}, 100);
+								});
+							});
+							return true;
 						}
-					});
+						return false;
+					}
+					
+					// Find all sections with snap-start class
+					const sections = document.querySelectorAll<HTMLElement>('section[class*="snap-start"]');
+					
+					if (sections.length === 0) return;
+					
+					// Generate section IDs if they don't exist
+					ensureSectionIds();
 					
 					// Handle initial hash on page load
+					// This handles both same-page navigation and cross-page navigation
 					const initialHash = window.location.hash.slice(1); // Remove #
 					if (initialHash) {
-						const targetSection = document.getElementById(initialHash);
-						if (targetSection) {
-							// Small delay to ensure layout is complete
-							setTimeout(() => {
-								isUpdatingHash = true;
-								targetSection.scrollIntoView({ behavior: 'instant' });
-								// Reset flag after scroll completes
+						// Try immediately if page is already loaded
+						if (document.readyState === 'complete') {
+							// Page is fully loaded, try scrolling
+							if (!scrollToHash(initialHash)) {
+								// Element not found, retry with delay (might be dynamically added)
 								setTimeout(() => {
-									isUpdatingHash = false;
-								}, 100);
-							}, 100);
+									scrollToHash(initialHash);
+								}, 300);
+							}
+						} else {
+							// Wait for page to be fully loaded (including images, etc.)
+							window.addEventListener('load', () => {
+								if (!scrollToHash(initialHash)) {
+									// Retry after a short delay if element still not found
+									setTimeout(() => {
+										scrollToHash(initialHash);
+									}, 300);
+								}
+							}, { once: true });
 						}
 					}
 					
@@ -709,15 +743,18 @@ const fadeSectionBg = bunnyImage('/wp-content/uploads/2025/09/1dfd153532710783b4
 							let maxRatio = 0;
 							let activeSection: Element | null = null;
 							
-							entries.forEach((entry) => {
+							for (const entry of entries) {
 								if (entry.isIntersecting && entry.intersectionRatio > maxRatio) {
 									maxRatio = entry.intersectionRatio;
-									activeSection = entry.target;
+									const target = entry.target;
+									if (target instanceof HTMLElement) {
+										activeSection = target;
+									}
 								}
-							});
+							}
 							
 							// Update hash if we found an active section
-							if (activeSection instanceof HTMLElement && activeSection.id) {
+							if (activeSection && activeSection.id) {
 								const newHash = `#${activeSection.id}`;
 								if (window.location.hash !== newHash) {
 									// Use replaceState to avoid adding history entries

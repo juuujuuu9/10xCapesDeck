@@ -1,0 +1,17 @@
+---
+// Reusable component to initialize hash scroll on pages
+// Uses the optimized mobile-friendly hash-scroll utility
+// RULE-027: Use this component for all new pages with hash navigation
+---
+
+<script type="module">
+	import { initHashScroll } from '../lib/hash-scroll';
+	
+	// Initialize hash scroll functionality
+	// The utility handles DOM ready state automatically
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initHashScroll);
+	} else {
+		initHashScroll();
+	}
+</script>
