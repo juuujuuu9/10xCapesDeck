@@ -55,22 +55,22 @@ const { title, col1, col2, col3, id } = Astro.props;
 				)}
 			</div>
 
-			{/* Mobile: Show col2 (Attomax) as top image */}
-			<div class="flex md:hidden relative overflow-hidden flex-1 min-h-0 items-center justify-center">
+			{/* Mobile: Show col1[1] (second image in first column) as top image */}
+			<div class="flex sm:hidden relative overflow-hidden flex-1 min-h-0 items-center justify-center">
 				<LazyImage
 					client:visible
-					src={col2.src}
-					alt={col2.alt}
-					pullZone={col2.pullZone}
-					priority={col2.priority || false}
-					width={col2.width || 1200}
-					quality={col2.quality || 85}
-					className="w-full h-full object-cover object-center"
+					src={col1[1].src}
+					alt={col1[1].alt}
+					pullZone={col1[1].pullZone}
+					priority={col1[1].priority || false}
+					width={col1[1].width || 1200}
+					quality={col1[1].quality || 85}
+					className="w-full h-full object-cover object-bottom"
 				/>
-				{col2.label && (
+				{col1[1].label && (
 					<div class="absolute bottom-0 left-0 px-3 md:px-4 lg:px-6 py-1.5 md:py-2 lg:py-3">
 						<span class="text-white text-lg md:text-xl lg:text-2xl font-light lowercase tracking-wide">
-							{col2.label}
+							{col1[1].label}
 						</span>
 					</div>
 				)}
@@ -124,7 +124,7 @@ const { title, col1, col2, col3, id } = Astro.props;
 		{/* Column 2: 1 image - visible on mobile (top right), md-lg, and xl+ */}
 		<div class="flex-1 min-h-0 flex items-center justify-center">
 			{/* Mobile: Show col3[0] (bottom image) */}
-			<div class="flex md:hidden relative overflow-hidden w-full h-full items-center justify-center">
+			<div class="flex sm:hidden relative overflow-hidden w-full h-full items-center justify-center">
 				<LazyImage
 					client:visible
 					src={col3[0].src}
@@ -144,7 +144,7 @@ const { title, col1, col2, col3, id } = Astro.props;
 				)}
 			</div>
 			{/* Desktop: Show col2 (original middle image) */}
-			<div class="hidden md:flex relative overflow-hidden w-full h-full items-center justify-center">
+			<div class="hidden sm:flex relative overflow-hidden w-full h-full items-center justify-center">
 				<LazyImage
 					client:visible
 					src={col2.src}
