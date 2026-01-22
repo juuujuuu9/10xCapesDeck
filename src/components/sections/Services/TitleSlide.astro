@@ -14,15 +14,12 @@ const mobileBg = backgroundImageMobile || backgroundImage;
 <section 
 	id={id}
 	class="title-slide-responsive relative w-full max-w-screen mx-auto h-dvh flex items-center justify-center snap-start snap-always overflow-hidden bg-cover bg-center bg-no-repeat px-4 md:px-0"
-	style={`--bg-mobile: '${mobileBg}'; --bg-desktop: '${backgroundImage}';`}
+	style={`--bg-mobile: url('${mobileBg}'); --bg-desktop: url('${backgroundImage}'); background-image: var(--bg-mobile);`}
 >
 	<style>
-		.title-slide-responsive {
-			background-image: url(var(--bg-mobile));
-		}
 		@media (min-width: 768px) {
 			.title-slide-responsive {
-				background-image: url(var(--bg-desktop));
+				background-image: var(--bg-desktop);
 			}
 		}
 	</style>
