@@ -1,16 +1,13 @@
 ---
-import { LazyVideo } from '../../LazyVideo.tsx';
-import { LazyImage } from '../../LazyImage.tsx';
-
 export interface Props {
-	videoSrc?: string;
-	imageSrc?: string;
+	image1Src?: string;
+	image2Src?: string;
 	id?: string;
 }
 
 const { 
-	videoSrc = 'https://times-10-video-offload.b-cdn.net/influencer-marketing%20(online-video-cutter.com).mp4',
-	imageSrc = '/wp-content/uploads/2025/02/jf-Instagram-Stories.png',
+	image1Src = '/influncer-n-paid1.png',
+	image2Src = '/influncer-n-paid2.png',
 	id
 } = Astro.props;
 ---
@@ -25,19 +22,15 @@ const {
 			</h2>
 		</div>
 
-		{/* Right side: Two iPhone images/videos */}
+		{/* Right side: Two iPhone images */}
 		<div class="lg:flex-1 w-full lg:w-[60%] min-h-0 min-w-0 max-w-full relative flex flex-row items-center justify-center gap-2 md:gap-4 lg:gap-8 overflow-hidden">
-			{/* First iPhone - Video */}
+			{/* First iPhone - Image */}
 			<div class="flex-1 min-w-[200px] w-full max-w-[300px] lg:min-w-0 lg:max-w-none lg:w-auto lg:max-w-[50%] xl:max-w-[40%] relative overflow-hidden flex items-center justify-center">
 				<div class="w-full aspect-[9/16] lg:aspect-auto lg:h-full">
-					<LazyVideo
-						client:load
-						src={videoSrc}
-						priority={true}
-						autoPlay
-						muted
-						loop
-						playsInline
+					<img
+						src={image1Src}
+						alt="Influencer marketing example 1"
+						loading="eager"
 						className="w-full h-full object-contain"
 					/>
 				</div>
@@ -46,15 +39,10 @@ const {
 			{/* Second iPhone - Image */}
 			<div class="flex-1 min-w-[200px] w-full max-w-[300px] lg:min-w-0 lg:max-w-none lg:w-auto lg:max-w-[50%] xl:max-w-[40%] relative overflow-hidden flex items-center justify-center">
 				<div class="w-full aspect-[9/16] lg:aspect-auto lg:h-full">
-					<LazyImage
-						client:visible
-						src={imageSrc}
-						alt="Instagram Stories influencer marketing example"
-						priority={true}
-						pullZone="wordpress"
-						width={1200}
-						quality={85}
-						blurPlaceholder={false}
+					<img
+						src={image2Src}
+						alt="Influencer marketing example 2"
+						loading="eager"
 						className="w-full h-full object-contain"
 					/>
 				</div>
