@@ -1,0 +1,418 @@
+---
+import '../../styles/global.css';
+import { bunnyImage } from '../../lib/bunny-cdn';
+import DerrickRoseSocialImpactMobile from '../../components/sections/C4CaseStudy/DerrickRoseSocialImpactMobile.astro';
+import DerrickRoseSocialImpact from '../../components/sections/C4CaseStudy/DerrickRoseSocialImpact.astro';
+import TwoBlockImageGrid from '../../components/sections/TwoBlockGrid/TwoBlockImageGrid.astro';
+import ThreeColumnTwoRowGrid from '../../components/sections/ThreeColumnTwoRowGrid/ThreeColumnTwoRowGrid.astro';
+import DerrickRoseBrandGrid from '../../components/sections/DerrickRoseBrandGrid/DerrickRoseBrandGrid.astro';
+import NavigationLinks from '../../components/sections/NavigationLinks/NavigationLinks.astro';
+import HashScrollInit from '../../components/HashScrollInit.astro';
+import Navigation from '../../components/Navigation.astro';
+
+// RULE-021: WordPress URL auto-conversion to Bunny CDN
+const endingLargeImage = bunnyImage('/wp-content/uploads/2025/02/IMG_3482.jpg', {
+	pullZone: 'wordpress',
+	width: 1920,
+	quality: 85
+});
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/png" href="/favicon.png" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Derrick Rose - Case Study | times10</title>
+	</head>
+	<body class="font-sans overflow-x-hidden bg-[#fdfffd]">
+		<script>
+			// Global error handler to prevent jQuery errors from breaking the page
+			// jQuery may be injected by browser extensions or dev tools
+			(function() {
+				// Catch unhandled errors (including jQuery selector errors)
+				window.addEventListener('error', function(event) {
+					// Check if it's the jQuery selector error
+					if (event.message && (
+						event.message.includes("is not a valid selector") ||
+						event.message.includes("*,:x") ||
+						event.filename && event.filename.includes('jquery')
+					)) {
+						// Prevent the error from breaking the page
+						event.preventDefault();
+						console.warn('[Error Handler] Caught jQuery selector error (likely from browser extension):', event.message);
+						return false;
+					}
+				}, true); // Use capture phase to catch errors early
+
+				// Also catch unhandled promise rejections
+				window.addEventListener('unhandledrejection', function(event) {
+					if (event.reason && (
+						event.reason.message && event.reason.message.includes("is not a valid selector") ||
+						event.reason.message && event.reason.message.includes("*,:x")
+					)) {
+						event.preventDefault();
+						console.warn('[Error Handler] Caught jQuery promise rejection:', event.reason);
+					}
+				});
+			})();
+		</script>
+	<Navigation />
+		<script>
+			// Development: Save and restore scroll position
+			// Remove this in production by deleting the script or setting ENABLE_SCROLL_RESTORE=false
+			(function() {
+				const STORAGE_KEY = 'dev-scroll-section';
+				
+				function initScrollRestore() {
+					// Skip scroll restore if there's a hash in the URL (hash-scroll handles it)
+					if (window.location.hash) {
+						return;
+					}
+					
+					const sections = document.querySelectorAll('section[class*="snap-start"]');
+					if (sections.length === 0) return;
+					
+					// Restore scroll position on load
+					const savedIndex = sessionStorage.getItem(STORAGE_KEY);
+					if (savedIndex !== null) {
+						const index = parseInt(savedIndex, 10);
+						if (index >= 0 && index < sections.length) {
+							// Small delay to ensure layout is complete
+							setTimeout(() => {
+								sections[index].scrollIntoView({ behavior: 'instant' });
+							}, 100);
+						}
+					}
+					
+					// Track current section using IntersectionObserver
+					const observer = new IntersectionObserver((entries) => {
+						entries.forEach((entry) => {
+							if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+								const index = Array.from(sections).indexOf(entry.target);
+								if (index !== -1) {
+									sessionStorage.setItem(STORAGE_KEY, index.toString());
+								}
+							}
+						});
+					}, {
+						threshold: 0.5,
+						rootMargin: '-20% 0px -20% 0px'
+					});
+					
+					// Observe all sections
+					sections.forEach((section) => observer.observe(section));
+				}
+				
+				// Wait for DOM to be ready
+				if (document.readyState === 'loading') {
+					document.addEventListener('DOMContentLoaded', initScrollRestore);
+				} else {
+					initScrollRestore();
+				}
+			})();
+		</script>
+		<section 
+			id="drose-case-study-title"
+			class="w-full h-dvh snap-start snap-always bg-no-repeat flex items-center justify-center relative bg-black"
+			style={`background-image: url('${endingLargeImage}'); background-position: 50% 50%; background-size: cover;`}
+		>
+			<div 
+				id="drose-case-study-title-overlay"
+				class="absolute inset-0 bg-black transition-opacity duration-1000 ease-in-out"
+			></div>
+		</section>
+		<script>
+			// Fade in/out black overlay when drose case study title section enters/exits viewport
+			(function() {
+				const overlay = document.getElementById('drose-case-study-title-overlay');
+				if (!overlay) return;
+
+				// Check for reduced motion preference
+				const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+				
+				// If reduced motion, hide overlay immediately
+				if (prefersReducedMotion) {
+					overlay.style.opacity = '0';
+					return;
+				}
+
+				// Use Intersection Observer to trigger fade in/out
+				const section = document.getElementById('drose-case-study-title');
+				if (!section) return;
+
+				const observer = new IntersectionObserver((entries) => {
+					entries.forEach((entry) => {
+						if (entry.isIntersecting) {
+							// Fade out the black overlay to reveal background image
+							overlay.style.opacity = '0';
+						} else {
+							// Fade in the black overlay when section exits viewport
+							overlay.style.opacity = '1';
+						}
+					});
+				}, {
+					threshold: 0.1,
+					rootMargin: '0px'
+				});
+
+				observer.observe(section);
+			})();
+		</script>
+		<script>
+			// Centralized Case Study Button Initialization
+			// This script initializes all case study sections once, preventing conflicts when multiple case studies exist
+			(function() {
+				// Use media query to check if mobile (more reliable than window.innerWidth)
+				const isMobile = window.matchMedia('(max-width: 1023px)').matches;
+				if (!isMobile) return;
+
+				// Track initialized sections to prevent duplicate initialization
+				const initializedSections = new WeakSet();
+
+				function initCaseStudyButtons() {
+					// Find all case study sections with mobile layout
+					const sections = document.querySelectorAll('section');
+					
+					sections.forEach((section) => {
+						const mobileLayout = section.querySelector('.mobile-layout');
+						if (!mobileLayout) return; // Skip if not a case study component
+
+						// Skip if already initialized
+						if (initializedSections.has(section)) return;
+						initializedSections.add(section);
+
+						const tabButtons = section.querySelectorAll('.tab-button');
+						const tabContents = section.querySelectorAll('.tab-content');
+						const contentContainer = section.querySelector('.tab-content-container');
+						const contentCard = section.querySelector('.content-card');
+						const tabNav = section.querySelector('.content-card > div:first-child');
+
+						if (!contentCard || !contentContainer) return;
+
+						// Function to expand the card
+						const expandCard = () => {
+							if (mobileLayout) {
+								mobileLayout.classList.add('expanded');
+							}
+							if (contentCard) {
+								contentCard.classList.add('expanded');
+							}
+							if (contentContainer) {
+								contentContainer.classList.add('has-content');
+							}
+						};
+
+						// Function to collapse the card
+						const collapseCard = () => {
+							if (mobileLayout) {
+								mobileLayout.classList.remove('expanded');
+							}
+							if (contentCard) {
+								contentCard.classList.remove('expanded');
+							}
+							if (contentContainer) {
+								contentContainer.classList.remove('has-content');
+							}
+						};
+
+						// Check if card is expanded
+						const isExpanded = () => {
+							return contentCard.classList.contains('expanded');
+						};
+
+						// Handle button clicks/touches (if tabs exist)
+						if (tabButtons.length > 0) {
+							tabButtons.forEach((button) => {
+								// Handle both click and touchstart for better mobile support
+								const handleInteraction = (e: Event) => {
+									e.preventDefault();
+									e.stopPropagation();
+									const targetTab = button.getAttribute('data-tab');
+									if (!targetTab) return;
+
+									// Expand card if not already expanded
+									if (!isExpanded()) {
+										expandCard();
+									}
+
+									// Only update button states and content visibility if there are multiple tabs
+									if (tabContents.length > 0) {
+										// Update button states
+										tabButtons.forEach((btn) => btn.classList.remove('active'));
+										button.classList.add('active');
+
+										// Update content visibility
+										tabContents.forEach((content) => {
+											content.classList.remove('active');
+											if (content instanceof HTMLElement && content.id === `${targetTab}-content`) {
+												content.classList.add('active');
+											}
+										});
+									}
+								};
+
+								button.addEventListener('click', handleInteraction, { passive: false });
+								button.addEventListener('touchstart', handleInteraction, { passive: false });
+							});
+						}
+
+						// Handle clicks on the tab navigation area to expand/collapse
+						if (tabNav) {
+							const handleNavClick = (e: Event) => {
+								// Don't toggle if clicking on a tab button (handled above)
+								if (e.target instanceof HTMLElement && e.target.classList.contains('tab-button')) {
+									return;
+								}
+								
+								// Expand on first click
+								if (!isExpanded()) {
+									expandCard();
+								}
+							};
+
+							tabNav.addEventListener('click', handleNavClick);
+							tabNav.addEventListener('touchstart', handleNavClick);
+						}
+
+						// Check if there's a whatWeDid prop by checking if overview tab exists
+						const hasWhatWeDid = section.querySelector('#overview-content') !== null;
+						
+						// If no tabs and no whatWeDid, make the card header area clickable to expand
+						if (!tabButtons.length && !hasWhatWeDid) {
+							const cardHeader = section.querySelector('.content-card > div:first-child');
+							if (cardHeader instanceof HTMLElement) {
+								cardHeader.style.cursor = 'pointer';
+								const handleHeaderClick = () => {
+									if (!isExpanded()) {
+										expandCard();
+									}
+								};
+								cardHeader.addEventListener('click', handleHeaderClick);
+								cardHeader.addEventListener('touchstart', handleHeaderClick);
+							}
+						}
+
+						// Add click handler to collapse when clicking outside content (on card background)
+						const handleCardClick = (e: Event) => {
+							// If clicking on the card itself (not children) and expanded, collapse
+							if (e.target === contentCard && isExpanded()) {
+								collapseCard();
+							}
+						};
+						contentCard.addEventListener('click', handleCardClick);
+						contentCard.addEventListener('touchstart', handleCardClick);
+					});
+				}
+
+				// Run immediately if DOM is ready, otherwise wait for DOMContentLoaded
+				if (document.readyState === 'loading') {
+					document.addEventListener('DOMContentLoaded', initCaseStudyButtons);
+				} else {
+					initCaseStudyButtons();
+				}
+			})();
+		</script>
+		<DerrickRoseSocialImpactMobile id="derrick-rose-social-impact" />
+		<DerrickRoseSocialImpact id="derrick-rose-social-impact" />
+		<TwoBlockImageGrid
+			id="two-block-image-grid"
+			block1={{
+				title: 'simeon high school',
+				images: [
+					{
+						src: '/wp-content/uploads/2025/08/JOE_4646.jpg',
+						alt: 'Derrick Rose at Simeon High School',
+						pullZone: 'wordpress',
+						priority: true
+					},
+					{
+						src: '/wp-content/uploads/2025/08/ByUs_Derrick-Rose_Homegrown-Game-Night-24.jpg',
+						alt: 'Derrick Rose Homegrown Game Night',
+						pullZone: 'wordpress'
+					},
+					{
+						type: 'video',
+						src: 'https://times-10-video-offload.b-cdn.net/Simeon-CapabilitiesLoop-08.14.25.mp4',
+						priority: false
+					}
+				]
+			}}
+			block2={{
+				title: "derrick rose's flower shop",
+				images: [
+					{
+						src: '/wp-content/uploads/2025/08/000027740007.jpg',
+						alt: "Derrick Rose's Flower Shop",
+						pullZone: 'wordpress',
+						priority: true
+					},
+					{
+						src: '/wp-content/uploads/2025/08/DR47.jpg',
+						alt: "Derrick Rose's Flower Shop",
+						pullZone: 'wordpress'
+					}
+				]
+			}}
+		/>
+		<ThreeColumnTwoRowGrid
+			id="three-column-two-row-grid"
+			images={[
+				{
+					src: '/wp-content/uploads/2025/03/Derrick-Rose-16x9-1.jpg',
+					alt: 'Derrick Rose',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85,
+					priority: true
+				},
+				{
+					src: '/wp-content/uploads/2025/03/RoseFlowerShop-1-gigapixel-low-resolution-v2-2x.jpg',
+					alt: "Derrick Rose's Flower Shop",
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85,
+					priority: true
+				},
+				{
+					src: '/wp-content/uploads/2025/03/ByUs_Derrick-Rose_Roses-Flower-Shop_BTS-Stills-7-1.jpg',
+					alt: "Derrick Rose's Flower Shop Behind the Scenes",
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85,
+					priority: true
+				},
+				{
+					src: '/wp-content/uploads/2025/03/Fans-braved-the-cold-to-experien-1-gigapixel-low-resolution-v2-2x.jpg',
+					alt: 'Fans braved the cold',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				},
+				{
+					src: '/wp-content/uploads/2025/02/SimeonHigh-Gym.jpg',
+					alt: 'Simeon High School Gym',
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				},
+				{
+					src: '/wp-content/uploads/2025/03/ByUs_Derrick-Rose_Homegrown-Game-Night-1-1.jpg',
+					alt: "Derrick Rose's Homegrown Game Night",
+					pullZone: 'wordpress',
+					width: 1200,
+					quality: 85
+				}
+			]}
+		/>
+		<DerrickRoseBrandGrid id="derrick-rose-brand-grid" />
+		<NavigationLinks
+			id="navigation-links"
+			links={[
+				{ href: 'http://localhost:4321/case-study/adidas-manchester-united#man-u-case-study-title', label: 'manchester united case study' }
+			]}
+		/>
+		<HashScrollInit />
+	</body>
+</html>
