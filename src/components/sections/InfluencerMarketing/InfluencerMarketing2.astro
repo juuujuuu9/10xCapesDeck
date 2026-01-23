@@ -23,9 +23,9 @@ const {
 		</div>
 
 		{/* Right side: Two iPhone images */}
-		<div class="lg:flex-1 w-full lg:w-[60%] min-h-0 min-w-0 max-w-full relative flex flex-row items-center justify-center gap-2 md:gap-4 lg:gap-8 overflow-hidden">
+		<div class="lg:flex-1 w-full lg:w-[60%] min-h-0 min-w-0 max-w-full relative flex flex-row items-center justify-center gap-2 md:gap-4 lg:gap-8">
 			{/* First iPhone - Image */}
-			<div class="flex-1 min-w-[200px] w-full max-w-[300px] lg:min-w-0 lg:max-w-none lg:w-auto lg:max-w-[50%] xl:max-w-[40%] relative overflow-hidden flex items-center justify-center">
+			<div class="flex-1 min-w-0 w-full max-w-[calc(50%-4px)] sm:max-w-[calc(50%-8px)] lg:max-w-[50%] xl:max-w-[40%] relative flex items-center justify-center">
 				<div class="w-full aspect-[9/16] lg:aspect-auto lg:h-full">
 					<img
 						src={image1Src}
@@ -37,7 +37,7 @@ const {
 			</div>
 
 			{/* Second iPhone - Image */}
-			<div class="flex-1 min-w-[200px] w-full max-w-[300px] lg:min-w-0 lg:max-w-none lg:w-auto lg:max-w-[50%] xl:max-w-[40%] relative overflow-hidden flex items-center justify-center">
+			<div class="flex-1 min-w-0 w-full max-w-[calc(50%-4px)] sm:max-w-[calc(50%-8px)] lg:max-w-[50%] xl:max-w-[40%] relative flex items-center justify-center">
 				<div class="w-full aspect-[9/16] lg:aspect-auto lg:h-full">
 					<img
 						src={image2Src}
