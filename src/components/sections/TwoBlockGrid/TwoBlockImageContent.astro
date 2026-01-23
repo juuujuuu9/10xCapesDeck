@@ -36,10 +36,10 @@ export interface Props {
 const { image, stats, videos, id } = Astro.props;
 ---
 
-<section id={id} class="w-full h-dvh max-h-dvh p-2 md:p-4 lg:p-8 snap-start snap-always flex flex-col overflow-hidden box-border">
-	<div class="flex-1 min-h-0 flex gap-2 md:gap-4 lg:gap-8">
+<section id={id} class="w-full h-dvh max-h-dvh pt-2 px-2 pb-12 md:pt-4 md:px-4 md:pb-12 lg:p-8 snap-start snap-always flex flex-col overflow-hidden box-border">
+	<div class="flex-1 min-h-0 flex flex-col items-center lg:items-stretch lg:flex-row gap-2 md:gap-4 lg:gap-8">
 		{/* Block 1: Image with h-full w-auto, left-aligned */}
-		<div class="hidden lg:flex relative overflow-hidden items-center justify-start h-full">
+		<div class="flex relative overflow-hidden items-center justify-center lg:justify-start flex-1 min-h-0 lg:h-full lg:w-auto lg:flex-none">
 			<LazyImage
 				client:visible
 				src={image.src}
@@ -48,12 +48,12 @@ const { image, stats, videos, id } = Astro.props;
 				priority={image.priority !== undefined ? image.priority : false}
 				width={image.width || 1200}
 				quality={image.quality || 85}
-				className="h-full w-auto object-contain object-left"
+				className="w-full h-full object-contain object-center lg:object-left"
 			/>
 		</div>
 		
 		{/* Block 2: Column with stats and videos */}
-		<div class="flex-1 min-h-0 flex flex-col items-center justify-center overflow-hidden w-full">
+		<div class="flex flex-col items-center justify-start lg:justify-center overflow-hidden shrink-0 w-auto lg:w-auto">
 			{/* Stats Section */}
 			<div class="shrink-0 flex flex-col sm:flex-row md:flex-row lg:flex-col xl:flex-row items-center sm:justify-center md:justify-center lg:justify-center gap-4 md:gap-6 lg:gap-8 whitespace-nowrap mb-4 sm:mb-8 md:mb-6 lg:mb-8 w-full">
 				{/* Total Views */}
@@ -82,7 +82,7 @@ const { image, stats, videos, id } = Astro.props;
 			</div>
 			
 			{/* Videos Section: 4 vertically oriented videos */}
-			<div class="shrink-0 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-2 sm:gap-2 md:gap-3 lg:gap-8 overflow-hidden w-full">
+			<div class="hidden lg:grid shrink-0 grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-2 sm:gap-2 md:gap-3 lg:gap-8 overflow-hidden w-full">
 				{videos.map((video) => (
 					<div class="flex flex-col gap-1 sm:gap-1 md:gap-2 lg:gap-3 w-full min-w-0 items-center">
 						{/* Video Container - vertically oriented (portrait) */}
