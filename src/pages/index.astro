@@ -91,7 +91,15 @@ const brandImages = [
 		</script>
 
 		<!-- RULE-014: Preconnect to Bunny CDN for faster LCP (300ms savings) -->
-		<link rel="preconnect" href="https://capeswp.b-cdn.net" crossorigin />
+		{import.meta.env.PUBLIC_BUNNY_CDN_URL && (
+			<link rel="preconnect" href={import.meta.env.PUBLIC_BUNNY_CDN_URL} crossorigin />
+		)}
+		{import.meta.env.PUBLIC_BUNNY_CDN_URL_WORDPRESS && import.meta.env.PUBLIC_BUNNY_CDN_URL_WORDPRESS !== import.meta.env.PUBLIC_BUNNY_CDN_URL && (
+			<link rel="preconnect" href={import.meta.env.PUBLIC_BUNNY_CDN_URL_WORDPRESS} crossorigin />
+		)}
+		{import.meta.env.PUBLIC_BUNNY_CDN_URL_STORAGE && (
+			<link rel="preconnect" href={import.meta.env.PUBLIC_BUNNY_CDN_URL_STORAGE} crossorigin />
+		)}
 
 		<!-- RULE-014: Preload critical assets for FCP -->
 		<!-- Logo is in first visible section, preload helps FCP -->
