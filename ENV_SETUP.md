@@ -51,43 +51,51 @@ PUBLIC_BUNNY_CDN_URL=https://capeswp.b-cdn.net
 - ✅ Redeploy after adding variables
 - ✅ Check browser console for `[Bunny CDN]` warnings/errors
 
-**If you see "Failed to load resource: You do not have permission to access the requested resource":**
-This is typically a CORS (Cross-Origin Resource Sharing) issue. Fix it by:
+**If you see "Failed to load resource: You do not have permission to access the requested resource" (403 errors):**
+This is typically a **Referrer Restrictions** (Hotlinking Protection) issue. Fix it by:
 
-1. **Enable CORS in Bunny CDN Dashboard:**
+1. **Configure Referrer Restrictions in Bunny CDN Dashboard:**
    - Log into [Bunny CDN Dashboard](https://bunny.net)
-   - Go to **Pull Zones** → Select your pull zone
+   - Go to **Pull Zones** → Select your pull zone (e.g., `capeswp`)
    - Navigate to **Security** tab
-   - Under **CORS**, enable **Enable CORS**
-   - Add your domain(s) to **Allowed Origins** (or use `*` for all origins during development)
+   - Find **Hotlink Protection** or **Referrer Restrictions** section
+   - **Option A: Disable Hotlink Protection** (easiest - allows all domains)
+     - Set **Enable Hotlink Protection** to **Disabled**
+   - **Option B: Allow Your Domain** (more secure)
+     - Set **Enable Hotlink Protection** to **Enabled**
+     - In **Allowed Referrers** or **Whitelist**, add your domain(s):
+       - `capabilities.times10.net`
+       - `www.capabilities.times10.net` (if you use www)
+       - `*.times10.net` (wildcard for all subdomains, if needed)
+     - Leave **Blocked Referrers** empty (or add domains you want to block)
    - Click **Save**
 
 2. **For WordPress Pull Zone (`capeswp.b-cdn.net`):**
-   - Enable CORS and add your site domain(s)
-   - Example allowed origins: `https://yourdomain.com`, `https://www.yourdomain.com`
+   - Follow steps above to configure referrer restrictions
+   - Add your production domain: `capabilities.times10.net`
 
 3. **For Storage Pull Zone (`times-10-video-offload.b-cdn.net`):**
-   - Enable CORS and add your site domain(s)
-   - Same domain configuration as above
+   - Follow same steps as WordPress pull zone
+   - Add your production domain: `capabilities.times10.net`
 
 4. **Verify the URLs:**
    - Check browser console Network tab to see which exact URL is failing
    - Verify the URL format matches: `https://{pullzone}.b-cdn.net/{path}`
    - Ensure the path exists in your pull zone
 
-5. **Check Access Restrictions:**
+5. **Check Other Access Restrictions:**
    - In Bunny CDN Dashboard → Pull Zone → **Security**
-   - Ensure **Access Control** is not blocking requests
-   - If using IP restrictions, make sure your server/client IPs are allowed
+   - Ensure **IP Access Control** is not blocking requests (should be disabled or allow all)
+   - Check **Country Blocking** is not enabled (unless you want geographic restrictions)
+   - Verify **Edge Rules** don't have restrictions blocking your domain
 
-**Common CORS Configuration:**
+**Common Referrer Configuration:**
 ```
-Enable CORS: ✅ Enabled
-Allowed Origins: *
-Allowed Methods: GET, HEAD, OPTIONS
-Allowed Headers: *
-Expose Headers: *
-Max Age: 86400
+Hotlink Protection: Disabled (allows all domains)
+OR
+Hotlink Protection: Enabled
+Allowed Referrers: capabilities.times10.net, www.capabilities.times10.net
+Blocked Referrers: (empty)
 ```
 
 The code will log warnings to the browser console if CDN URLs aren't configured.
