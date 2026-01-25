@@ -2,6 +2,7 @@
 // Reusable component to initialize hash scroll on pages
 // Uses the optimized mobile-friendly hash-scroll utility
 // RULE-027: Use this component for all new pages with hash navigation
+// Code is inlined to avoid production import issues
 ---
 
 <!-- Inline script runs immediately to prevent browser's default hash scroll -->
@@ -28,14 +29,266 @@
 	})();
 </script>
 
-<script type="module">
-	import { initHashScroll } from '../lib/hash-scroll';
-	
-	// Initialize hash scroll functionality
-	// The utility handles DOM ready state automatically
-	if (document.readyState === 'loading') {
-		document.addEventListener('DOMContentLoaded', initHashScroll);
-	} else {
-		initHashScroll();
-	}
+<script is:inline>
+	(function() {
+		// Hash Scroll Manager - Inlined to avoid production import issues
+		// Updates URL hash as user scrolls through sections
+		// Uses Intersection Observer to detect visible sections
+		
+		function initHashScroll() {
+			// Track if we're updating hash programmatically (to prevent scroll loops)
+			let isUpdatingHash = false;
+			
+			// Helper function to generate a URL-friendly ID for a section
+			function generateSectionId(section, index) {
+				// Try to find text content that could be used as ID
+				const heading = section.querySelector('h1, h2, h3, h4, h5, h6');
+				if (heading) {
+					const text = (heading.textContent || '').trim().toLowerCase();
+					if (text) {
+						// Convert to slug: lowercase, replace spaces with hyphens, remove special chars
+						const slug = text
+							.replace(/[^\w\s-]/g, '')
+							.replace(/\s+/g, '-')
+							.replace(/-+/g, '-')
+							.replace(/^-|-$/g, '');
+						if (slug.length > 0) {
+							return slug;
+						}
+					}
+				}
+				// Fallback to section-{index}
+				return 'section-' + (index + 1);
+			}
+			
+			// Helper function to ensure all sections have IDs
+			function ensureSectionIds() {
+				const sections = document.querySelectorAll('section[class*="snap-start"]');
+				sections.forEach((section, index) => {
+					if (!section.id) {
+						const sectionId = generateSectionId(section, index);
+						section.id = sectionId;
+					}
+				});
+			}
+			
+			// Function to find and update the most visible section
+			function updateActiveSectionHash() {
+				if (isUpdatingHash) return;
+				
+				ensureSectionIds();
+				const currentSections = document.querySelectorAll('section[class*="snap-start"]');
+				if (currentSections.length === 0) return;
+				
+				let maxScore = -1;
+				let activeSection = null;
+				let fallbackSection = null;
+				let maxVisibleArea = 0;
+				const viewportHeight = window.innerHeight;
+				const viewportCenter = viewportHeight / 2;
+				
+				for (const section of currentSections) {
+					if (!section.id) continue;
+					
+					const rect = section.getBoundingClientRect();
+					const visibleTop = Math.max(0, rect.top);
+					const visibleBottom = Math.min(viewportHeight, rect.bottom);
+					const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+					
+					if (visibleHeight > maxVisibleArea) {
+						maxVisibleArea = visibleHeight;
+						fallbackSection = section;
+					}
+					
+					if (visibleHeight === 0) continue;
+					
+					const sectionHeight = rect.height;
+					const visibilityRatio = sectionHeight > 0 ? visibleHeight / sectionHeight : 0;
+					const sectionCenter = (rect.top + rect.bottom) / 2;
+					const distanceFromCenter = Math.abs(sectionCenter - viewportCenter);
+					const centerScore = Math.max(0, 1 - (distanceFromCenter / viewportHeight));
+					
+					let score = 0;
+					if (visibilityRatio > 0.7 && centerScore > 0.5) {
+						score = visibilityRatio * 0.5 + centerScore * 0.5;
+						if (visibilityRatio > 0.9 && centerScore > 0.7) {
+							score += 0.3;
+						}
+					} else {
+						score = visibilityRatio * 0.6 + centerScore * 0.4;
+					}
+					
+					if (score > maxScore) {
+						maxScore = score;
+						activeSection = section;
+					}
+				}
+				
+				if (!activeSection && fallbackSection) {
+					activeSection = fallbackSection;
+				}
+				
+				if (activeSection && activeSection.id) {
+					const newHash = '#' + activeSection.id;
+					const currentHash = window.location.hash;
+					if (currentHash !== newHash) {
+						const pathname = window.location.pathname;
+						const search = window.location.search;
+						const newUrl = pathname + search + newHash;
+						try {
+							window.history.replaceState(null, '', newUrl);
+						} catch (e) {
+							window.location.hash = newHash;
+						}
+					}
+				}
+			}
+			
+			const sections = document.querySelectorAll('section[class*="snap-start"]');
+			if (sections.length === 0) return;
+			
+			ensureSectionIds();
+			
+			const urlHash = window.location.hash.slice(1);
+			const pendingHash = sessionStorage.getItem('pendingHashScroll');
+			const initialHash = urlHash || pendingHash || '';
+			
+			if (initialHash) {
+				if (pendingHash) {
+					sessionStorage.removeItem('pendingHashScroll');
+				}
+				
+				function scrollToTarget() {
+					ensureSectionIds();
+					const targetSection = document.getElementById(initialHash);
+					if (targetSection) {
+						const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+						const scrollBehavior = prefersReducedMotion ? 'auto' : 'instant';
+						isUpdatingHash = true;
+						targetSection.scrollIntoView({ 
+							behavior: scrollBehavior, 
+							block: 'start',
+							inline: 'nearest'
+						});
+						setTimeout(function() {
+							isUpdatingHash = false;
+							updateActiveSectionHash();
+						}, prefersReducedMotion ? 100 : 300);
+					}
+				}
+				
+				if (document.readyState === 'complete') {
+					setTimeout(function() {
+						requestAnimationFrame(function() {
+							requestAnimationFrame(scrollToTarget);
+						});
+					}, 100);
+				} else {
+					window.addEventListener('load', function() {
+						setTimeout(function() {
+							requestAnimationFrame(function() {
+								requestAnimationFrame(scrollToTarget);
+							});
+						}, 200);
+					}, { once: true });
+					
+					if (document.readyState === 'loading') {
+						document.addEventListener('DOMContentLoaded', function() {
+							setTimeout(function() {
+								requestAnimationFrame(scrollToTarget);
+							}, 300);
+						}, { once: true });
+					}
+				}
+			}
+			
+			const observer = new IntersectionObserver(function() {
+				requestAnimationFrame(updateActiveSectionHash);
+			}, {
+				threshold: [0, 0.25, 0.5, 0.75, 1],
+				rootMargin: '-5% 0px -5% 0px'
+			});
+			
+			sections.forEach(function(section) {
+				observer.observe(section);
+			});
+			
+			let scrollTimeout = null;
+			window.addEventListener('scroll', function() {
+				if (isUpdatingHash) return;
+				if (scrollTimeout === null) {
+					scrollTimeout = requestAnimationFrame(function() {
+						updateActiveSectionHash();
+						scrollTimeout = null;
+					});
+				}
+			}, { passive: true });
+			
+			let scrollEndTimeout = null;
+			window.addEventListener('scroll', function() {
+				if (scrollEndTimeout !== null) {
+					clearTimeout(scrollEndTimeout);
+				}
+				scrollEndTimeout = setTimeout(function() {
+					updateActiveSectionHash();
+				}, 150);
+			}, { passive: true });
+			
+			function setInitialHash() {
+				requestAnimationFrame(function() {
+					requestAnimationFrame(function() {
+						updateActiveSectionHash();
+					});
+				});
+			}
+			
+			if (document.readyState === 'complete') {
+				setTimeout(setInitialHash, 50);
+			} else if (document.readyState === 'interactive') {
+				setTimeout(setInitialHash, 100);
+			} else {
+				document.addEventListener('DOMContentLoaded', function() {
+					setTimeout(setInitialHash, 100);
+				}, { once: true });
+			}
+			
+			window.addEventListener('load', function() {
+				setTimeout(setInitialHash, 100);
+			}, { once: true });
+			
+			const periodicCheck = setInterval(function() {
+				if (!isUpdatingHash) {
+					updateActiveSectionHash();
+				}
+			}, 500);
+			
+			window.addEventListener('beforeunload', function() {
+				clearInterval(periodicCheck);
+			});
+			
+			window.addEventListener('popstate', function() {
+				const hash = window.location.hash.slice(1);
+				if (hash) {
+					const targetSection = document.getElementById(hash);
+					if (targetSection) {
+						const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+						isUpdatingHash = true;
+						targetSection.scrollIntoView({ 
+							behavior: prefersReducedMotion ? 'auto' : 'smooth' 
+						});
+						setTimeout(function() {
+							isUpdatingHash = false;
+						}, prefersReducedMotion ? 100 : 500);
+					}
+				}
+			});
+		}
+		
+		// Initialize hash scroll functionality
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', initHashScroll);
+		} else {
+			initHashScroll();
+		}
+	})();
 </script>
