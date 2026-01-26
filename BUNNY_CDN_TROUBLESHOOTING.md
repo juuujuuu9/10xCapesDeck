@@ -9,20 +9,33 @@
 - When Bunny CDN tries to fetch WordPress images, it requests from Vercel instead
 - Vercel doesn't have WordPress files → 403/404 errors
 
+### WP Engine Specific Issue
+If WordPress is on WP Engine:
+- WP Engine URL (e.g., `capabilitiesde.wpenginepowered.com`) redirects to `capabilities.times10.net`
+- `capabilities.times10.net` now points to Vercel (not WordPress)
+- Bunny CDN pull zone origin must point to the **actual WP Engine URL**, not the redirect target
+
 ### The Fix: Update Pull Zone Origin URL
 
 1. **Find Your WordPress Site's Actual URL**
    - Where is WordPress actually hosted now?
    - Could be: `wordpress.times10.net`, `wp.times10.net`, or a different server
-   - Check your WordPress hosting provider or DNS settings
+   - **For WP Engine**: Check your WP Engine dashboard for the actual site URL (usually ends in `.wpenginepowered.com` or `.wpengine.com`)
+   - **Important**: Use the URL that DOESN'T redirect - Bunny CDN needs direct access to WordPress
 
 2. **Update Pull Zone Origin**
    - Go to Bunny CDN Dashboard → **Pull Zones** → `capeswp`
    - Click **General** tab (or **Origin** tab)
    - Find **Origin URL** or **Pull From** field
-   - Change from: `https://capabilities.times10.net`
-   - Change to: `https://[your-actual-wordpress-url]` (e.g., `https://wordpress.times10.net`)
+   - Change from: `https://capabilities.times10.net` (this now points to Vercel!)
+   - Change to: `https://[your-actual-wordpress-url]` 
+   - **Example for WP Engine**: `https://capabilitiesde.wpenginepowered.com` (use your actual WP Engine URL)
    - Click **Save**
+   
+   **Note**: If your WP Engine URL redirects to `capabilities.times10.net`, you may need to:
+   - Disable the redirect in WP Engine settings, OR
+   - Use a different WP Engine URL that doesn't redirect, OR
+   - Set up a subdomain specifically for CDN access that doesn't redirect
 
 3. **Purge Cache**
    - Go to **Cache** tab → Click **Purge Cache** or **Purge All**
