@@ -41,19 +41,65 @@ If images work on `*.vercel.app` but fail with 403 errors on your custom domain,
    - Check browser console - 403 errors should be gone
    - Images should load correctly
 
-### Where to Find Settings
+### Where to Find Settings (If Hotlink Protection Not Visible)
 
-If you can't find "Hotlink Protection" in Security tab:
-- Look for **"Referrer Restrictions"** or **"Access Control"**
-- Some Bunny CDN interfaces show it under **"Security"** → **"Hotlink Protection"**
-- If still not found, check **"General"** tab for security settings
+The Bunny CDN interface may vary. Try these locations:
 
-### Alternative: Check Account Status
+1. **Check All Tabs in Pull Zone:**
+   - **General** tab → Look for "Security" or "Access" settings
+   - **Security** tab → Look for "Hotlink Protection", "Referrer", or "Access Control"
+   - **Settings** tab → Check for security options
+   - **Advanced** tab → May contain security settings
 
-If 403 errors persist after configuring referrer restrictions:
-- Go to **Account** → **Billing**
-- Ensure account balance is positive (not negative)
-- Check for any account suspensions or payment issues
+2. **Alternative Names to Look For:**
+   - "Hotlink Protection"
+   - "Referrer Restrictions"
+   - "Access Control"
+   - "Domain Restrictions"
+   - "Allowed Domains"
+   - "Whitelist"
+
+3. **If Still Not Found - Use Edge Rules (Alternative Solution):**
+   - Go to your pull zone → **Edge Rules** tab
+   - Create a new rule to allow your domain:
+     ```
+     Condition: Request Header Referer contains "capabilities.times10.net"
+     Action: Allow
+     ```
+   - Or create a rule to remove referrer restrictions entirely
+
+4. **Contact Bunny CDN Support:**
+   - If you can't find these settings anywhere
+   - Ask them: "How do I disable referrer restrictions or allow my custom domain `capabilities.times10.net` to access my pull zone?"
+   - They can guide you to the exact location or configure it for you
+
+### Alternative: Check Other Security Settings
+
+If you can't find Hotlink Protection, check these other settings that might cause 403 errors:
+
+1. **IP Access Control**
+   - Location: Pull Zone → **Security** tab → **IP Access Control**
+   - Should be **Disabled** or **Allow All**
+   - If enabled, make sure your server IPs are whitelisted
+
+2. **Token Authentication**
+   - Location: Pull Zone → **Security** tab → **Token Authentication**
+   - Should be **Disabled** (unless you're using tokens)
+   - If enabled, images need token parameters in URLs
+
+3. **Country Blocking**
+   - Location: Pull Zone → **Security** tab → **Country Blocking**
+   - Should be **Disabled** (unless you want geographic restrictions)
+
+4. **Edge Rules**
+   - Location: Pull Zone → **Edge Rules** tab
+   - Check if any rules are blocking requests
+   - Look for rules that check Referer header
+
+5. **Account Status**
+   - Go to **Account** → **Billing**
+   - Ensure account balance is positive (not negative)
+   - Check for any account suspensions or payment issues
 
 ## 404 Errors (File Not Found)
 
@@ -99,8 +145,26 @@ If you see errors like `Failed to fetch dynamically imported module`:
    - If this fails, check account status or file existence
 
 3. **Contact Bunny CDN Support**
-   - If settings look correct but still getting 403 errors
+   - If you can't find hotlink protection settings OR still getting 403 errors
+   - Ask: "How do I allow my custom domain `capabilities.times10.net` to access my pull zones?"
    - Provide them with:
-     - Your pull zone names
-     - Your custom domain
+     - Your pull zone names: `capeswp` and `times-10-video-offload`
+     - Your custom domain: `capabilities.times10.net`
      - Example failing URL from browser console
+     - Screenshot of your Security tab (if possible)
+
+### Quick Test: Is It Really Referrer Restrictions?
+
+Before spending time finding settings, test if referrer restrictions are the issue:
+
+1. **Open a new incognito/private browser window**
+2. **Visit your custom domain**: `https://capabilities.times10.net`
+3. **Open browser console** (F12) → Network tab
+4. **Try accessing an image directly** by typing this in the address bar:
+   ```
+   https://capeswp.b-cdn.net/wp-content/uploads/2025/02/brands_0018_universal.png?width=150&quality=75
+   ```
+5. **Check the result:**
+   - ✅ **If image loads**: Referrer restrictions ARE the issue - you need to configure Bunny CDN
+   - ❌ **If image fails with 403**: Could be account balance, IP restrictions, or other security settings
+   - ❌ **If image fails with 404**: File doesn't exist in pull zone
