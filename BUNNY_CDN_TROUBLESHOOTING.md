@@ -1,5 +1,51 @@
 # Bunny CDN Troubleshooting Guide
 
+## ⚠️ CRITICAL: Pull Zone Origin URL Issue
+
+**If your pull zone origin is set to `capabilities.times10.net` but that domain now points to your new Vercel site (not WordPress), this will cause 403/404 errors!**
+
+### The Problem
+- Pull zone origin: `capabilities.times10.net` (was WordPress, now Vercel)
+- When Bunny CDN tries to fetch WordPress images, it requests from Vercel instead
+- Vercel doesn't have WordPress files → 403/404 errors
+
+### The Fix: Update Pull Zone Origin URL
+
+1. **Find Your WordPress Site's Actual URL**
+   - Where is WordPress actually hosted now?
+   - Could be: `wordpress.times10.net`, `wp.times10.net`, or a different server
+   - Check your WordPress hosting provider or DNS settings
+
+2. **Update Pull Zone Origin**
+   - Go to Bunny CDN Dashboard → **Pull Zones** → `capeswp`
+   - Click **General** tab (or **Origin** tab)
+   - Find **Origin URL** or **Pull From** field
+   - Change from: `https://capabilities.times10.net`
+   - Change to: `https://[your-actual-wordpress-url]` (e.g., `https://wordpress.times10.net`)
+   - Click **Save**
+
+3. **Purge Cache**
+   - Go to **Cache** tab → Click **Purge Cache** or **Purge All**
+   - Wait 2-3 minutes for changes to propagate
+
+4. **Test**
+   - Images should now load correctly
+   - Bunny CDN will pull from the correct WordPress origin
+
+### Alternative: If WordPress Is No Longer Accessible
+
+If WordPress is completely gone and you can't access it:
+
+1. **Migrate Images to Bunny Storage**
+   - Download all WordPress images from your old backup
+   - Upload them to Bunny Storage zone
+   - Update code to use `pullZone: 'storage'` instead of `pullZone: 'wordpress'`
+
+2. **Or Use Storage Pull Zone for Everything**
+   - Upload WordPress images to Storage
+   - Keep same folder structure: `/wp-content/uploads/...`
+   - Update environment variables to use storage pull zone
+
 ## 403 Errors on Custom Domain (Images Work on Vercel Domain)
 
 If images work on `*.vercel.app` but fail with 403 errors on your custom domain, this is a **Referrer Restrictions** (Hotlink Protection) issue.
